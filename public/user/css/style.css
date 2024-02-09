@@ -308,6 +308,13 @@ ol {
 	left: -9px;
 	top: 14px;
 }
+.logoutbtn{
+	text-decoration: none;
+	color: red;
+}
+.logoutbtn:hover{
+	color: black;
+}
 
 .inner-header .user-access {
 	float: right;

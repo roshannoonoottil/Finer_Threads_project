@@ -18,6 +18,14 @@ app.use(session({
 }));
 
 
+app.use((req, res, next) => {
+    res.header("Cache-Control", "private,no-cache,no-store, must-revalidate");
+    res.header("Expires", "-1");
+    res.header("Pragma", "no-cache");
+    next();
+  });
+  
+
 app.set('view engine', 'ejs');
 
 app.use(express.static(path.join(__dirname, "public/user")));
@@ -34,7 +42,7 @@ const userRouter = require('./server/routes/userRoute')
 const adminRouter = require('./server/routes/adminRoute')
 
 app.use('/',userRouter)
-// app.use('/admin',adminRouter)
+app.use('/admin',adminRouter)
 
 
 

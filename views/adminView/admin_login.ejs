@@ -92,14 +92,16 @@
             <div class="card-body p-5 text-center">
 
               <div class="mb-md-5 mt-md-4 pb-3">
-                <% if(error){ %>
-                    <p style="color: red;" id="errMsg"><%=error%></p>  
-                    <%}else{%>
-                    <p id="successID" style="display:block; color: brown;"><%=success%></p>
-                    <%}%>
-                <form action="/home" method="post">
+                <% if (error) { %>
+                    <div id="errMsg">
+                        <div class="alert alert-danger" role="alert">
+                            <%=error %>
+                        </div>
+                    </div>
+                <% } %>
+                <form action="/admin/dashboard" method="post">
 
-                  <h2 class="fw-bold mb-2 ">User Login</h2>
+                  <h2 class="fw-bold mb-2 ">Admin Login</h2>
                   <p class="text-white-50 mb-5">Please enter your login and password!</p>
 
                   <div class="form-outline form-white mb-4">
@@ -116,12 +118,12 @@
                     <!-- <span><%#= invalidpass %></span> -->
                   </div>
                   <button class="btn btn-outline-light btn-lg px-5" type="submit">Login</button>
-                  <div>
+                  <!-- <div>
                     <br>
                     <p class="mb-0 text-white-50">Don't have an account? <a href="/signup" style="text-decoration: none;"
                         class="text-white-50 fw-bold">Sign Up</a>
                     </p>
-                  </div>
+                  </div> -->
                 </form>
               </div>
             </div>
@@ -224,19 +226,6 @@
     <script src="js/jquery.nice-select.min.js"></script>
     <script src="js/mixitup.min.js"></script>
     <script src="js/main.js"></script>
-
-    <script>
-         setTimeout(()=>{
-              const fade=document.getElementById('errMsg');
-              fade.style.display='none'
-            },3000)
-
-
-setTimeout(()=>{
-  const fade1=document.getElementById("successID");
-  fade1.style.display='none'
-},5000)
-    </script>
 </body>
 
 </html>
