@@ -22,6 +22,7 @@
     <link rel="stylesheet" href="css/magnific-popup.css" type="text/css">
     <link rel="stylesheet" href="css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="css/style.css" type="text/css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
 </head>
 
 <body>
@@ -111,9 +112,8 @@
                   </div>
 
                   <div class="form-outline form-white mb-4">
-                    <input type="password" placeholder="Password" id="typePasswordX" name="password"
-                      class="form-control form-control-lg" />
-                    <!-- <span><%#= invalidpass %></span> -->
+                    <input type="password" placeholder="Password" id="id_password" name="password" style="position:absolute; width: 78%;" class="form-control form-control-lg" />
+                    <i class="far fa-eye showpass" id="togglePassword" ></i>
                   </div>
                   <button class="btn btn-outline-light btn-lg px-5" type="submit">Login</button>
                   <div>
@@ -237,6 +237,20 @@ setTimeout(()=>{
   fade1.style.display='none'
 },5000)
     </script>
+        <script>
+
+            const togglePassword = document.querySelector('#togglePassword');
+    
+            const password = document.querySelector('#id_password');
+    
+            togglePassword.addEventListener('click', function (e) {
+                // toggle the type attribute
+                const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+                password.setAttribute('type', type);
+                // toggle the eye slash icon
+                this.classList.toggle('fa-eye-slash');
+            });
+            </script>    
 </body>
 
 </html>

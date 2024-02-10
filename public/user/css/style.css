@@ -312,6 +312,16 @@ ol {
 	text-decoration: none;
 	color: red;
 }
+
+.showpass
+   {
+    position: relative;
+    margin-left: 90%;  
+    cursor: pointer;
+    color: black;
+    margin-top: 18px;
+
+}   
 .logoutbtn:hover{
 	color: black;
 }
