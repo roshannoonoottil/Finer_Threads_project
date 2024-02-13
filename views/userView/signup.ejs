@@ -104,8 +104,8 @@
                         <p class="text-white-50 mb-5">Please enter your deails and Register!</p>
 
                         <div class="form-outline form-white mb-4">
-                            <input type="text" placeholder="Username" id="typetext" name="username" class="form-control form-control-lg" />
-                           <!-- <span id="ufound"><%#= unamefound  %></span> -->
+                            <input type="text" placeholder="Username" id="typeUsername" name="username" class="form-control form-control-lg" onkeyup="validateName()" />
+                            <span id="name-error"></span>
                           <script>
                             setTimeout(function (){
                               const mesg = document.getElementById('ufound').value
@@ -115,21 +115,24 @@
                         </div>
         
                         <div class="form-outline form-white mb-4">
-                        <input type="email" placeholder="Email" id="typeEmailX" name="email" class="form-control form-control-lg" />
-                        <!-- <span><%#= emailmsg %></span>  -->
+                        <input type="email" placeholder="Email" id="typeEmailX" name="email" class="form-control form-control-lg" onkeyup="validateEmail()" />
+                        <span id="email-error"></span>
                         </div>
 
                         <div class="form-outline form-white mb-4">
-                          <input type="tel" placeholder="Phone" id="typePhone" name="mobile" class="form-control form-control-lg" />
+                          <input type="tel" placeholder="Phone" id="typePhone" name="mobile" maxlength="10" class="form-control form-control-lg" onkeyup="validatePhone()" />
+                          <span id="phone-error"></span>
                           </div>
         
                         <div class="form-outline form-white mb-4">
-                        <input type="password" placeholder="Password" id="id_password" name="password" style="position:absolute; width: 78%;" class="form-control form-control-lg" />
+                        <input type="password" placeholder="Password" id="id_password" name="password" style="position:absolute; width: 78%;" class="form-control form-control-lg" onkeyup="validatePass()" />
                         <i class="far fa-eye showpass" id="togglePassword" ></i>
                         </div>
                         <br>
-                        <button class="btn btn-outline-light btn-lg px-5" type="submit">Register</button>
+                        <span id="pass-error"></span>
+                        <button class="btn btn-outline-light btn-lg px-5" onclick="return validateForm()" type="submit">Register</button>
                          <div>
+                            <span id="submit-error"></span>
                           <br>
                           <p class="mb-0 text-white-50">Have a account?<a href="/login" style="text-decoration: none;" class="text-white-50 fw-bold">Login</a>
                           </p>
@@ -254,6 +257,94 @@
             // toggle the eye slash icon
             this.classList.toggle('fa-eye-slash');
         });
+        </script>
+        <script>
+            var nameError = document.getElementById('name-error');
+            var emailError = document.getElementById('email-error');
+            var phoneError = document.getElementById('phone-error');
+            var passError = document.getElementById('pass-error');
+            var submitError = document.getElementById('submit-error');
+
+
+            function validateName()
+            {
+                var name = document.getElementById('typeUsername').value;
+                if(name.length ==0)
+                {
+                    nameError.innerHTML ='<p class="help-block text-danger">name is required</p>';
+                    return false;
+                }
+                if(!name.match(/^[A-Za-z]+( [A-Za-z]+){1,2}$/)){
+                    nameError.innerHTML ='<p class="help-block text-danger">write your full name</p>';
+                    return false;
+                    
+                }
+                nameError.innerHTML = '<p class="help-block text-success"><i class="bi bi-check-circle-fill"></i></p>';
+                return true;
+            }
+
+            function validateEmail()
+            {
+                var email = document.getElementById('typeEmailX').value;
+                if(email.length==0)
+                {
+                    emailError.innerHTML ='<p class="help-block text-danger">email is required</p>';
+                    return false;
+                }
+                if(!email.match(/^[A-Za-z\._\-[0-9]+@[A-Za-z]+\.[a-z]{2,}$/))
+                {
+                    emailError.innerHTML ='<p class="help-block text-danger">email is invalid</p>';
+                    return false;
+                }
+                emailError.innerHTML = '<p class="help-block text-success"><i class="bi bi-check-circle-fill"></i></p>';
+                return true;
+            }
+            function validatePhone()
+            {
+                var phone = document.getElementById('typePhone').value;
+                if(phone.length==0)
+                {
+                    phoneError.innerHTML ='<p class="help-block text-danger">number is required</p>';
+                    return false;
+                }
+                if(!phone.match(/^[0-9]{10,12}$/))
+                {
+                    phoneError.innerHTML ='<p class="help-block text-danger">invalid phone number</p>';
+                    return false;
+                }
+                phoneError.innerHTML = '<p class="help-block text-success"><i class="bi bi-check-circle-fill"></i></p>';
+                return true;
+            }
+
+            function validatePass()
+            {
+                var Pass = document.getElementById('id_password').value;
+                if(Pass.length==0)
+                {
+                    passError.innerHTML ='<p class="help-block text-danger">Password is required</p>';
+                    return false;
+                }
+                if(!Pass.match(/^(?=.*?[0-9])(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[^0-9A-Za-z]).{8,32}$/))
+                {
+                    passError.innerHTML ='<p class="help-block text-danger">Strong Password required</p>';
+                    return false;
+                }
+                passError.innerHTML = '<p class="help-block text-success"><i class="bi bi-check-circle-fill"></i></p>';
+                return true;
+            }
+
+                    function validateForm()
+            {
+                if(!validateName() || !validateEmail() || !validatePhone() || !validatePass())
+                {
+                    submitError.style.display ='block';
+                    submitError.style.color ='red';
+                    submitError.innerHTML = 'please fill the all field';
+                    setTimeout(function(){submitError.style.display ='none';}, 3000);
+                    return false;
+                
+                }
+            }
         </script>
 </body>
 

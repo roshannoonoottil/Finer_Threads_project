@@ -4,7 +4,7 @@ const adminCheck = require("../middleware/adminMiddleware")
 
 router.get("/",adminController.adiminLogin);
 router.post("/dashboard",adminController.adminDashboard);
-router.get("/dashboard",adminController.toDashboard,adminCheck.isAdmin);
+router.get("/dashboard",adminCheck.isAdmin,adminController.toDashboard);
 router.get("/adminlogout",adminController.adminLogout)
 
 
