@@ -3,6 +3,7 @@ const express = require('express')
 const session = require('express-session');
 const path =  require("path");
 const ejs = require("ejs")
+require("dotenv").config();
 
 
 
@@ -11,7 +12,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended:true}))
 
 app.use(session({
-    secret: 'your-secret-key',
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true
 }));
@@ -27,7 +28,9 @@ app.use((req, res, next) => {
 
 app.set('view engine', 'ejs');
 
-app.use(express.static(path.join(__dirname, "public/user")));
+app.use(express.static(path.join(__dirname, 'public/user')));
+app.use(express.static(path.join(__dirname, 'public/admin')));
+
 
 app.set("views",[
     path.join(__dirname,"./views/userView"),

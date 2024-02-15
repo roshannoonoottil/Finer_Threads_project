@@ -7,6 +7,8 @@ router.post("/dashboard",adminController.adminDashboard);
 router.get("/dashboard",adminCheck.isAdmin,adminController.toDashboard);
 router.get("/adminlogout",adminController.adminLogout)
 
+router.get("/user", adminCheck.isAdmin, adminController.adminShowUsers);
+
 
 
 

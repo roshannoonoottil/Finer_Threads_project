@@ -1,0 +1,74 @@
+<%- include ('adminHeader') %>
+
+
+<section class="content-main">
+  <div class="content-header">
+    <div>
+      <h2 class="content-title card-title">Users Details</h2>
+    </div>
+      </div>
+    </div>
+    <header class="card card-body mb-4">
+      <div class="row gx-3">
+        <div class="col-lg-4 col-md-6 me-auto">
+          <input type="text" placeholder="Search..." class="form-control" />
+        </div>
+    </div>
+    </header>
+  </div>
+  <div class="card">
+    <div class="card-body">
+      <div class="row">
+        
+        <div class="container mt-5">
+          <div class="row">
+            <table class="table table-striped" width="50%>">
+              <tr>
+                <th style="color:rgb(0, 0, 0);font-size: large; text-align: center; ">Username</th>
+                <th style="color:rgb(0, 0, 0);font-size: large; text-align: center; ">Email</th>
+                <th style="color:rgb(0, 0, 0);font-size: large; text-align: center; ">Phone</th>
+                <th style="color:rgb(0, 0, 0);font-size: large; text-align: center; ">Action</th>
+              </tr>
+              <% for(let u of users) { %>
+              <tr>
+                <td style="text-align: center;"><%=u.username%></td>
+                <td style="text-align: center;"><%=u.email %> </td>
+                <td style="text-align: center;"><%=u.mobile%> </td>
+                </td>                
+                <td style="text-align: center;">
+                  <form action="">
+                    <input type="hidden" name="username" value=""/>
+                    <button style="background-color:rgb(255, 47, 47); border-radius: 6px; border: none;" type="button" id="<%#=c._id %>" onclick="toggleFunction()" >Block</button>
+                  </form>
+                </td>
+              </tr>
+              <% } %>
+              
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<script>
+    // Function to be executed when the toggle button is clicked
+
+    function toggleFunction() {
+      var toggleButton = document.getElementById();
+      if (toggleButton.innerHTML === "Block") {
+        toggleButton.innerHTML = "UnBlock";
+        toggleButton.style.backgroundColor="Red";
+        //var hide=1;
+
+        
+      } else {
+        toggleButton.innerHTML = "Block";
+        toggleButton.style.backgroundColor="Green";
+        //var hide=0;
+      }
+    }
+  </script>
+
+
+<%- include ('adminFooter') %>

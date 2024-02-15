@@ -67,6 +67,17 @@ const adminDashboard = async (req, res) => {
     }
 };
 
+const adminShowUsers = async (req, res) => {
+  try {
+    const users = await userModel.find({ isAdmin: 0 }).sort({ username: -1 });
+    res.render("user_Management", { username: req.session.username, users });
+    console.log("Admin View User");
+  } catch (error) {
+    console.log("Error while Admin showing user data: " + error);
+  }
+};
+
+
 
 
 
@@ -81,5 +92,6 @@ module.exports = {
     adiminLogin,
     adminDashboard,
     toDashboard,
-    adminLogout
+    adminLogout,
+    adminShowUsers
 };
