@@ -1,7 +1,7 @@
 const userModel = require("../models/userModel")
 const bcrypt = require("bcrypt");
 
-
+let nameSearch;
 const adiminLogin = (req,res) =>
 {
 try{
@@ -70,7 +70,7 @@ const adminDashboard = async (req, res) => {
 const adminShowUsers = async (req, res) => {
   try {
     const users = await userModel.find({ isAdmin: 0 }).sort({ username: -1 });
-    res.render("user_Management", { username: req.session.username, users });
+    res.render("user_Management", { username: req.session.username, users,nameSearch });
     console.log("Admin View User");
   } catch (error) {
     console.log("Error while Admin showing user data: " + error);
@@ -78,7 +78,35 @@ const adminShowUsers = async (req, res) => {
 };
 
 
+const block = async (req, res) => {
+  try {
+      const name = req.params.username
+      console.log(name)
+      const userData = await userModel.findOne({ username: name })
+      let val = 1
+      if (userData.status == 1)
+          val = 0
+      await userModel.updateOne({ username: name }, { $set: { status: val } })
+      res.redirect('/admin/user')
+  } catch (e) {
+      console.log("catch of block in admin : " + e)
+  }
 
+};
+
+
+const searchUser = async (req, res) => {
+  try {
+       nameSearch = req.body.search
+      const regex = new RegExp(`${nameSearch}`, 'i')
+      console.log(regex)
+      const users = await userModel.find({ $and: [{ username: { $regex: regex } }, { isAdmin: 0 }] })
+      res.render('user_Management', {username: req.session.username, users, nameSearch, })
+  } catch (e) {
+      console.log("catch of searchUser in admin : " + e)
+  }
+
+}
 
 
 
@@ -93,5 +121,8 @@ module.exports = {
     adminDashboard,
     toDashboard,
     adminLogout,
-    adminShowUsers
+    adminShowUsers,
+    block,
+    searchUser
+    
 };

@@ -109,10 +109,15 @@ const validateUser = async (req, res) => {
       );
       console.log(checkPass);
       if (checkPass) {
+        if(userProfile.status==0){
         req.session.isUser = true;
         req.session.name = req.body.username;
         console.log(req.session.isUser);
         res.redirect("/home");
+      }else{
+        req.session.error="User blocked";
+        res.redirect("/login");
+      }
       } else {
         req.session.error = "Incorrect password";
         console.log("Incorrect password");
@@ -145,6 +150,28 @@ const logout = (req, res) => {
   }
 };
 
+const productView = async (req, res) => {
+  try {
+    const id = req.params.id;
+    console.log("product id is: " + id);
+    const category = await categoryModel.find({});
+    const productDetails = await productModel.findOne({ _id: id });
+    console.log("product category is: " + productDetails);
+    const categoryData = await productModel.find({
+      $and: [{
+         category: productDetails.category },{ _id: { $ne: productDetails._id } },
+      ],});
+    console.log(
+      "Specific category data except the product seen in page :\n" +
+        categoryData
+    );
+    res.render("productPage",{ category,productDetails,available: "In Stock",notAvailable: "Out of Stock",categoryData,});
+  } catch (error) {
+    console.log("Error while displaying product page " + error);
+  }
+};
+
+
 
 
 
@@ -156,6 +183,7 @@ module.exports =
   authOTP,
   validateUser,
   redirectUser,
-  logout
+  logout,
+  productView
 
 }

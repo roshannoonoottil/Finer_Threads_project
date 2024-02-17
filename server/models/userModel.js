@@ -30,6 +30,11 @@ const userData = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  status:{
+    type: Number,
+      required:true,
+      default:0,
+  }
 });
 
 const Users = mongoose.model("User", userData);
