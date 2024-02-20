@@ -58,6 +58,30 @@ const adminProduct = async (req, res) => {
     }
   };
   
+
+  const editProduct = async (req, res) => {
+    try {
+      const category = await categoryModel.find({}).sort({ name: 1 });
+      const oldName = req.body.oldName;
+      const oldCategory = req.body.oldCategory;
+      const oldRate = req.body.oldRate;
+      const oldStock = req.body.oldStock;
+      const oldDesc = req.body.oldDesc;
+      console.log("ADMIN: PRODUCT EDIT");
+      res.render("adminProductEdit", {
+        username: req.session.username,
+        oldName,
+        oldCategory,
+        oldRate,
+        oldStock,
+        oldDesc,
+        category,
+      });
+    } catch (err) {
+      console.log(err.message);
+      return res.redirect("/error?message=error-while-updating-category");
+    }
+  };
   
 
 
@@ -76,5 +100,6 @@ const adminProduct = async (req, res) => {
   module.exports ={
     adminProduct,
     addProduct,
-    newProductPage
+    newProductPage,
+    editProduct
   }
