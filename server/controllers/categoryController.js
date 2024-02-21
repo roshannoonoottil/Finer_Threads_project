@@ -80,7 +80,7 @@ const list = async (req, res) => {
             val = 0
         await catMod.updateMany({ name: name }, { $set: { list: val } })
         // await productDetails.updateMany({ category: name }, { $set: { list: val } })
-        res.redirect(`/admin/category?val=${val}`)
+        res.redirect(`/admin/category`)
     } catch (e) {
         console.log("catch of list in admin : " + e)
     }

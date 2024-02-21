@@ -84,6 +84,45 @@ const adminProduct = async (req, res) => {
   };
   
 
+  const updateProduct = async (req, res) => {
+    try {
+      console.log(req.body);
+      await productModel.updateOne(
+        { name: req.body.oldProdName },
+        {
+          $set: {
+            name: req.body.newProdName,
+            category: req.body.newProdCat,
+            rate: req.body.newProdRate,
+            description: req.body.newProdDesc,
+            stock: req.body.newProStock,
+          },
+        }
+      );
+      console.log("PRODUCT UPDATED");
+      return res.redirect("/admin/product");
+    } catch (err) {
+      console.log(err.message);
+      return res.redirect("/admin/error?message=error-while-updating-category");
+    }
+  };
+
+  const proBlock = async (req, res) => {
+    try {
+        const name = req.params.name
+        console.log(name)
+        const proData = await productModel.findOne({ name: name })
+        let val = 1
+        if (proData.hide == 1)
+            val = 0
+        await productModel.updateOne({ name: name }, { $set: { hide: val } })
+        res.redirect(`/admin/product`)
+    } catch (e) {
+        console.log("catch of block in admin : " + e)
+    }
+  
+  };
+
 
 
 
@@ -101,5 +140,7 @@ const adminProduct = async (req, res) => {
     adminProduct,
     addProduct,
     newProductPage,
-    editProduct
+    editProduct,
+    updateProduct,
+    proBlock
   }

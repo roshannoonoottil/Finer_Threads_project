@@ -58,23 +58,15 @@
                     
                   </form>
                 </td>
-                <td style="text-align: center;"> <% if(!p.hide){ %><button style="background-color:rgb(180, 77, 77);"  type="button"
-                  id="<%=p._id %>"
-                  onclick="toggleFunction('<%=p._id %>')"
-                >
-                Hide
-              </button>
-              <% }else{ %>
-              <button
-                style="background-color:green;"
-                  type="button"
-                  id="<%=p._id %>"
-                  onclick="toggleFunction('<%=p._id %>')"
-                >
-                Show
-              </button>
-              <% } %>
-                </td> 
+                <td style="text-align: center;">
+                  <a href="/admin/proHide/<%=p.name %>">
+                    <% if (p.hide){ %>
+                    <button class="btn btn-success">UnBlock</button>
+                    <% }else{ %>
+                    <button class="btn btn-danger">Block</button>
+                    <% } %>
+                  </a>
+                </td>
               </tr>
               <% } %>
               

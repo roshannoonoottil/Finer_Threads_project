@@ -25,6 +25,8 @@ router.get("/product", adminCheck.isAdmin, productController.adminProduct); // s
 router.post("/product", adminCheck.isAdmin, multer.array("images", 5), productController.addProduct ); //admin add products
 router.get("/addProduct", adminCheck.isAdmin,  productController.newProductPage );  // go to the add product page
 router.post("/productEdit/:name", adminCheck.isAdmin, productController.editProduct ); // Edit Product Page
+router.post("/productUpdate", adminCheck.isAdmin, productController.updateProduct ); // Update Product
+router.get('/proHide/:name' , adminCheck.isAdmin, productController.proBlock ) ; // Hide the product from frontend
   
 
 
