@@ -9,14 +9,14 @@ mongoose
     console.log(error);
   });
 const categorySchema = new mongoose.Schema({
-    name:{
-        type:String,
-        required:true
-    },
-    list:{
-        type:Number,
-        required:true
-    }
-})
+  name: {
+    type: String,
+    required: true,
+  },
+  list: {
+    type: Number,
+    required: true,
+  },
+});
 
-module.exports = mongoose.model('categoryDetails',categorySchema)
+module.exports = mongoose.model("categoryDetails", categorySchema);

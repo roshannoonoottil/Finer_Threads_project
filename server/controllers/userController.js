@@ -1,55 +1,50 @@
 const userModel = require("../models/userModel");
-const otpSend =require("../middleware/otp")
+const categoryModel = require("../models/categoryModel");
+const productModel = require("../models/productModel");
+const otpSend = require("../middleware/otp");
 const bcrypt = require("bcrypt");
 
-
- const index =  (req, res) => {
-  try{
-      if (req.session.isUser){
-        res.redirect("/home")
-      }else{
-      res.render("index");
+const index = async (req, res) => {
+  try {
+    if (req.session.isUser) {
+      res.redirect("/home");
+    } else {
+      const category = await categoryModel.find({ list: 1 });
+      const product = await productModel.find({}).sort({ _id: 1 });
+      res.render("index", { category, product });
       console.log("index page");
-      }
-    } catch (error)
-     {
-      console.log("Error happened while user login: " + error);
-     }
-
-  };
-  
-  const login = (req, res) => {
-    try{
-      if (req.session.isUser) 
-      {
-        res.redirect("/home");
-      } else 
-      {
-        let message = req.session.error || req.session.logout;
-        const success = req.query.success;
-
-        res.render("login", { error: message, success });
-        console.log("User login");
-      }
-    } catch{
-      console.log("Error while rendering user registration page: " + error);
     }
-  };
+  } catch (error) {
+    console.log("Error happened while user login: " + error);
+  }
+};
 
+const login = (req, res) => {
+  try {
+    if (req.session.isUser) {
+      res.redirect("/home");
+    } else {
+      let message = req.session.error || req.session.logout;
+      const success = req.query.success;
 
-  const signup = (req, res) => {
-    try
-    {
-      let error = req.query.error;
-    res.render("signup",{ error });
+      res.render("login", { error: message, success });
+      console.log("User login");
+    }
+  } catch {
+    console.log("Error while rendering user registration page: " + error);
+  }
+};
+
+const signup = (req, res) => {
+  try {
+    let error = req.query.error;
+    res.render("signup", { error });
     console.log("User signup");
-    } catch{
-      console.log("Error while rendering user registration page: " + error);
-    }
-  };
+  } catch {
+    console.log("Error while rendering user registration page: " + error);
+  }
+};
 
-
-  
 var OTP;
 const verifyOTPS = (req, res) => {
   try {
@@ -92,8 +87,6 @@ const authOTP = async (req, res) => {
   }
 };
 
-
-
 const validateUser = async (req, res) => {
   try {
     const name = await req.body.username;
@@ -109,15 +102,15 @@ const validateUser = async (req, res) => {
       );
       console.log(checkPass);
       if (checkPass) {
-        if(userProfile.status==0){
-        req.session.isUser = true;
-        req.session.name = req.body.username;
-        console.log(req.session.isUser);
-        res.redirect("/home");
-      }else{
-        req.session.error="User blocked";
-        res.redirect("/login");
-      }
+        if (userProfile.status == 0) {
+          req.session.isUser = true;
+          req.session.name = req.body.username;
+          console.log(req.session.isUser);
+          res.redirect("/home");
+        } else {
+          req.session.error = "User blocked";
+          res.redirect("/login");
+        }
       } else {
         req.session.error = "Incorrect password";
         console.log("Incorrect password");
@@ -132,8 +125,10 @@ const validateUser = async (req, res) => {
 const redirectUser = async (req, res) => {
   try {
     const userName = req.session.name;
+    const category = await categoryModel.find({ list: 1 });
+    const product = await productModel.find({}).sort({ _id: 1 });
     console.log(userName);
-    res.render("home");
+    res.render("home",{ category, product });
   } catch (error) {
     console.log("Error while redirection");
   }
@@ -150,6 +145,15 @@ const logout = (req, res) => {
   }
 };
 
+const indexPageCategory = async (req, res) => {
+  console.log("category clicked");
+  const params = req.params.name;
+  console.log(params);
+  const product = await productModel.find({ category: params });
+  const category = await categoryModel.find({ list: 1 });
+  res.render("productCategory", { category, product });
+};
+
 const productView = async (req, res) => {
   try {
     const id = req.params.id;
@@ -158,25 +162,62 @@ const productView = async (req, res) => {
     const productDetails = await productModel.findOne({ _id: id });
     console.log("product category is: " + productDetails);
     const categoryData = await productModel.find({
-      $and: [{
-         category: productDetails.category },{ _id: { $ne: productDetails._id } },
-      ],});
-    console.log(
-      "Specific category data except the product seen in page :\n" +
-        categoryData
-    );
-    res.render("productPage",{ category,productDetails,available: "In Stock",notAvailable: "Out of Stock",categoryData,});
+      $and: [
+        { category: productDetails.category },
+        { _id: { $ne: productDetails._id } },
+      ],
+    });
+    res.render("productPage", {
+      category,
+      productDetails,
+      available: "In Stock",
+      notAvailable: "Out of Stock",
+      categoryData,
+    });
   } catch (error) {
     console.log("Error while displaying product page " + error);
   }
 };
 
 
+const homePageCategory = async (req, res) => {
+  console.log("category clicked");
+  const params = req.params.name;
+  console.log(params);
+  const product = await productModel.find({ category: params });
+  const category = await categoryModel.find({ list: 1 });
+  res.render("userProductCategory", { category, product });
+};
 
 
+const userproductView = async (req, res) => {
+  try {
+    const id = req.params.id;
+    console.log("product id is: " + id);
+    const category = await categoryModel.find({});
+    const productDetails = await productModel.findOne({ _id: id });
+    console.log("product category is: " + productDetails);
+    const categoryData = await productModel.find({
+      $and: [
+        { category: productDetails.category },
+        { _id: { $ne: productDetails._id } },
+      ],
+    });
+    res.render("userProductPage", {
+      category,
+      productDetails,
+      available: "In Stock",
+      notAvailable: "Out of Stock",
+      categoryData,
+    });
+  } catch (error) {
+    console.log("Error while displaying product page " + error);
+  }
+};
 
-module.exports = 
-{ index,
+
+module.exports = {
+  index,
   login,
   signup,
   verifyOTPS,
@@ -184,6 +225,8 @@ module.exports =
   validateUser,
   redirectUser,
   logout,
-  productView
-
-}
+  indexPageCategory,
+  productView,
+  homePageCategory,
+  userproductView
+};

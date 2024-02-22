@@ -20,7 +20,7 @@ const sendmail = (email) => {
 
     var mailOptions = {
       from: "Finer Threads <info@finerthreads.com>", // sender address
-      to: email,// To the receiver
+      to: email, // To the receiver
       subject: "E-Mail Verification",
       text: "Your OTP is:" + otp,
     };
@@ -33,4 +33,4 @@ const sendmail = (email) => {
   }
 };
 
-module.exports = {sendmail};
+module.exports = { sendmail };

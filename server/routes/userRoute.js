@@ -2,7 +2,6 @@ const router = require("express").Router();
 const userController = require("../controllers/userController.js");
 const userCheck = require("../middleware/userMiddleware.js");
 
-
 router.get("/", userController.index);
 router.get("/login", userController.login);
 router.get("/signup", userController.signup);
@@ -11,8 +10,11 @@ router.post("/verifyOTP", userController.authOTP);
 router.post("/home", userController.validateUser);
 
 router.get("/home", userCheck.isUser, userController.redirectUser);
-router.get("/product/:id", userController.productView);
 router.get("/logout", userController.logout);
+router.get("/index/:name", userController.indexPageCategory);
+router.get("/product/:id", userController.productView);
+router.get("/home/:name", userCheck.isUser, userController.homePageCategory);
+router.get("/userproduct/:id", userCheck.isUser, userController.userproductView);
 
 
 
