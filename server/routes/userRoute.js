@@ -15,7 +15,14 @@ router.get("/index/:name", userController.indexPageCategory);
 router.get("/product/:id", userController.productView);
 router.get("/home/:name", userCheck.isUser, userController.homePageCategory);
 router.get("/userproduct/:id", userCheck.isUser, userController.userproductView);
-
+router.get("/forgetPassword", userController.forgotPassword);
+router.post("/authEmail", userController.authEmail);
+router.get("/forgotPassword/getOTP", userController.fpGetOTP);
+router.post("/forgotPassword/authOTP", userController.fpAuthOTP);
+router.get("/changePassword", userController.toChangePassword);
+router.post("/updatePassword", userController.updatePassword);
+router.get("/resendOTP", userController.resendOTP);
+router.get("/otp", userController.otp);
 
 
 

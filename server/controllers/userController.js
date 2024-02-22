@@ -216,6 +216,137 @@ const userproductView = async (req, res) => {
 };
 
 
+const forgotPassword = (req, res) => {
+  try {
+    res.render("forgotPassword", { error: req.session.noRegisteredEmail });
+    console.log("USER IN FORGOT PASSWORD - EMAIL PAGE");
+  } catch (error) {
+    console.log("Error while redirecting to forgot password page :" + error);
+  }
+};
+
+
+const authEmail = async (req, res) => {
+  try {
+    const email = req.body.email;
+    req.session.emailDetail = req.body.email;
+    console.log("User entered email: " + email);
+    const emailAuth = await userModel.findOne({ email: email });
+    console.log("emailAuth is: " + emailAuth);
+    if (emailAuth === null) {
+      console.log("User entered a non registered email");
+      req.session.noRegisteredEmail = "This is not a registered email";
+      error = req.session.noRegisteredEmail;
+      res.redirect("/forgetPassword");
+      //console.log(error);
+    } else {
+      req.session.USERdata = emailAuth.username;
+      //console.log(req.session.USERdata);
+      res.redirect("/forgotPassword/getOTP");
+    }
+  } catch (error) {
+    console.log(
+      "Error while authenticating email for password reset :" + error
+    );
+  }
+};
+
+var newOTP;
+const fpGetOTP = (req, res) => {
+  try {
+    const fpEmail = req.session.emailDetail;
+    fpOTP = req.session.invalidOTP;
+    res.render("fpOTP", { fpEmail, fpOTP });
+    console.log(
+      "sending otp to registered email for password reset: " + fpEmail
+    );
+    const otpData = otpSend.sendmail(fpEmail);
+    console.log(
+      "password reset OTP received is:++++++++++++++++++++++++++++++++ " +
+        otpData
+    );
+    newOTP = otpData;
+  } catch (error) {
+    console.log("Error in getting OTP for password reset :" + error);
+  }
+};
+
+
+const fpAuthOTP = (req, res) => {
+  try {
+    if (req.body.otp === newOTP) {
+      // console.log("*********************************************************");
+      res.redirect("/changePassword");
+    } else {
+      fpEmail = req.session.emailDetail;
+      console.log(newOTP);
+      console.log(req.body.otp);
+      req.session.invalidOTP = "Invalid OTP entered";
+      fpOTP = req.session.invalidOTP;
+      res.render("fpOTP", { fpEmail, fpOTP });
+    }
+  } catch (error) {
+    console.log("Error in authenticating OTP for password change: " + error);
+  }
+};
+
+const toChangePassword = (req, res) => {
+  try {
+    res.render("changePassword");
+  } catch (error) {
+    console.log("Error while redirected to change password :" + error);
+  }
+};
+
+const updatePassword = async (req, res) => {
+  try {
+    const a = req.session.USERdata;
+    console.log("a is-------->" + a);
+    //let newPass = req.body.Password1
+    let newPass = await bcrypt.hash(req.body.Password1, 10);
+    console.log(newPass);
+    await userModel.updateOne({ username: a }, { $set: { password: newPass } });
+    req.session.passChange = "Password changed successfully. Login to proceed";
+    res.redirect("/login");
+  } catch (error) {
+    console.log("Error while updating password :" + error);
+  }
+};
+
+
+const resendOTP = (req, res) => {
+  try {
+    //console.log("Hello");
+    const email = req.session.emailDetail;
+    console.log("Resending OTP to email: " + email);
+    const otpRData = otpSend.sendmail(email);
+    console.log("otpRData is ++++++" + otpRData);
+    newOTP = otpRData;
+    console.log(
+      "OTP received after 60s is: " + newOTP + " and timestamp is:  " + otpRData
+    );
+    req.session.otpTimestamp = otpRData[1];
+    message = req.session.otpError;
+    // res.redirect("/otp");
+    console.log("USER RESEND OTP PAGE");
+  } catch (error) {
+    console.log("Error while resending OTP :" + error);
+  }
+};
+
+const otp = (req, res) => {
+  try {
+    res.render("otp", { message });
+  } catch (error) {
+    console.log(
+      "Error while displaying OTP page when wrong OTP entered by user :" + error
+    );
+  }
+};
+
+
+
+
 module.exports = {
   index,
   login,
@@ -228,5 +359,13 @@ module.exports = {
   indexPageCategory,
   productView,
   homePageCategory,
-  userproductView
+  userproductView,
+  forgotPassword,
+  authEmail,
+  fpGetOTP,
+  fpAuthOTP,
+  toChangePassword,
+  updatePassword,
+  resendOTP,
+  otp
 };
