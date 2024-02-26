@@ -138,19 +138,21 @@
                 <br>
                 <label for="username" style="font-size:large;">Update Rate</label>
                   <input
-                    type="text"
+                    type="number"
                     class="form-control"
                     id="username"
                     name="newProdRate"
                     value="<%=oldRate %>"
+                    min="0"
                   /><br>
                   <label for="username" style="font-size:large;">Update Quantity</label>
                   <input
-                    type="text"
+                    type="number"
                     class="form-control"
                     id="username"
                     name="newProStock"
                     value="<%=oldStock %>"
+                    min="0"
                   /><br>
                   <label for="username" style="font-size:large;">Update Description</label>
                   <input

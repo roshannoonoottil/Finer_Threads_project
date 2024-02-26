@@ -27,6 +27,7 @@ router.get("/addProduct", adminCheck.isAdmin,  productController.newProductPage 
 router.post("/productEdit/:name", adminCheck.isAdmin, productController.editProduct ); // Edit Product Page
 router.post("/productUpdate", adminCheck.isAdmin, productController.updateProduct ); // Update Product
 router.get('/proHide/:name' , adminCheck.isAdmin, productController.proBlock ) ; // Hide the product from frontend
+
   
 
 

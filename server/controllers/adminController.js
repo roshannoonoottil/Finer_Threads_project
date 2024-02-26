@@ -74,12 +74,18 @@ const adminShowUsers = async (req, res) => {
 
 const block = async (req, res) => {
   try {
-    const name = req.params.username;
-    console.log(name);
-    const userData = await userModel.findOne({ username: name });
-    let val = 1;
-    if (userData.status == 1) val = 0;
-    await userModel.updateOne({ username: name }, { $set: { status: val } });
+    const { username } = req.params; // Destructuring req.params
+    console.log(username);
+    
+    const userData = await userModel.findOne({ username }); // Using shorthand property name
+    if(userData.status != 1){
+    req.session.isUser = false;
+    console.log("User logged out + blocked");
+    }
+    userData.status = !userData.status;
+    console.log(userData.status);
+    await userData.save();
+    
     res.redirect("/admin/user");
   } catch (e) {
     console.log("catch of block in admin : " + e);
