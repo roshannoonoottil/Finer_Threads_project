@@ -47,13 +47,13 @@ const addCategory = async (req, res) => {
 
 const categoryEdit = async (req, res) => {
   try {
-    // console.log(req.body)
+     console.log(req.body.category)
     const categoryFound = await catMod.find({
       name: { $regex: new RegExp(req.body.category, "i") },
     });
-    console.log(req.body.name);
-    console.log(categoryFound.name);
-    if (categoryFound.name == req.body.name) {
+    console.log(req.body.name+" hi1");
+    console.log(categoryFound.name+" hi2");
+    if (req.body.name === categoryFound.name) {
       res.redirect("/admin/category?err=Category already exits");
     } else {
       await catMod.updateOne(

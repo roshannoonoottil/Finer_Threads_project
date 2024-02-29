@@ -23,6 +23,8 @@ router.get("/changePassword", userController.toChangePassword);
 router.post("/updatePassword", userController.updatePassword);
 router.get("/resendOTP", userController.resendOTP);
 router.get("/otp", userController.otp);
+router.get("/shop",  userController.shop)
+router.post("/search", userController.search);
 
 
 

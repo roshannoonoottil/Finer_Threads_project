@@ -186,7 +186,7 @@ const homePageCategory = async (req, res) => {
   console.log(params);
   const product = await productModel.find({ category: params });
   const category = await categoryModel.find({ list: 1 });
-  res.render("userProductCategory", { category, product });
+  res.render("userProductCategory", { category, product,searchValue });
 };
 
 
@@ -343,6 +343,30 @@ const otp = (req, res) => {
     );
   }
 };
+let searchValue;
+const search = async (req, res) => {
+  try {
+    searchValue = req.body.searchValue;
+    console.log("The searched data is: " + req.body.searchValue);
+    const category = await categoryModel.find({});
+    const product = await productModel.find({
+      name: { $regex: new RegExp(searchValue, "i") },
+    });
+    console.log("searchData value is" + product);
+    const noProduct = "No such product available";
+    res.render("userProductCategory", { category, product, searchValue, noProduct });
+  } catch (error) {
+    console.log("Error while searching a product by guest: " + error);
+  }
+};
+
+const shop = async (req, res) => {
+  console.log("Shop clicked");
+  const product = await productModel.find({ });
+  const category = await categoryModel.find({ list: 1 });
+  res.render("userProductCategory", { category, product,searchValue });
+};
+
 
 
 
@@ -367,5 +391,7 @@ module.exports = {
   toChangePassword,
   updatePassword,
   resendOTP,
-  otp
+  otp,
+  shop,
+  search
 };
