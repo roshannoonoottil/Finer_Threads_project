@@ -26,7 +26,7 @@ const addtoWishList = async (req, res) => {
     try {
         console.log(req.params.id+" add to wishlist");
         const wishPro = await productDetails.findOne({ name: req.params.id })
-        const wishDataFound = await wishDetails.findOne({ product: req.params.id })
+        const wishDataFound = await wishDetails.findOne({ product: req.params.id , username: req.session.name})
         console.log(req.session.name)
         if (!wishDataFound) {
             console.log("innn");
@@ -53,7 +53,7 @@ const addtoWishList = async (req, res) => {
 const removeWishlist = async (req, res) => {
     try {
         const proName = req.params.id
-        await wishDetails.deleteOne({ product: proName })
+        await wishDetails.deleteOne({ product: proName , username: req.session.name })
         res.redirect('/wishlist')
     } catch (e) {
         console.log('error in the removeWishlist in cartController in user side : ' + e)
