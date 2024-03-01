@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const userController = require("../controllers/userController.js");
 const userCheck = require("../middleware/userMiddleware.js");
+const cartController=require("../controllers/cartController.js")
 
 router.get("/", userController.index);
 router.get("/login", userController.login);
@@ -25,6 +26,10 @@ router.get("/resendOTP", userController.resendOTP);
 router.get("/otp", userController.otp);
 router.get("/shop",  userController.shop)
 router.post("/search", userController.search);
+;
+router.get('/wishlist', userCheck.isUser, cartController.viewWish);
+router.get('/wishlist/:id', userCheck.isUser, cartController.addtoWishList);
+router.get('/deletewishlist/:id', userCheck.isUser, cartController.removeWishlist);
 
 
 

@@ -26,6 +26,9 @@
     <link rel="stylesheet" href="/css/magnific-popup.css" type="text/css" />
     <link rel="stylesheet" href="/css/slicknav.min.css" type="text/css" />
     <link rel="stylesheet" href="/css/style.css" type="text/css" />
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'>
+
+    
   </head>
 
   <body>
@@ -183,7 +186,6 @@
               <p><%=productDetails.description %></p>
               <ul class="tags">
                 <li><span>Category :</span><%=productDetails.category %></li>
-                <!-- <li><span>Tags :</span> man, shirt, dotted, elegant, cool</li> -->
               </ul>
               <div class="product-quantity">
                 <div class="pro-qty">
@@ -191,6 +193,9 @@
                 </div>
               </div>
               <a href="#" class="primary-btn pc-btn">Add to cart</a>
+              <a href="/wishlist/<%=productDetails.name %>"><img src="/img/icons/heart.png" class="p-3" alt=""></a>
+
+
               <ul class="p-info">
                 <li>Product Information</li>
                 <li>Reviews</li>

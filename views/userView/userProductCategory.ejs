@@ -122,6 +122,9 @@
           </div>
         </div>
         <div class="row" id="product-list">
+          <% if(product=="") { %>
+            <p style="color: red"><%=noProduct %></p>
+            <%}else{%> 
           <% for(let p of product){%>
           <div class="col-lg-4 col-sm-6 mix all accesories bags">
             <div class="single-product-item">
@@ -142,6 +145,7 @@
             </div>
           </div>
           <% } %>
+          <%} %>
         </div>
       </div>
     </section>
