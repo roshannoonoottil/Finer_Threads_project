@@ -28,6 +28,8 @@ router.post("/productEdit/:name", adminCheck.isAdmin, productController.editProd
 router.post("/productUpdate", adminCheck.isAdmin, productController.updateProduct ); // Update Product
 router.get('/proHide/:name' , adminCheck.isAdmin, productController.proBlock ) ; // Hide the product from frontend
 
+router.get('/offers', adminCheck.isAdmin, adminController.offers);   // Offers page
+
   
 
 

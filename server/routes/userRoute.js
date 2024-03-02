@@ -32,5 +32,7 @@ router.get('/wishlist/:id', userCheck.isUser, cartController.addtoWishList);
 router.get('/deletewishlist/:id', userCheck.isUser, cartController.removeWishlist);
 
 
+// router.get('/cart', user.checkUser, cartController.viewCart)
+
 
 module.exports = router;

@@ -70,6 +70,9 @@ const removeWishlist = async (req, res) => {
 
 
 
+
+
+
 module.exports={
     viewWish,
     addtoWishList,
