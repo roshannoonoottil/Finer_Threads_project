@@ -17,6 +17,9 @@ const categorySchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  offer:{
+    type:Number
+}
 });
 
 module.exports = mongoose.model("categoryDetails", categorySchema);

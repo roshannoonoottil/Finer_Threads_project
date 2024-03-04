@@ -29,6 +29,10 @@
                     <label for="">Enter </label>
                     <input type="text" placeholder="Enter the name" name="category" class="form-control">
                   </div>
+                  <div class="modal-body">
+                    <label for="">Offer </label>
+                    <input type="text" placeholder="offer in %" name="offer" class="form-control">
+                  </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary">Save</button>
@@ -55,7 +59,7 @@
                   <!-- {{!-- <th scope="col">Count</th> --}} -->
                   <th>Status</th>
                   <th>Edit</th>
-                  <!-- {{!-- <th>Delete</th> --}} -->
+                  <th>Offer</th>
                 </tr>
               </thead>
             
@@ -94,15 +98,30 @@
                             <div class="modal-body">
                               <label class="form-control-label">Category</label>
                               <input type="text" value="<%= c.name %>" class="form-control" name="name">
+                              <input type="text" value="<%= c.name %>" class="form-control" name="oldname" hidden>
                             </div>
+                            <div class="modal-body">
+                              <label class="form-control-label">Offer</label>
+                              <input type="text" value="<%= c.offer %>" class="form-control" name="offer">
+                            </div>  
                             <div class="modal-footer">
                               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                               <button type="submit" class="btn btn-primary">Save changes</button>
                             </div>
                           </div>
+                          </div>
                         </form>
                       </div>
                     </div>
+
+                  </td>
+                  <td>
+                    <% if (c.offer){ %>
+                    <button class="btn btn-success" disabled >Applied</button>
+                    <% } else { %>
+                    <button class="btn btn-danger" disabled >No offers</button>
+                    <% } %>
+                  </td>
   
                   <!-- </td>
                   <td><a href="/admin/deletecat/<%#c.name %>" class="btn btn-danger" onclick="return confirm(' Are you sure, You want to delete the product')">Delete</a></td> 
