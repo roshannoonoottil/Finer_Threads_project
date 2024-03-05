@@ -249,7 +249,11 @@
               </figure>
               <div class="product-text">
                 <h6><%=p.name %></h6>
-                <p>₹ <%=p.rate %></p>
+                <% if (p.offer) { %>
+                  <span class="price"><del><%= p.rate %></del>&nbsp;<%= p.discountAmount %>Rs.</span>
+                  <% } else { %>
+                    <span class="price">Rs.<%= p.rate %></span>
+                    <% } %>
               </div>
             </div>
           </div>

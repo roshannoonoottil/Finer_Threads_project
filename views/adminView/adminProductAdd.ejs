@@ -29,8 +29,17 @@
   <label for="productPrice" style="color:rgb(0, 0, 0); font-size: medium;">Product Price:</label>
   <input type="number" min="0" class="form-control" id="productPrice" placeholder="Product price" name="prodRate" required>
 </div>
+<div class="form-group">
+  <label for="productPrice" style="color:rgb(0, 0, 0); font-size: medium;">Offer</label>
+  <input type="number" onkeyup="discountPrice()" min="0" placeholder="Product offer" class="form-control" id="offerValue" max="99" name="offer" >
+</div>
+<div class="form-group">
+  <div class="input-group mb-3">
+    <input type="text" class="form-control" hidden placeholder="Username" aria-label="Username"
+ aria-describedby="basic-addon1" value="" readonly id="discountAmount" name="discount">
+  </div>
+</div>
 <div class="form-group" style="padding-top: 3%;">
-
   <label for="productCategory" style="color:rgb(0, 0, 0); font-size: medium;">Product Category:</label>
   <select class="form-control" id="productCategory" name="category" required>
     
@@ -62,6 +71,18 @@
     <!-- row.// -->
     
   </section>
+
+  <script>
+    function discountPrice() {
+      const offer = document.getElementById('offerValue').value
+      const price = document.getElementById('productPrice').value
+      console.log(offer, 'offer', price, 'price')
+      let sum = offer * price
+      let dis = sum / 100
+      let offerPrice = Math.floor(price - dis)
+      document.getElementById('discountAmount').value = offerPrice
+    }
+  </script>
 
 
   <%- include ('adminFooter') %>

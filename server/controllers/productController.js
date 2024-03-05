@@ -19,6 +19,7 @@ const adminProduct = async (req, res) => {
   }
 };
 
+
 const addProduct = async (req, res) => {
   try {
     console.log(req.body);
@@ -31,22 +32,59 @@ const addProduct = async (req, res) => {
         .replace("public", "")
         .replace("/admin", "../");
     }
-    console.log(imagePath);
-    const newProd = new productModel({
-      name: req.body.prodName,
-      category: req.body.category,
-      rate: req.body.prodRate,
-      description: req.body.prodDesc,
-      stock: req.body.quantity,
-      image: imagePath,
-      hide: 0,
+    const { prodName, category, prodDesc, prodRate, quantity} = req.body;
+        let data=req.body;
+        let amount = 0
+        if (data.offer == '') {
+            const catdata = await categoryModel.find({ name: category })
+            if (catdata[0].offer == '') {
+                amount = Number(data.discount)
+            } else {
+                let sum = Number(data.rate) * Number(catdata[0].offer)
+                let value = sum / 100
+                amount = Number(data.rate) - value
+            }
+        } else {
+          const catdata = await categoryModel.find({ name: category })
+          if (catdata[0].offer == '') {
+              amount = Number(data.discount)
+          } else {
+              if (catdata[0].offer > data.offer) {
+                  let sum = Number(data.price) * Number(catdata[0].offer)
+                  let value = sum / 100
+                  amount = Number(data.rate) - value
+              } else {
+                  amount = Number(data.discount)
+              }
+          }
+      }
+      const newProd = new productModel({
+        name: prodName,
+        category: category,
+        description: prodDesc,
+        rate: prodRate,
+        stock: quantity,
+        list: 0,
+        hide: 0,
+        image: imagePath,
+        offer: data.offer,
+        discountAmount: amount
     });
+
     await newProd.save();
     return res.redirect(`/admin/product`);
   } catch (err) {
     console.log("error while adding product to the DB: " + err);
   }
 };
+
+
+
+
+
+
+
+
 
 const newProductPage = async (req, res) => {
   const category = await categoryModel.find({}).sort({ name: 1 });

@@ -59,6 +59,7 @@
                   <!-- {{!-- <th scope="col">Count</th> --}} -->
                   <th>Status</th>
                   <th>Edit</th>
+                  <th></th>
                   <th>Offer</th>
                 </tr>
               </thead>
@@ -115,9 +116,10 @@
                     </div>
 
                   </td>
+                  <td><%= c.offer %> %</td>
                   <td>
                     <% if (c.offer){ %>
-                    <button class="btn btn-success" disabled >Applied</button>
+                    <button class="btn btn-success" disabled > Applied</button>
                     <% } else { %>
                     <button class="btn btn-danger" disabled >No offers</button>
                     <% } %>
