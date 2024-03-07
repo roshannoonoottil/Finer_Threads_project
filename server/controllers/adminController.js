@@ -111,9 +111,9 @@ const searchUser = async (req, res) => {
 };
 
 
-const offers = (req, res) => {
+const oders = (req, res) => {
   try {
-      res.render('adminOffers',{username: req.session.username})
+      res.render('adminOders',{username: req.session.username})
   } catch (e) {
       // res.redirect('/admin/errorPage')
       console.log('error in the offers in the adminController in the admin side : ' + e)
@@ -128,5 +128,5 @@ module.exports = {
   adminShowUsers,
   block,
   searchUser,
-  offers
+  oders
 };
