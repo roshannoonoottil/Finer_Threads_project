@@ -34,6 +34,7 @@
                 <th style="color:rgb(0, 0, 0);font-size:small; text-align: center; ">Name</th>
                 <th style="color:rgb(0, 0, 0);font-size:small; text-align: center; ">Category</th>
                 <th style="color:rgb(0, 0, 0);font-size:small; text-align: center; ">Rate</th>
+                <th style="color:rgb(0, 0, 0);font-size:small; text-align: center; ">Offer</th>
                 <th style="color:rgb(0, 0, 0);font-size:small; text-align: center; ">Stock</th>
                 <th style="color:rgb(0, 0, 0);font-size:small; text-align: center; width: 250px;">Description</th>
                <th style="color:rgb(0, 0, 0);font-size:small; text-align: center; ">Edit</th>
@@ -45,6 +46,7 @@
                 <td style="text-align: center;"><%=p.name %></td>
                 <td style="text-align: center;"><%=p.category %> </td>
                 <td style="text-align: center;">₹<%=p.rate %></td> 
+                <td style="text-align: center;"><%=p.offer %> %</td> 
                 <td style="text-align: center;"><%=p.stock %></td>
                 <td style="text-align:center;" class="description" title="<%=p.description %>"><%=p.description %></td> 
                 <td style="text-align: center;">
@@ -52,6 +54,7 @@
                     <input type="hidden" value="<%=p.name%>" name="oldName">
                     <input type="hidden" value="<%=p.category %>" name="oldCategory">
                      <input type="hidden" value="<%=p.rate %>" name="oldRate">
+                     <input type="hidden" value="<%=p.offer %>" name="oldOffer">
                     <input type="hidden"  value="<%=p.stock %>" name="oldStock"> 
                     <input  style="overflow: hidden;" type="hidden" value="<%=p.description %>" name="oldDesc"> 
                     <button class="btn btn-success" type="submit">Edit</button>

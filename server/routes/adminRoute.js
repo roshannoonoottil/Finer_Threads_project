@@ -22,10 +22,15 @@ router.get('/list/:id', adminCheck.isAdmin, categoryController.list) //list or u
 
 
 router.get("/product", adminCheck.isAdmin, productController.adminProduct); // show  products
-router.post("/product", adminCheck.isAdmin, multer.array("images", 5), productController.addProduct ); //admin add products
+router.post("/product", adminCheck.isAdmin, multer.array("images", 4), productController.addProduct ); //admin add products
 router.get("/addProduct", adminCheck.isAdmin,  productController.newProductPage );  // go to the add product page
 router.post("/productEdit/:name", adminCheck.isAdmin, productController.editProduct ); // Edit Product Page
-router.post("/productUpdate", adminCheck.isAdmin, productController.updateProduct ); // Update Product
+router.post("/productUpdate", adminCheck.isAdmin, multer.fields([
+    { name: "0Image", maxCount: 1 },
+    { name: "1Image", maxCount: 1 },
+    { name: "2Image", maxCount: 1 },
+    { name: "3Image", maxCount: 1 },
+  ]), productController.updateProduct ); // Update Product
 router.get('/proHide/:name' , adminCheck.isAdmin, productController.proBlock ) ; // Hide the product from frontend
 
 router.get('/offers', adminCheck.isAdmin, adminController.offers);   // Offers page

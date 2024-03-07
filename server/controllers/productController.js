@@ -50,7 +50,7 @@ const addProduct = async (req, res) => {
               amount = Number(data.discount)
           } else {
               if (catdata[0].offer > data.offer) {
-                  let sum = Number(data.price) * Number(catdata[0].offer)
+                  let sum = Number(data.rate) * Number(catdata[0].offer)
                   let value = sum / 100
                   amount = Number(data.rate) - value
               } else {
@@ -105,6 +105,11 @@ const editProduct = async (req, res) => {
     const oldRate = req.body.oldRate;
     const oldStock = req.body.oldStock;
     const oldDesc = req.body.oldDesc;
+    const oldOffer = req.body.oldOffer;
+
+    const allOldData = await productModel.findOne({ name: oldName });
+    totalImages = allOldData.image.length;
+    console.log(req.body);
     console.log("ADMIN: PRODUCT EDIT");
     res.render("adminProductEdit", {
       username: req.session.username,
@@ -114,6 +119,9 @@ const editProduct = async (req, res) => {
       oldStock,
       oldDesc,
       category,
+      oldOffer,
+      allOldData,
+      totalImages
     });
   } catch (err) {
     console.log(err.message);
@@ -123,7 +131,55 @@ const editProduct = async (req, res) => {
 
 const updateProduct = async (req, res) => {
   try {
+    console.log(req.files," re uploding files");
+    for (let i in req.files) {
+      console.log(parseInt(`${i}`));
+      let index = parseInt(`${i}`);
+      console.log("pro img update");
+      let newImagePath = req.files[i][0].path
+      .replace(/\\/g, "/")
+      .replace("public", "")
+      .replace("/admin", "../");
+      console.log(newImagePath);
+      await productModel.updateOne(
+        { name: req.body.oldProdName },
+        {
+          $set: { [`image.${index}`]: newImagePath },
+        }
+      );
+    }
     console.log(req.body);
+    const catdata = await categoryModel.find({ name: req.body.newProdCat })
+        console.log(catdata,'caaaat data')
+        let offerPrice
+        if (req.body.offer != '') {
+            
+            if (req.body.offer > catdata[0].offer) {
+                let sum = Number(req.body.newProdRate) * Number(req.body.offer)
+                let dis = sum / 100
+                offerPrice = Number(req.body.newProdRate) - Math.floor(dis)
+                console.log(req.body.offer, 'if')
+            } else {
+                let sum = Number(req.body.newProdRate) * Number(catdata[0].offer)
+                let value = sum / 100
+                offerPrice = Number(req.body.newProdRate) - value
+            }
+
+        }else {
+          if (catdata[0].offer == '') {
+              console.log('offer is null')
+              offerPrice = Number(req.body.newProdRate)
+          } else {
+              console.log('offer is not null')
+              let sum = Number(req.body.newProdRate) * Number(catdata[0].offer)
+              let value = sum / 100
+              offerPrice = Number(req.body.newProdRate) - value
+              console.log(offerPrice,'offferprice - -- -- --')
+          }
+      }
+
+    console.log(req.body);
+    if (req.body) {
     await productModel.updateOne(
       { name: req.body.oldProdName },
       {
@@ -133,14 +189,19 @@ const updateProduct = async (req, res) => {
           rate: req.body.newProdRate,
           description: req.body.newProdDesc,
           stock: req.body.newProStock,
-        },
-      }
-    );
+          discountAmount: offerPrice,
+          offer: req.body.offer,
+        }
+      },
+      {
+          upsert: true
+      })
+}
     console.log("PRODUCT UPDATED");
     return res.redirect("/admin/product");
   } catch (err) {
     console.log(err.message);
-    return res.redirect("/admin/error?message=error-while-updating-category");
+    // return res.redirect("/admin/error?message=error-while-updating-category");
   }
 };
 
