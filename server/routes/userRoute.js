@@ -30,6 +30,9 @@ router.post("/search", userController.search);
 router.get('/wishlist', userCheck.isUser, cartController.viewWish);
 router.get('/wishlist/:id', userCheck.isUser, cartController.addtoWishList);
 router.get('/deletewishlist/:id', userCheck.isUser, cartController.removeWishlist);
+// add to cart functionality
+router.get('/cart', userCheck.isUser, cartController.viewcart);
+router.get('/addToCart/:id', userCheck.isUser, cartController.addToCart);
 
 
 // router.get('/cart', user.checkUser, cartController.viewCart)
