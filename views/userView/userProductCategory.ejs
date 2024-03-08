@@ -140,7 +140,12 @@
               </figure>
               <div class="product-text">
                 <h6><%=p.name %></h6>
-                <p>₹ <%=p.rate %></p>
+                <% if (p.offer) { %>
+                  <span class="price"><del>₹ <%= p.rate %></del>
+                    <h5>₹ <%= p.discountAmount %></h5></span>
+                  <% } else { %>
+                    <span class="price">₹ <%= p.rate %></span>
+                    <% } %>
               </div>
             </div>
           </div>

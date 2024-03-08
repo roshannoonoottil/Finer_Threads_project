@@ -34,7 +34,9 @@ const addtoWishList = async (req, res) => {
                 username: req.session.name,
                 product: wishPro.name,
                 image: wishPro.image[0],
-                price: wishPro.rate
+                rate: wishPro.rate,
+                discountAmount: wishPro.discountAmount,
+                offer: wishPro.offer
             })
             console.log('asfjgafs')
             console.log('++++++++++')

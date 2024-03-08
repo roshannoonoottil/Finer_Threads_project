@@ -22,10 +22,16 @@ const wishSchema = new mongoose.Schema({
         type:String,
         required:true
     },
-    price:{
+    rate:{
         type:Number,
         requrd:true
-    }
+    },
+    discountAmount:{
+          type:Number
+    },
+    offer:{
+      type:Number
+  }
     
 })
 

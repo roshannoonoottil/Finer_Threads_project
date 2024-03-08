@@ -88,7 +88,12 @@
                                                         <img src="<%=i.image %>" alt="img" style="height: 50px;">
                                                     </td>
                                                     <td>
-                                                        <a href="">₹ <%=i.price %></a>
+                                                        <% if (i.offer) { %>
+                                                            <span class="price"><del>₹ <%= i.rate %></del>
+                                                              <h5>₹ <%= i.discountAmount %></h5></span>
+                                                            <% } else { %>
+                                                              <span class="price">₹ <%= i.rate %></span>
+                                                              <% } %>
                                                     </td>
                                                     <td>
                                                         <a href="/addtocart/{{this.product}}" class="btn btn-primary">Add</a>
