@@ -11,7 +11,6 @@ const session = require('express-session');
 const viewWish = async (req, res) => {
     try {
         const wishData = await wishDetails.find({ username: req.session.name })
-        // const proData = await productDetails.find({name:catData.product})
         const userin = req.session.name
         const cat = await categoryDetails.find({ list: 1 })
         console.log("view wishlist");
@@ -19,7 +18,6 @@ const viewWish = async (req, res) => {
         res.render('userWishlist', { wishData, userin, cat })
     } catch (e) {
         console.log('error in the viewCart in cartController user side : ' + e)
-        res.redirect("/error")
     }
 }
 
@@ -49,7 +47,6 @@ const addtoWishList = async (req, res) => {
         res.redirect('/wishlist')
     } catch (e) {
         console.log('error in the addtoCart in cartController user side : ' + e)
-        res.redirect("/error")
     }
 }
 
@@ -60,7 +57,6 @@ const removeWishlist = async (req, res) => {
         res.redirect('/wishlist')
     } catch (e) {
         console.log('error in the removeWishlist in cartController in user side : ' + e)
-        res.redirect("/error")
     }
 }
 
@@ -107,7 +103,6 @@ const viewcart = async (req,res)=>{
         res.render('cart', { catData, userin, catDataCount, totalPrice, cat })
         } catch (e) {
         console.log('error in the viewCart in cartController user side : ' + e)
-        //  res.redirect("/error")
         }
     };
 
@@ -145,6 +140,18 @@ const viewcart = async (req,res)=>{
     }
 
    };
+
+
+   const deleteCart = async (req, res) => {
+    try {
+        console.log(req.params.id)
+        await cartDetails.deleteOne({ product: req.params.id })
+        res.redirect('/cart')
+    } catch (e) {
+        console.log('error in the deleteCart in cartController in user side : ' + e)
+        // res.redirect("/error")
+    }
+}
    
 
 
@@ -160,6 +167,7 @@ module.exports={
     addtoWishList,
     removeWishlist,
     viewcart,
-    addToCart
+    addToCart,
+    deleteCart
     
 };

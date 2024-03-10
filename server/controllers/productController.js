@@ -177,7 +177,8 @@ const updateProduct = async (req, res) => {
               console.log(offerPrice,'offferprice - -- -- --')
           }
       }
-
+      if(offerPrice>0){
+        
     console.log(req.body);
     if (req.body) {
     await productModel.updateOne(
@@ -196,6 +197,7 @@ const updateProduct = async (req, res) => {
       {
           upsert: true
       })
+    }
 }
     console.log("PRODUCT UPDATED");
     return res.redirect("/admin/product");

@@ -33,6 +33,7 @@ router.get('/deletewishlist/:id', userCheck.isUser, cartController.removeWishlis
 // add to cart functionality
 router.get('/cart', userCheck.isUser, cartController.viewcart);
 router.get('/addToCart/:id', userCheck.isUser, cartController.addToCart);
+router.get('/deleteItemCart/:id', userCheck.isUser, cartController.deleteCart)
 
 
 // router.get('/cart', user.checkUser, cartController.viewCart)
