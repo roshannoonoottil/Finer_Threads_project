@@ -31,6 +31,11 @@ const wishSchema = new mongoose.Schema({
     },
     offer:{
       type:Number
+  },
+  stock: {
+    type: Number,
+    required: true,
+    trim: true,
   }
     
 })

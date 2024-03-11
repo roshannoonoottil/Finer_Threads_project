@@ -96,7 +96,11 @@
                                                               <% } %>
                                                     </td>
                                                     <td>
+                                                        <% if (i.stock<1) { %>
+                                                            <h5 style="color: red;">Out Of stock</h5>
+                                                            <% } else { %>
                                                         <a href="/addToCart/<%=i.product %>" class="btn btn-primary">Add</a>
+                                                        <% } %>
                                                     </td>
                                                     <td>
                                                         <a href="/deletewishlist/<%=i.product %>" class="btn btn-danger">Remove</a>

@@ -197,7 +197,11 @@
                   <input type="text" value="1" />
                 </div>
               </div> -->
+              <% if (productDetails.stock<1) { %>
+                <h5 style="color: red;">Out Of stock</h5>
+                <% } else { %>
               <a href="/addToCart/<%=productDetails.name %>" class="primary-btn pc-btn">Add to cart</a>
+              <% } %>
               <a href="/wishlist/<%=productDetails.name %>"><img src="/img/icons/heart.png" class="p-3" alt=""></a>
 
 
