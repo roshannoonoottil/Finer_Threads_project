@@ -36,7 +36,7 @@ router.get('/addToCart/:id', userCheck.isUser, cartController.addToCart);
 router.get('/deleteItemCart/:id', userCheck.isUser, cartController.deleteCart)
 
 
-// router.get('/cart', user.checkUser, cartController.viewCart)
+router.post('/change-quentity', userCheck.isUser, cartController.changeQuantity)
 
 
 module.exports = router;

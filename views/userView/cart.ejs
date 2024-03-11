@@ -115,11 +115,34 @@
                          <td class="price-col"> ₹ <%=i.rate%></td>
                          <%} %>
                         <td class="quantity-col">
-                            <div class="pro-qty">
-                                <input type="text" value="1">
-                            </div>
+                          <div
+                          class="input-group quantity mx-auto"
+                          style="width: 100px"
+                        >
+                          <div class="input-group-btn">
+                            <button
+                            class="btn btn-touchspin js-touchspin bootstrap-touchspin-down"
+                            type="button"
+                            onclick="quantityChange('<%= i.product %>', -1, '<%= i.offerPrice %>')">
+                            -
+                        </button>
+                          </div>
+                          <p class="input-group form-control"
+                             id="<%=i.product %>"><%=i.quentity %>
+                          </p>
+                          
+                          <div class="input-group-btn">
+                            <button
+                            class="btn btn-touchspin js-touchspin bootstrap-touchspin-up"
+                            type="button"
+                            onclick="quantityChange('<%= i.product %>', 1, '<%= i.offerPrice %>')">
+                            +
+                        </button>
+                          </div>
+                        </div>
                         </td>
-                        <td class="total">₹ <%=i.offerPrice%></td>
+                        <td class="total">
+                        <span>₹ </span><span id="<%=i.product %>+hai"> <%= i.offerPrice * i.quentity %></span></td>
                         <td class="product-close"><a href="/deleteItemCart/<%=i.product %>" class="btn btn-danger">x</a></td>
                     </tr>
                 </tbody>
@@ -158,9 +181,9 @@
                                 <tbody>
                                     <tr>
                                         <td class="total"></td>
-                                        <td class="sub-total"></td>
-                                        <td class="shipping"></td>
-                                        <td class="total-cart-p">₹ <%=totalPrice%></td>
+                                        <td class="sub-total"><span>₹ </span><span id="totalAmount"> <%=totalPrice%></span></td>
+                                        <td class="shipping">₹ 0</td>
+                                        <td class="total-cart-p"><span>₹ </span><span id="totalAmounts"> <%=totalPrice%></span></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -275,6 +298,54 @@
         </div>
       </footer>
       <!-- Footer Section End -->
+
+      <!-- count change -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+    <script>
+        function quantityChange(pro, count, price) {
+            ///let quantity = document.getElementById('countUpdate').value;
+            //console.log(quantity);
+            //count = parseInt(count);
+
+            console.log('enter');
+            console.log(count);
+
+            $.ajax({
+                url: '/change-quentity',
+                data: {
+                    name: pro,
+                    count: count,
+                    price: price
+                },
+                method: 'post',
+                dataType: 'json',
+                success: (response) => {
+
+                    //Update the content of an element with the ID 'quantity'
+                    if (response) {
+                        console.log(response, 'response got')
+                        console.log(response.quantity, 'value kitti')
+
+                        //console.log(price)
+                        console.log('success response came');
+                        document.getElementById(`${pro}`).innerHTML = response.quantity;
+                        document.getElementById(`${pro}+hai`).innerHTML = response.totalPrice;
+                        document.getElementById('totalAmount').innerHTML = response.totalAmount
+                        document.getElementById('totalAmounts').innerHTML = response.totalAmount
+                        //if (response.quantity == 10 || response.quantity == 1) {
+                        //    location.reload()
+                        //}
+
+                    } else {
+                        console.log('error in ajax for updating the quantity of the product')
+                    }
+                }
+            });
+        }
+    </script>
+
+
   
       <!-- Js Plugins -->
       <script src="/js/jquery-3.3.1.min.js"></script>
