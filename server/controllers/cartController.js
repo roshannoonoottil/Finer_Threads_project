@@ -27,6 +27,7 @@ const addtoWishList = async (req, res) => {
         const wishPro = await productDetails.findOne({ name: req.params.id })
         const wishDataFound = await wishDetails.findOne({ product: req.params.id , username: req.session.name})
         console.log(req.session.name)
+
         if (!wishDataFound) {
             console.log("innn");
             const wishData = new wishDetails({
@@ -119,7 +120,9 @@ const viewcart = async (req,res)=>{
         if (cartData) {
             let updatedValue = cartData.quentity
             updatedValue++
+            if ((updatedValue <= 5) & (updatedValue >= 1)) {
             await cartDetails.updateOne({ product: req.params.id }, { quentity: updatedValue })
+            }
         } else {
             const categoryData = new cartDetails({
                 username: req.session.name,
@@ -170,7 +173,7 @@ const changeQuantity = async (req, res) => {
         let q = dataCart1.quentity
         console.log(q + Number(data[1]), 'quantity check 10')
         let val = q + Number(data[1])
-        if ((val <= 10) & (val >= 1)) {
+        if ((val <= 5) & (val >= 1)) {
             await cartDetails.updateOne({ $and: [{ username: userin }, { product: `${data[0]}` }] }, { $inc: { quentity: req.body.count } })
             console.log('after cartupater')
 
