@@ -49,6 +49,9 @@ router.get('/newAddressEdit', userCheck.isUser, profileController.newAddressEdit
 router.post('/newAddressEdit', userCheck.isUser, profileController.newEditAddress)
 router.get('/removeAddress', userCheck.isUser, profileController.removeAddress)
 
+router.get('/update-profile', userCheck.isUser, profileController.updateProfile)
+router.post('/update-profile', userCheck.isUser, profileController.updateProfileData)
+
 
 
 module.exports = router;

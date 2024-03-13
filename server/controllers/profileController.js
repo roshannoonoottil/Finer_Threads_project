@@ -162,6 +162,47 @@ const newEditAddress = async (req, res) => {
 
 
 
+const updateProfile = async (req, res) => {
+    try {
+        const userin = req.session.name
+        console.log(userin)
+        const userProfile = await address.findOne({ username: req.session.name })
+        console.log(userProfile)
+        const cat = await categoryModel.find({ list: 0 })
+        const cartCount = await cart.find({ username: req.session.name }).countDocuments()
+        const wishCount = await wish.find({ username: userin }).countDocuments()
+        res.render('userAddress', { userProfile, userin, cat, cartCount, wishCount })
+    } catch (e) {
+        console.log('error in the updateAddress in userprofilecontoller in user side : ' + e)
+        // res.redirect("/error")
+    }
+}
+
+
+const updateProfileData = async (req, res) => {
+    try {
+        const userin = req.session.name
+        console.log(req.body)
+        await address.updateOne({ username: userin }, {
+            fullname: req.body.name,
+            phone: req.body.phone,
+            address: {
+                houseName: req.body.house,
+                city: req.body.city,
+                state: req.body.state,
+                pincode: req.body.pin,
+                country: req.body.country
+            }
+        })
+        res.redirect(`/useraccount/${{ userin }}`)
+    } catch (e) {
+        console.log('error in the updateProfileData in userProfileController in user side : ' + e)
+        // res.redirect("/error")
+    }
+}
+
+
+
 module.exports={
     changePass,
     change,
@@ -169,5 +210,7 @@ module.exports={
     addAddress,
     newEditAddress,
     newAddressEdit,
-    removeAddress
+    removeAddress,
+    updateProfile,
+    updateProfileData
 }

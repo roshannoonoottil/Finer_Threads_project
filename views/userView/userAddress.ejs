@@ -72,7 +72,7 @@
                     <div class="form-group no-gutters">
                         <label for="">Full Name: </label>
                         <input class="form-control" name="username" type="text"
-                            value="{{userProfile.fullname}}" data-msg="Please enter your username">
+                            value="<%=userProfile.fullname%>" data-msg="Please enter your username">
                     </div>
                     <!-- {{!-- <div class="form-group no-gutters">
                         <label for="">Email Address: </label>
@@ -82,34 +82,34 @@
                     </div> --}} -->
                     <div class="form-group no-gutters">
                         <label for="">Phone Number: </label>
-                        <input class="form-control" name="phone" type="number" value="{{userProfile.phone}}"
+                        <input class="form-control" name="phone" type="number" value="<%=userProfile.phone%>"
                             data-msg="Please enter your username">
                     </div>
                     <div class="form-group no-gutters">
                         <label for="">House Name: </label>
                         <input class="form-control" name="house" type="text"
-                            value="{{userProfile.address.houseName}}" data-msg="Please enter your username">
+                            value="<%=userProfile.address.houseName%>" data-msg="Please enter your username">
                     </div>
                     <div class="form-group no-gutters">
                         <label for="">City: </label>
                         <input class="form-control" name="city" type="text"
-                            value="{{userProfile.address.city}}" data-msg="Please enter your username">
+                            value="<%=userProfile.address.city%>" data-msg="Please enter your username">
                     </div>
 
                     <div class="form-group no-gutters">
                         <label for="">State: </label>
                         <input class="form-control" name="state" type="text"
-                            value="{{userProfile.address.state}}" data-msg="Please enter your username">
+                            value="<%=userProfile.address.state%>" data-msg="Please enter your username">
                     </div>
                     <div class="form-group no-gutters">
                         <label for="">Pin Code: </label>
                         <input class="form-control" name="pin" type="number"
-                            value="{{userProfile.address.pincode}}" data-msg="Please enter your username">
+                            value="<%=userProfile.address.pincode%>" data-msg="Please enter your username">
                     </div>
                     <div class="form-group no-gutters">
                         <label for="">Country: </label>
                         <input class="form-control" name="country" type="text"
-                            value="{{userProfile.address.country}}" data-msg="Please enter your username">
+                            value="<%=userProfile.address.country%>" data-msg="Please enter your username">
                     </div>
 
                     <button type="submit" class="btn btn-primary">Update Profile</button>
