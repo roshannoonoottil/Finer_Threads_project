@@ -1,6 +1,7 @@
 const userModel = require("../models/userModel");
 const categoryModel = require("../models/categoryModel");
 const productModel = require("../models/productModel");
+const userPro = require('../models/userAddressModel')
 const otpSend = require("../middleware/otp");
 const bcrypt = require("bcrypt");
 
@@ -128,7 +129,7 @@ const redirectUser = async (req, res) => {
     const category = await categoryModel.find({ list: 1 });
     const product = await productModel.find({}).sort({ _id: 1 });
     console.log(userName);
-    res.render("home",{ category, product });
+    res.render("home",{ category, product,userName });
   } catch (error) {
     console.log("Error while redirection");
   }
@@ -368,6 +369,56 @@ const shop = async (req, res) => {
 };
 
 
+const userAccount = async (req, res) => {
+  try {
+    console.log(req.params.id)
+    const userin = req.session.name
+
+    const userData = await userPro.findOne({ username: userin, primary: 1 })
+    const user = await userModel.findOne({ username: userin })
+    const useraddress = await userPro.find({ username: userin, primary: 0 })
+    console.log(user)
+    const username = userin
+    const cat = await categoryModel.find({ list: 0 })
+    res.render('userProfile'
+    , { userData, user, userin, cat, useraddress, username }
+    )
+  } catch (e) {
+    console.log('error in the userAccount of userController in user side : ' + e)
+    // res.redirect("/error")
+  }
+}
+
+
+
+
+const newAddress = async (req, res) => {
+  try {
+    const userin = req.session.name
+    console.log(userin)
+    console.log(req.body)
+    const newAddress = new userPro({
+      username: userin,
+      fullname: req.body.fullname,
+      phone: req.body.phone,
+      address: {
+        houseName: req.body.house,
+        city: req.body.city,
+        state: req.body.state,
+        country: req.body.country,
+        pincode: req.body.pincode
+      },
+      primary: 0
+    })
+    await newAddress.save()
+    res.redirect(`/useraccount/${userin}`)
+
+  } catch (e) {
+    console.log('error in the newAddress in userController in the user side:' + e)
+    // res.redirect("/error")
+  }
+}
+
 
 
 
@@ -393,5 +444,7 @@ module.exports = {
   resendOTP,
   otp,
   shop,
-  search
+  search,
+  userAccount,
+  newAddress
 };

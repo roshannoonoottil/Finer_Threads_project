@@ -2,6 +2,7 @@ const router = require("express").Router();
 const userController = require("../controllers/userController.js");
 const userCheck = require("../middleware/userMiddleware.js");
 const cartController=require("../controllers/cartController.js")
+const profileController = require("../controllers/profileController.js")
 
 router.get("/", userController.index);
 router.get("/login", userController.login);
@@ -34,9 +35,20 @@ router.get('/deletewishlist/:id', userCheck.isUser, cartController.removeWishlis
 router.get('/cart', userCheck.isUser, cartController.viewcart);
 router.get('/addToCart/:id', userCheck.isUser, cartController.addToCart);
 router.get('/deleteItemCart/:id', userCheck.isUser, cartController.deleteCart)
-
-
 router.post('/change-quentity', userCheck.isUser, cartController.changeQuantity)
+
+router.get('/useraccount/:id', userCheck.isUser, userController.userAccount)
+router.get('/userchangePassword', userCheck.isUser, profileController.changePass)
+router.post('/userchangePassword', userCheck.isUser, profileController.change)
+router.get('/add-address', userCheck.isUser, profileController.profile)
+
+
+router.post('/add-address', userCheck.isUser, profileController.addAddress)
+router.post('/newAddress', userCheck.isUser, userController.newAddress)
+router.get('/newAddressEdit', userCheck.isUser, profileController.newAddressEdit)
+router.post('/newAddressEdit', userCheck.isUser, profileController.newEditAddress)
+router.get('/removeAddress', userCheck.isUser, profileController.removeAddress)
+
 
 
 module.exports = router;
