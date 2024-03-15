@@ -186,6 +186,32 @@ const deleteOrder = async (req, res) => {
   }
 }
 
+const returnDetails = async (req, res) => {
+  try {
+      console.log(req.query)
+      await orderData.updateOne({ orderId: req.query.id, product: req.query.product },{returnStatus:1})
+      const user = await orderData.findOne({ orderId: req.query.id, product: req.query.product })
+
+      console.log(user,'return details')
+      let amount = user.price * user.quentity
+      console.log(amount)
+      await userModel.updateOne({username:user.username},{$set:{wallet:amount}},{upsert:true})
+      res.redirect(`/admin/orderDetails?orderId=${req.query.id}&product=${req.query.product}`)
+  } catch (e) {
+      console.log('error in the returnDetails in the ordetrController in the admin side : ' + e)
+  }
+}
+
+const returnFail = async (req,res)=>{
+  try{
+      console.log(req.query,'retuen failed')
+      await orderData.updateOne({ orderId: req.query.id, product: req.query.product },{returnStatus:2})
+      res.redirect(`/admin/orderDetails?orderId=${req.query.id}&product=${req.query.product}`)
+  }catch(e){
+      console.log('error in the returnFail of orderController in admin side : ' + e)
+  }
+}
+
 module.exports = {
   adiminLogin,
   adminDashboard,
@@ -198,5 +224,7 @@ module.exports = {
   updateOrderStatus,
   details,
   searchOrder,
-  deleteOrder
+  deleteOrder,
+  returnDetails,
+  returnFail
 };

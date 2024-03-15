@@ -38,6 +38,8 @@ router.post('/updatestatus', adminCheck.isAdmin, adminController.updateOrderStat
 router.get('/orderDetails',adminCheck.isAdmin, adminController.details)
 router.post('/oders', adminCheck.isAdmin, adminController.searchOrder)
 router.get('/deleteOrder', adminCheck.isAdmin, adminController.deleteOrder)
+router.get('/returnsuccess',adminCheck.isAdmin, adminController.returnDetails)
+router.get('/returnFail',adminCheck.isAdmin, adminController.returnFail)
 
 
   

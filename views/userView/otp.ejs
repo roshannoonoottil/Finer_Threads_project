@@ -81,31 +81,46 @@
 
 
     <div class="container-fluid">
-      <h5 style="padding-left:40%">Please check the email OTP for verification.</h5>
-      <div class="w-25" style="margin-left: 40%">
-      <br><br>
-      <p></p>
-        <form action="/verifyOTP" method="post">
-          <!-- OTP input -->
-          <div class="form-outline mb-4">
-            <input
-              type="number"
-              id="number"
-              class="form-control"
-              name="otp" placeholder="Enter the OTP"
-              required
-            />
-            <label class="form-label" for="form2Example1">OTP verification</label>
-          </div>
-          
-          <!-- Submit button -->
-          <button type="submit" class="btn btn-primary btn-block mb-4">
-            Sign up
-          </button>
-        </form>
-      </div>
+        <h5 style="padding-left:40%">Please check the email OTP for verification.</h5>
+        <br>
+        <div class="w-25" style="margin-left: 40%">
+            <form action="/verifyOTP" method="post">
+                <!-- OTP input -->
+                <div class="form-outline mb-4">
+                    <input
+                        type="number"
+                        id="number"
+                        class="form-control"
+                        name="otp"
+                        placeholder="Enter the OTP"
+                        required
+                        maxlength="6"
+                        onkeyup="validateOTP()"
+                    />
+                    <br>        
+                    <label class="form-label" for="form2Example1">OTP verification</label>
+                </div>
+                <span id="otp-error"></span>
+    
 
-
+                <!-- Submit button -->
+                <button onclick="return validateOTPForm()" type="submit" class="btn btn-primary btn-block mb-4">
+                    Sign Up
+                </button>
+            </form>
+                <!-- Countdown and Resend OTP button -->
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <p id="countdown">Waiting for OTP...</p>
+                    </div>
+                    <div>
+                        <button id="resendButton" onclick="resendOTP()" class="btn btn-primary" disabled>Resend OTP</button>
+                    </div>
+                </div>
+            
+        </div>
+    </div>
+    
 
 
 
@@ -200,6 +215,88 @@
     <script src="js/jquery.nice-select.min.js"></script>
     <script src="js/mixitup.min.js"></script>
     <script src="js/main.js"></script>
-</body>
+    <script>
+    var email = req.body.email;
+    </script>
+
+    <script>
+
+        /*    OTP VALIDATION     */
+        var otpError = document.getElementById("otp-error");
+        var submitOTPError = document.getElementById("submitOTP-error");
+        var invalidOTP = document.getElementById("invalidotp");
+            invalidOTP.style.display='block';
+            setTimeout(()=>{
+              invalidOTP.style.display="none"
+            },2000)
+    
+        function validateOTP() {
+          var otpname = document.getElementById("otp").value;
+          if (otpname.length == 0) {
+            otpError.innerHTML = "Please enter OTP";
+            return false;
+          
+          } else if (!otpname.match(/^[0-9]{4,}$/)) {
+        otpError.innerHTML = "Only numbers allowed";
+        return false;
+           }
+          
+          else if (otpname.length != 6) {
+            otpError.innerHTML = "6 digit OTP";
+            return false;
+          }
+    
+          otpError.innerHTML = "valid";
+          return true;
+        }
+    
+        function validateOTPForm() {
+          if (!validateOTP()) {
+            submitOTPError.style.display = "block";
+            submitOTPError.innerHTML = "OTP required";
+            setTimeout(() => {
+              submitOTPError.style.display = "none";
+            }, 2000);
+            return false;
+          }
+          
+        }
+        
+        
+        </script>
+    
+    <script>
+        let countdownValue = 60; // Countdown duration in seconds
+        let countdownInterval;
+    
+        function startCountdown() {
+            countdownInterval = setInterval(function () {
+                if (countdownValue > 0) {
+                    countdownValue--;
+                    document.getElementById('countdown').innerText = `Resend OTP in ${countdownValue} seconds`;
+                } else {
+                    clearInterval(countdownInterval);
+                    document.getElementById('countdown').innerText = 'Waiting for OTP...';
+                    document.getElementById('resendButton').disabled = false;
+                }
+            }, 1000);
+        }
+    
+        function resendOTP() {
+            // Simulate OTP resend logic
+            // Replace this with your actual OTP resend logic   
+            
+            window.location.href="/regResOTP/<%=email %>"
+    
+            // Disable the resend button and start the countdown
+            document.getElementById('resendButton').disabled = true;
+            countdownValue = 60; // Reset countdown value
+            startCountdown();
+        }
+        
+        // Start the initial countdown
+        startCountdown();
+    </script>
+
 
 </html>

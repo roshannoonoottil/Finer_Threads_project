@@ -244,22 +244,22 @@ const orderData = async (req, res) => {
 }
 
 
-// const showDetailOrderHistory = async (req, res) => {
-//     try {
-//         console.log(req.params.id)
-//         const userin = req.session.userName
-//         const data = await order.find({ orderId: req.params.id })
-//         const img = await productDetails.findOne({ name: data.product })
-//         const cartCount = await cart.find({ username: userin }).count()
-//         //console.log(cartCount)
-//         console.log(data[0], 'orderdata is notksnfgighasbfj--------------------------------------')
-//         res.render('userOrderSinglePage', { data, img, userin, cartCount })
+const showDetailOrderHistory = async (req, res) => {
+    try {
+        console.log(req.params.id)
+        const userin = req.session.userName
+        const data = await order.find({ orderId: req.params.id })
+        const img = await productDetails.findOne({ name: data.product })
+        const cartCount = await cart.find({ username: userin }).count()
+        //console.log(cartCount)
+        console.log(data[0], 'orderdata is notksnfgighasbfj--------------------------------------')
+        res.render('userOrderSiglePage', { data, img, userin, cartCount })
 
-//     } catch (e) {
-//         console.log('error in the showDetailOrderHistory in orderController in the userSide : ' + e)
-//         res.redirect("/error")
-//     }
-// }
+    } catch (e) {
+        console.log('error in the showDetailOrderHistory in orderController in the userSide : ' + e)
+        res.redirect("/error")
+    }
+}
 
 const orderHistory = async (req, res) => {
     try {
@@ -275,6 +275,49 @@ const orderHistory = async (req, res) => {
     }
 }
 
+const cancelPro = async (req, res) => {
+    try {
+        // await order.updateOne({ orderId: req.params.id }, { adminCancel: 1, status: 'CANCELED' })
+        await order.updateOne({
+            $and:
+                [
+                    { orderId: req.query.orderId },
+                    { product: req.query.product }
+                ]
+        },
+            {
+                $set: { status: 'CANCELED', adminCancel: 1 }
+            })
+        res.redirect(`/historyOrder?orderId=${req.query.orderId}&product=${req.query.product}`)
+    } catch (e) {
+        console.log('error in the cancelPro in orderController in user side : ' + e)
+    }
+}
+
+const returnPro = async (req, res) => {
+    try {
+        await order.updateOne({ orderId: req.params.id }, { status: 'Returnde Successfully' })
+        res.redirect('/orderhistory')
+    } catch (e) {
+        console.log('error in thr returnPro in orderController in user side : ' + e)
+        res.redirect("/error")
+    }
+}
+
+const returnreason = async (req, res) => {
+    try {
+        console.log(req.body)
+        console.log(req.params.id)
+        const val = await order.updateOne({ orderId: req.params.id, product: req.query.product }, { returnStatus: 0, returnreason: req.body.reason }, { upsert: true })
+        console.log(val)
+        res.redirect(`/orderHistoryPage/${req.params.id}?product=${req.query.product}`)
+    } catch (e) {
+        console.log('error in the returnreason in ordercontroller in user side : ' + e)
+        res.redirect("/error")
+
+    }
+}
+
 module.exports ={
     proceedtoCheckOut,
     displayaddress,
@@ -282,5 +325,9 @@ module.exports ={
     codPayment,
     orderData,
     orderHistory,
+    cancelPro,
+    returnPro,
+    returnreason,
+    showDetailOrderHistory
 
 }

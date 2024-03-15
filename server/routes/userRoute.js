@@ -11,6 +11,8 @@ router.get("/signup", userController.signup);
 router.post("/signup", userController.verifyOTPS);
 router.post("/verifyOTP", userController.authOTP);
 router.post("/home", userController.validateUser);
+router.get("/regResOTP/:id", userController.regResendOTP);
+
 
 router.get("/home", userCheck.isUser, userController.redirectUser);
 router.get("/logout", userController.logout);
@@ -63,6 +65,11 @@ router.get('/paymentSuccess', userCheck.isUser, orderController.codPayment)
 
 router.get('/orderhistory', userCheck.isUser, orderController.orderData)
 router.get('/historyOrder', userCheck.isUser, orderController.orderHistory)
+
+router.get('/cancelProduct', userCheck.isUser, orderController.cancelPro)
+router.get('/returnProduct/:id', userCheck.isUser, orderController.returnPro)
+router.post("/returnreason/:id", userCheck.isUser, orderController.returnreason)
+router.get('/orderHistoryPage/:id', userCheck.isUser, orderController.showDetailOrderHistory)
 
 
 

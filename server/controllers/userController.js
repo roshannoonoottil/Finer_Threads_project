@@ -57,7 +57,7 @@ const verifyOTPS = (req, res) => {
     console.log(otpData);
     OTP = otpData;
     console.log("OTP received is: " + otpData);
-    res.render("otp");
+    res.render("otp",{OTP,email});
     console.log("User OTP Page");
   } catch (err) {
     console.log("error in veriy otp" + err);
@@ -344,6 +344,28 @@ const otp = (req, res) => {
     );
   }
 };
+
+const regResendOTP = (req, res) => {
+  try {
+    //console.log("Hello");
+    email = req.params.id;
+    console.log("Resending OTP to email: " + email);
+    const otpReRData = otpSend.sendmail(email);
+    console.log("otpRData is ++++++" + otpReRData);
+    OTP = otpReRData;
+    console.log(
+      "OTP received after 60s is: " + OTP + " and timestamp is:  " + otpReRData
+    );
+    req.session.otpTimestamp = otpReRData[1];
+    message = req.session.otpError;
+    // res.redirect("/otp");
+    console.log("USER RESEND OTP PAGE");
+  } catch (error) {
+    console.log("Error while resending OTP :" + error);
+  }
+};
+
+
 let searchValue;
 const search = async (req, res) => {
   try {
@@ -443,6 +465,7 @@ module.exports = {
   updatePassword,
   resendOTP,
   otp,
+  regResendOTP,
   shop,
   search,
   userAccount,
