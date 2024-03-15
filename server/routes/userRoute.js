@@ -3,6 +3,7 @@ const userController = require("../controllers/userController.js");
 const userCheck = require("../middleware/userMiddleware.js");
 const cartController=require("../controllers/cartController.js")
 const profileController = require("../controllers/profileController.js")
+const orderController = require("../controllers/orderController.js")
 
 router.get("/", userController.index);
 router.get("/login", userController.login);
@@ -51,6 +52,11 @@ router.get('/removeAddress', userCheck.isUser, profileController.removeAddress)
 
 router.get('/update-profile', userCheck.isUser, profileController.updateProfile)
 router.post('/update-profile', userCheck.isUser, profileController.updateProfileData)
+
+
+router.post('/checkout', userCheck.isUser, orderController.proceedtoCheckOut)
+
+router.post('/displayaddress', userCheck.isUser, orderController.displayaddress)
 
 
 
