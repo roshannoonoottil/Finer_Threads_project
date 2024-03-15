@@ -34,6 +34,11 @@ router.post("/productUpdate", adminCheck.isAdmin, multer.fields([
 router.get('/proHide/:name' , adminCheck.isAdmin, productController.proBlock ) ; // Hide the product from frontend
 
 router.get('/oders', adminCheck.isAdmin, adminController.oders);   // Offers page
+router.post('/updatestatus', adminCheck.isAdmin, adminController.updateOrderStatus)
+router.get('/orderDetails',adminCheck.isAdmin, adminController.details)
+router.post('/oders', adminCheck.isAdmin, adminController.searchOrder)
+router.get('/deleteOrder', adminCheck.isAdmin, adminController.deleteOrder)
+
 
   
 

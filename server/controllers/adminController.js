@@ -1,4 +1,5 @@
 const userModel = require("../models/userModel");
+const orderData = require('../models/orderModel')
 const bcrypt = require("bcrypt");
 
 let nameSearch;
@@ -111,12 +112,77 @@ const searchUser = async (req, res) => {
 };
 
 
-const oders = (req, res) => {
+const oders = async (req, res) => {
   try {
-      res.render('adminOders',{username: req.session.username})
+    const dataOrder = await orderData.find({}).sort({ '_id': -1 }).limit(5)
+    console.log(dataOrder)
+    let current = 0
+    let displayprev = 0
+    let displaynxt = 1
+    res.render('adminOders', { dataOrder, current, displayprev, displaynxt, username: req.session.username })
   } catch (e) {
-      // res.redirect('/admin/errorPage')
-      console.log('error in the offers in the adminController in the admin side : ' + e)
+
+      console.log('error in the orders in the adminController in the admin side : ' + e)
+  }
+}
+
+const updateOrderStatus = async (req, res) => {
+  try {
+      console.log('status update')
+      console.log(req.params.id)
+      console.log(req.body.status)
+      await orderData.updateOne(
+          {
+              $and: [{ orderId: req.query.orderId },
+              { product: req.query.product }]
+          },
+          { $set: { status: req.body.status } }
+      )
+
+
+      res.redirect('/admin/oders')
+  } catch (e) {
+      console.log('error in the updateOrderStatus in orderController in admin side: ' + e)
+  }
+}
+
+
+const searchOrder = async (req, res) => {
+  try {
+      let search = req.body.search
+      console.log(search)
+      const regex = new RegExp(`${search}`, 'i')
+      const dataOrder = await orderData.find({ product: { $regex: regex } })
+      res.render('adminOders', { dataOrder, username: req.session.username})
+  } catch (e) {
+      console.log('error in the searchOrder in orderController in admin side : ' + e)
+  }
+}
+
+const details = async (req, res) => {
+  try {
+      console.log(req.query.orderId)
+      console.log(req.query.product)
+      const data = await orderData.findOne({ $and: [{ orderId: req.query.orderId }, { product: req.query.product }] })
+      // const img = await productDetails.findOne({ name: data.product })
+      console.log(data)
+      console.log('==================================================================')
+      // console.log(img.imagePath[0])
+      console.log('aidhgsai')
+      res.render('admin_order_details', { data, username: req.session.username })
+  } catch (e) {
+      console.log('error in the details in orderController in adminSide : ' + e)
+  }
+}
+
+
+
+const deleteOrder = async (req, res) => {
+  try {
+      await orderData.updateOne({ $and: [{ orderId: req.query.orderId }, { product: req.query.product }] }, { $set: { adminCancell: 1, status: 'CANCELED' } })
+      res.redirect('/admin/oders')
+  } catch (e) {
+      console.log('error in the deleteOrder in orderController in admin controller : ' + e)
   }
 }
 
@@ -128,5 +194,9 @@ module.exports = {
   adminShowUsers,
   block,
   searchUser,
-  oders
+  oders,
+  updateOrderStatus,
+  details,
+  searchOrder,
+  deleteOrder
 };

@@ -16,14 +16,8 @@ const changePass = async (req, res) => {
         const val = req.query.val
         const cat = await categoryModel.find({ list: 0 })
         const userData = await userModel.findOne({ username: userin })
-        //const otpData = sndmail.sendmail(userData.email)
         const cartCount = await cart.find({ username: req.session.name }).countDocuments()
         const wishCount = await wish.find({ username: userin }).countDocuments()
-        // otpData.then((val) => {
-        //     console.log(val)
-        //     otp = val[0]
-        // })
-        //console.log(otp)
         const error = req.query.error 
         res.render('userChangePass', { userin, val, cat, cartCount, wishCount,error })
     } catch (e) {
