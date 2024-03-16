@@ -221,11 +221,13 @@ const proBlock = async (req, res) => {
   }
 };
 
+
+
 module.exports = {
   adminProduct,
   addProduct,
   newProductPage,
   editProduct,
   updateProduct,
-  proBlock,
+  proBlock
 };

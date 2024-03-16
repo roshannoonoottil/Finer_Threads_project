@@ -99,6 +99,40 @@
                             </div>
                         </form>
                     </div>
+                    <!-- <div class="col-xl-3"> -->
+                      <!-- Content of the column goes here -->
+                      <!-- For example, some text or other elements -->
+                    
+                      <!-- Move the selection box here -->
+                      <!-- <div style="margin-left: 400px;" class="bg-light rounded d-flex justify-content-between mt-3">
+                        <h6 for="category">Sort:</h6>
+                        <select id="category" name="category" class="border-0 form-select-sm bg-light me-3" form="category" onchange="redirectToSort()">
+                          <option value=""> Default</option>
+                          <option value="A - Z"> A - Z</option>
+                          <option value="Z - A"> Z - A</option>
+                          <option value="1-10"> Price: Low to High</option>
+                          <option value="10-1"> Price: High to Low</option>
+                        </select>
+                        <script>
+                          function redirectToSort() {
+                            const selectedValue =
+                              document.getElementById("category").value;
+                            if (selectedValue === "A - Z") {
+                              window.location.href = "/Ucategory/sort/1"; // Redirect to A -Z sorting page
+                            } else if (selectedValue === "Z - A") {
+                              window.location.href = "/Ucategory/sort/2"; // Redirect to Z - A sorting page
+                            } else if (selectedValue === "1-10") {
+                              window.location.href = "/Ucategory/sort/3"; // Redirect to Price: Low to High sorting page
+                            } else if (selectedValue === "10-1") {
+                              window.location.href = "/Ucategory/sort/4"; // Redirect to Price: High to Low sorting page
+                            } else {
+                              // No sorting selected, do nothing
+                              console.log("dropdown pressed");
+                            }
+                          }
+                        </script>
+                      </div>
+                    </div> -->
                 
                     <div class="col-lg-4">
                       
@@ -131,7 +165,7 @@
               <figure>
                 <a href="/userproduct/<%=p.id %>"
                   ><img
-                    src="<%=p.image[0] %>"
+                    src="/<%=p.image[0] %>"
                     alt=""
                     width="240px"
                     height="360px"
@@ -155,6 +189,18 @@
       </div>
     </section>
     <!-- Latest Product End -->
+
+      <!-- <div class="pagination-area mt-15 mb-50">
+        <nav aria-label="Page navigation example">
+          <ul class="pagination justify-content-center">
+            <#% for(let page = 1; page <= totalPages; page++){ %>
+              <li class="page-item <#%= currentPage === page ? 'active' : '' %>">
+                <a class="page-link btn-primary" href="?page=<#%=page%>"><#%=page%></a>
+              </li>
+            <#% } %>
+          </ul>
+        </nav>
+      </div> -->
 
     <!-- Footer Section Begin -->
     <footer class="footer-section spad">

@@ -366,9 +366,10 @@ const regResendOTP = (req, res) => {
 };
 
 
-let searchValue;
+
 const search = async (req, res) => {
   try {
+    var currentPage ;
     searchValue = req.body.searchValue;
     console.log("The searched data is: " + req.body.searchValue);
     const category = await categoryModel.find({});
@@ -377,17 +378,37 @@ const search = async (req, res) => {
     });
     console.log("searchData value is" + product);
     const noProduct = "No such product available";
-    res.render("userProductCategory", { category, product, searchValue, noProduct });
+    res.render("userProductCategory", { category, product, searchValue, noProduct});
   } catch (error) {
     console.log("Error while searching a product by guest: " + error);
   }
 };
 
 const shop = async (req, res) => {
+
+  // var page = 1;
+  // if (req.query.page) {
+  //   page = req.query.page;
+  // }
+  // const limit = 6;
+  // var product = await productModel
+  //   .find({})
+  //   .sort({ _id: 1 })
+  //   .limit(limit * 1)
+  //   .skip((page - 1) * limit); //cant use const here as it will render error when a product is searched//
+
+  // const count = await productModel.find({}).countDocuments(); // counts the total products //
+  // console.log("PRODUCT COUNT IS :" + count);
+
+
   console.log("Shop clicked");
+  searchValue = req.body.searchValue;
   const product = await productModel.find({ });
   const category = await categoryModel.find({ list: 1 });
-  res.render("userProductCategory", { category, product,searchValue });
+  res.render("userProductCategory", { category, product,searchValue,
+    // totalPages: Math.ceil(count / limit),
+    // currentPage: page, 
+   });
 };
 
 
@@ -441,7 +462,78 @@ const newAddress = async (req, res) => {
   }
 }
 
+const categoryProductSort = async (req, res) => {
+  try {
+    // const cartProducts = await cartModel.find({ user: req.session.userID });
+    // const cartCount = cartProducts[0].item.length;
 
+    const category = await categoryModel.find({ list: 1 });
+    const userName = req.session.name;
+    // const searchValue = "";
+    // const searchData = "";
+    const number = req.params.number;
+    //console.log(number);
+    if (number == 1) {
+      var totalPages
+      var currentPage 
+      const product = await productModel
+        .find({})
+        .sort({ name: 1 });
+      console.log("DATA IF 1 is pressed:" + product);
+      const value = "A - Z";
+      res.re("userProductCategory", {
+        user: userName,
+        product,
+        searchValue,
+        category,
+        totalPages,
+        currentPage
+      });
+    } else if (number == 2) {
+      const product = await productModel
+        .find({})
+        .sort({ name: -1 });
+      console.log("DATA IF 2 is pressed:" + product);
+      res.render("userProductCategory", {
+        user: userName,
+        product,
+        searchValue,
+        category,
+        totalPages,
+        currentPage
+
+      });
+    } else if (number == 3) {
+      const product = await productModel
+        .find({})
+        .sort({ discountAmount: 1 });
+      console.log("DATA IF 3 is pressed:" + product);
+      res.render("userProductCategory", {
+        user: userName,
+        product,
+        searchValue,
+        category,
+        totalPages,
+        currentPage
+      });
+    } else if (number == 4) {
+      const product = await productModel
+        .find({})
+        .sort({ discountAmount: -1 });
+      console.log("DATA IF 4 is pressed:" + product);
+      res.render("userProductCategory", {
+        user: userName,
+        product,
+        searchValue,
+        category,
+        totalPages,
+        currentPage
+      });
+    }
+  } catch (error) {
+    console.log("Error happened while accessing categoryProductSort: " + error);
+  }
+};
 
 
 module.exports = {
@@ -469,5 +561,6 @@ module.exports = {
   shop,
   search,
   userAccount,
-  newAddress
+  newAddress,
+  categoryProductSort
 };

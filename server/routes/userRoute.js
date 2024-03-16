@@ -4,6 +4,7 @@ const userCheck = require("../middleware/userMiddleware.js");
 const cartController=require("../controllers/cartController.js")
 const profileController = require("../controllers/profileController.js")
 const orderController = require("../controllers/orderController.js")
+const productController =require("../controllers/productController.js")
 
 router.get("/", userController.index);
 router.get("/login", userController.login);
@@ -70,6 +71,8 @@ router.get('/cancelProduct', userCheck.isUser, orderController.cancelPro)
 router.get('/returnProduct/:id', userCheck.isUser, orderController.returnPro)
 router.post("/returnreason/:id", userCheck.isUser, orderController.returnreason)
 router.get('/orderHistoryPage/:id', userCheck.isUser, orderController.showDetailOrderHistory)
+
+router.get("/Ucategory/sort/:number",userCheck.isUser,userController.categoryProductSort);
 
 
 

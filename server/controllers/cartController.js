@@ -10,12 +10,29 @@ const session = require('express-session');
 
 const viewWish = async (req, res) => {
     try {
-        const wishData = await wishDetails.find({ username: req.session.name })
+        var page = 1;
+        if (req.query.page) {
+          page = req.query.page;
+        }
+        const limit = 4;
+        var wishData = await wishDetails
+          .find({ username: req.session.name })
+          .sort({ _id: -1 })
+          .limit(limit * 1)
+          .skip((page - 1) * limit); //cant use const here as it will render error when a product is searched//
+    
+        const count = await wishDetails.find({ username: req.session.name }).countDocuments(); // counts the total products //
+        console.log("PRODUCT COUNT IS :" + count);
+
+
+        // const wishData = await wishDetails.find({ username: req.session.name })
         const userin = req.session.name
         const cat = await categoryDetails.find({ list: 1 })
         console.log("view wishlist");
         console.log(wishData);
-        res.render('userWishlist', { wishData, userin, cat })
+        res.render('userWishlist', { wishData, userin, cat,
+            totalPages: Math.ceil(count / limit),
+            currentPage: page, })
     } catch (e) {
         console.log('error in the viewCart in cartController user side : ' + e)
     }
