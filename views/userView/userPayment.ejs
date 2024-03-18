@@ -117,7 +117,7 @@
                                             <tr>
                                                 <td><%= item.product %></td>
                                                 <td><%= item.quentity %></td>
-                                                <td><%= item.offerPrice %></td>
+                                                <td>₹ <%= item.offerPrice %></td>
                                             </tr>
                                         <% }); %>
                                     
@@ -135,7 +135,7 @@
                                 <hr>
                                 <div style="padding-left: 60%;">
 
-                                    <h6 style="padding-left: 45%;" id="price"><%= totalPrice %></h6>
+                                    <h6 style="padding-left: 45%;" id="price">₹ <%= totalPrice %></h6>
                                     <!-- <h5 id="applied" style="display: none;">Coupon Applied</h5> -->
                                     <h6 style="margin-top: -7%;padding-left: 8%;display: none;" id="discountValue"></h6>
                                     <br>
@@ -143,7 +143,7 @@
                                     <h6 style="margin-top: -6%;padding-left: 8%;display: none;" id="walletValue"></h6>
                                     <hr>
                                     <h5>Price</h5>
-                                    <h6 style="margin-top: -6%;padding-left: 45%;" id="totalAmount"><%= totalPrice %></h6>
+                                    <h6 style="margin-top: -6%;padding-left: 45%;" id="totalAmount">₹ <%= totalPrice %></h6>
 
                                 </div>
 

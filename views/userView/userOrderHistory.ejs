@@ -84,7 +84,7 @@
                     <% if (item.amountPaid) { %>
                         <td><%= item.amountPaid %></td>
                     <% } else { %>
-                        <td><%= item.price %></td>
+                        <td>₹ <%= item.price %></td>
                     <% } %>
                     <td><%= item.orderDate %></td>
                     <td><a href="/historyOrder?orderId=<%= item.orderId %>&product=<%= item.product %>" class="btn btn-dark">Details</a></td>
