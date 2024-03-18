@@ -38,22 +38,24 @@
 <!-- <h2 class="mb-4">Add Product</h2> -->
 <form action="/admin/product" method="post" enctype="multipart/form-data">
 <div class="form-group">
-  <span id="name-error"></span>
+  <p id="name-error"></p>
   <label for="productName" style="color:rgb(0, 0, 0); font-size: medium;">Product Name:</label>
   <input type="text" class="form-control" id="productName" placeholder="Product name" onkeyup="validateName()" name="prodName" minlength="4" required>
 </div>
 <div class="form-group" style="padding-top: 3%;">
-  <span id="disc_error"></span>
+  <p class="help-block text-danger" id="disc_error"></p>
   <label for="productDescription" style="color:rgb(0, 0, 0); font-size: medium;">Product Description:</label>
   <textarea class="form-control" id="productDescription" rows="3" placeholder="Product description" onkeyup="validateDiscription()" name="prodDesc" minlength="10" maxlength="100" required></textarea>
 </div>
+<p id="price-error"></p>
 <div class="form-group" style="padding-top: 3%;">
   <label for="productPrice" style="color:rgb(0, 0, 0); font-size: medium;">Product Price:</label>
-  <input type="number" min="0" class="form-control" id="productPrice" placeholder="Product price" name="prodRate" required>
+  <input type="number" min="0" class="form-control" id="productPrice" placeholder="Product price" name="prodRate" onkeyup="proPrice()" required>
 </div>
+<p id="offer-error"></p>
 <div class="form-group">
-  <label for="productPrice" style="color:rgb(0, 0, 0); font-size: medium;">Offer</label>
-  <input type="number" onkeyup="discountPrice()" min="0" placeholder="Product offer" class="form-control" id="offerValue" max="99" name="offer" >
+  <label for="productPrice"  style="color:rgb(0, 0, 0); font-size: medium;">Offer</label>
+  <input type="number" onkeyup="discountPrice(); proOffer()" min="0" placeholder="Product offer" class="form-control" id="offerValue" max="99" name="offer" >
 </div>
 <div class="form-group">
   <div class="input-group mb-3">
@@ -61,9 +63,10 @@
  aria-describedby="basic-addon1" value="" readonly id="discountAmount" name="discount">
   </div>
 </div>
+<p id="cat-error"></p>
 <div class="form-group" style="padding-top: 3%;">
   <label for="productCategory" style="color:rgb(0, 0, 0); font-size: medium;">Product Category:</label>
-  <select class="form-control" id="productCategory" name="category" required>
+  <select class="form-control" id="productCategory" onkeyup="catOffer()" name="category" required>
     
     <option value="" selected disabled>Choose a category</option>
     <% for(let a of category) { %>
@@ -71,17 +74,21 @@
     <% } %>
   </select>
 </div>
+<p id="qty-error"></p>
 <div class="form-group" style="padding-top: 3%;">
   <label for="productQuantity" min="0" style="color:rgb(0, 0, 0); font-size: medium;">Product Quantity:</label>
-  <input type="number" class="form-control" min="0" id="productQuantity" placeholder="Product quantity" name="quantity" required>
+  <input type="number" class="form-control" onkeyup="proqty()" min="0" id="productQuantity" placeholder="Product quantity" name="quantity" required>
 </div>
+<p id="img-error"></p>
 <div class="form-group" style="padding-top: 3%;">
   <label for="productImage" style="color:rgb(0, 0, 0); font-size: medium;">Product Image:</label><br>
-  <input type="file" class="form-control-file" id="productImage" accept="image/*" name="images"  multiple accept="image/*" required>
+  <input type="file" class="form-control-file" id="productImage" onclick="imgup()" accept="image/*" name="images"  multiple accept="image/*" required>
 </div>
+<br>
+<span id="submit-error"></span>
 <div id="image-preview" class="mt-3"></div>
 <br><br>
-<button type="submit" class="btn btn-primary" >Save it</button>
+<button type="submit" onclick="validateForm()" class="btn btn-primary" >Save it</button>
 <a style="margin-left:40%" href="/admin/product" class="btn btn-danger">Go Back</a>
 </form>
 <p id="demo"></p>
@@ -136,36 +143,169 @@ document.getElementById('productImage').addEventListener('change', function(even
   }
 });
 </script>
-<!-- <script>
- var name_error = document.getElementById('name-error');
- var disc_error = document.getElementById('disc_error');
+<script>
+ var nameError = document.getElementById('name-error');
+ var discError = document.getElementById('disc_error');
+ var priceError = document.getElementById('price-error');
+ var proError = document.getElementById('offer-error');
+ var catError = document.getElementById('cat-error'); 
+ var qtyError = document.getElementById('qty-error'); 
+ var imgError = document.getElementById('img-error');
+ var submitError = document.getElementById('submit-error');
 
 
 
-            function validateName()
-            {
-                var name = document.getElementById('productName').value;
-                if(name.length ==0)
-                {
-                  name_error.innerHTML ='<p class="help-block text-danger">product name is required</p>';
-                    return false;
-                }
-                return true;
-            }
+
+ function validateName()
+    {
+        var name = document.getElementById('productName').value;
+        if(name.length ==0)
+        {
+            nameError.innerHTML ='<p class="help-block text-danger">Product name is required !</p>';
+            return false;
+        }
+        if(!name.match(/^[A-Za-z]/)){
+            nameError.innerHTML ='<p class="help-block text-danger">Product name Invalid !</p>';
+            return false;
+            
+        }
+        nameError.innerHTML ="";
+        return true;
+    }
 
  
-            function validateDiscription()
-            {
-                var disc = document.getElementById('productDescription').value;
-                if(disc.length == 0)
-                {
-                  disc_error.innerHTML ='<p class="help-block text-danger">product discription is required</p>';
-                    return false;
-                }
-                return true;
-            }
+  function validateDiscription()
+      {
+          var disc = document.getElementById('productDescription').value;
+          var required =25;
+           var left = required - disc.length;
+          if(disc.length == 0)
+          {
+              disc_error.innerHTML ='<p class="help-block text-danger">product discription is required</p>';
+              return false;
+          }
+          if(left>0)
+          {
+
+              discError.innerHTML = left +' more characters required';
+              return false;
+            
+          }
+              discError.innerHTML ="";
+              return true;
+      }
  
+  function proPrice()
+    {
+
+        var price = document.getElementById('productPrice').value;
+        if(price==0)
+        {
+          priceError.innerHTML='<p class="help-block text-danger"> Price can not be empty </p>';
+          return false;
+        }
+       if(price<0){
+        priceError.innerHTML='<p class="help-block text-danger"> Invalid input! Please enter a positive number.</p>' ;
+        return false;
+
+       }
+        priceError.innerHTML ="";
+        return true;
+
+
+    }
+
+
+  function proOffer()
+    {
+      var offerprice = document.getElementById('offerValue').value;
+      if(offerprice=="")
+      {
+        proError.innerHTML= '<p class="help-block text-danger"> Please Enter the offer';
+        return false;
+      }
+      if(offerprice<0)
+      {
+        proError.innerHTML= '<p class="help-block text-danger"> Invalid Offer Value! Please Enter a Positive Number';
+        return false;
+      }
+        proError.innerHTML="";
+        return true;
+    
+    }
+
+  function catOffer()
+    {
+      var procat = document.getElementById('productCategory').value;
+      if(procat=="")
+      {
+        catError.innerHTML='<p class="help-block text-danger"> select any category.</p>';
+         return false;
+      }
+        catError.innerHTML="";
+        return true;
+
+    }
+
+
+    function proqty()
+    {
+
+        var proqty = document.getElementById('productQuantity').value;
+        if(proqty==0)
+        {
+          qtyError.innerHTML='<p class="help-block text-danger"> Quantity can not be empty </p>';
+          return false;
+        }
+       if(proqty<0){
+        qtyError.innerHTML='<p class="help-block text-danger"> Invalid input! Please enter a positive number.</p>' ;
+        return false;
+
+       }
+       qtyError.innerHTML ="";
+        return true;
+
+
+    }
+
+    function validateImageUpload()
+    {
+    var fileInput = document.getElementById('productImage');
+    var file = fileInput.files[0];
+    var allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i; // Define allowed image file extensions
+
+    if (!file) {
+        // No file selected
+        imageError.innerHTML = '<p class="help-block text-danger">Please select an image.</p>';
+        return false;
+    }
+
+    if (!allowedExtensions.exec(file.name)) {
+        // Invalid file type
+        imageError.innerHTML = '<p class="help-block text-danger">Invalid file type. Only JPG, JPEG, PNG, or GIF files are allowed.</p>';
+        return false;
+    }
+
+    // Add any additional validation rules here, such as file size
+
+    imageError.innerHTML = ""; // Clear any previous error message
+    return true;
+  }
+
+
+  function validateForm()
+    {
+        if(!validateName() || !validateDiscription() || !proPrice() || !proOffer() || !catOffer() || !proqty() || !alidateImageUpload())
+        {
+            submitError.style.display ='block';
+            submitError.style.color ='red';
+            submitError.innerHTML = 'please fill the all field';
+            setTimeout(function(){submitError.style.display ='none';}, 3000);
+            return false;
+          
+        }
+    }
 
   
-</script> -->
+</script>
   <%- include ('adminFooter') %>

@@ -112,22 +112,26 @@
             <div class="card-body">
               <!-- <h1 class="card-title text-center mb-4">Edit User</h1> -->
               <form action="/admin/productUpdate" method="POST" enctype="multipart/form-data">
+                <br>
+                <p id="name-error"></p>
                 <div class="form-group">
                 <input type="hidden" name="oldProdName" value="<%=oldName %>">
                   <label for="username" style="font-size:large;">Enter new name</label>
                   <input
                     type="text"
                     class="form-control"
-                    id="username"
+                    id="productName"
                     name="newProdName"
                     value="<%=oldName %>"
+                    onkeyup="validateName()"
                   />
                  <p><br></p>
                   
                 </div>
                 <div class="form-group">
+                  <p id="cat-error"></p>
                   <label for="description" style="font-size:large;">Choose new category</label>
-                  <select class="form-control" id="productCategory" name="newProdCat" required>
+                  <select class="form-control" onkeyup="catOffer()" id="productCategory" name="newProdCat" required>
           
                 <option value="" selected disabled>Choose a category</option>
                 <% for(let a of category) { %>
@@ -136,51 +140,61 @@
                 </select> 
                 </div>
                 <br>
+                <p id="price-error"></p>
                 <label for="username" style="font-size:large;">Update Rate</label>
                   <input
                     type="number"
                     class="form-control"
-                    id="username"
+                    id="productPrice"
                     name="newProdRate"
                     value="<%=oldRate %>"
                     min="0"
+                    onkeyup="proPrice()"
                   /><br>
                   <div class="form-group">
+                    <p id="offer-error"></p>
                     <label for="username" style="font-size:large;">Offer</label>
-                    <input type="number" min="0" placeholder="Product offer" value="<%=oldOffer %>" class="form-control" id="offerValue" max="99" name="offer" >
+                    <input type="number" min="0" onkeyup="proOffer()" placeholder="Product offer" value="<%=oldOffer %>" class="form-control" id="offerValue" max="99" name="offer" >
                   </div>
+                  <p id="qty-error"></p>
                   <label for="username" style="font-size:large;">Update Quantity</label>
                   <input
                     type="number"
                     class="form-control"
-                    id="username"
+                    id="productQuantity"
                     name="newProStock"
                     value="<%=oldStock %>"
                     min="0"
+                    onkeyup="proqty()"
                   /><br>
+                  <p class="help-block text-danger" id="disc_error"></p>
                   <label for="username" style="font-size:large;">Update Description</label>
                   <input
                     type="text"
                     class="form-control"
-                    id="username"
+                    id="productDescription"
                     name="newProdDesc"
                     value="<%=oldDesc %>"
+                    onkeyup="validateDiscription()"
                   /><br>
                   <% for(let i=0; i<totalImages; i++){ %>
                     <div class="row">
                     <div style="display: flex; align-items: center;">
+                      <p id="img-error"></p>
                     <input type="text" value="<%=i %>" name="image <%=i %>" hidden >
                     <img src="/<%= allOldData.image[i] %>" alt="image of <%= oldName %>" style="height: 100px; width: 130px; padding: 10px;">
           <!-- <button style="margin-left: auto;" onclick="">Delete</button> -->
           
                     </div>
-                    <div><input name="<%=i%>Image" type="file" id="fileInput"  accept="image/*" class='form' >
+                    <div><input name="<%=i%>Image" type="file" id="fileInput" onclick="imgup()"  accept="image/*" class='form' >
                     
                     </div>
                   </div>
                 <% } %>
                 <br>
-                <button type="submit" class="btn btn-primary btn-block">
+                <br>
+                <span id="submit-error"></span>
+                <button type="submit" onclick="validateForm()" class="btn btn-primary btn-block">
                   Update
                 </button>
                 <a style="margin-left:40%; " href="/admin/product" class="btn btn-danger">Go Back</a>
@@ -216,7 +230,169 @@
 <script src="/assets/js/main.js" type="text/javascript"></script>
 <script src="/assets/js/custom-chart.js" type="text/javascript"></script>
 </body>
-
-
-<!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:32:57 GMT -->
+<script>
+  var nameError = document.getElementById('name-error');
+  var discError = document.getElementById('disc_error');
+  var priceError = document.getElementById('price-error');
+  var proError = document.getElementById('offer-error');
+  var catError = document.getElementById('cat-error'); 
+  var qtyError = document.getElementById('qty-error'); 
+  var imgError = document.getElementById('img-error');
+  var submitError = document.getElementById('submit-error');
+ 
+ 
+ 
+ 
+  function validateName()
+     {
+         var name = document.getElementById('productName').value;
+         if(name.length ==0)
+         {
+             nameError.innerHTML ='<p class="help-block text-danger">Product name is required !</p>';
+             return false;
+         }
+         if(!name.match(/^[A-Za-z]/)){
+             nameError.innerHTML ='<p class="help-block text-danger">Product name Invalid !</p>';
+             return false;
+             
+         }
+         nameError.innerHTML ="";
+         return true;
+     }
+ 
+  
+   function validateDiscription()
+       {
+           var disc = document.getElementById('productDescription').value;
+           var required =25;
+            var left = required - disc.length;
+           if(disc.length == 0)
+           {
+               disc_error.innerHTML ='<p class="help-block text-danger">product discription is required</p>';
+               return false;
+           }
+           if(left>0)
+           {
+ 
+               discError.innerHTML = left +' more characters required';
+               return false;
+             
+           }
+               discError.innerHTML ="";
+               return true;
+       }
+  
+   function proPrice()
+     {
+ 
+         var price = document.getElementById('productPrice').value;
+         if(price==0)
+         {
+           priceError.innerHTML='<p class="help-block text-danger"> Price can not be empty </p>';
+           return false;
+         }
+        if(price<0){
+         priceError.innerHTML='<p class="help-block text-danger"> Invalid input! Please enter a positive number.</p>' ;
+         return false;
+ 
+        }
+         priceError.innerHTML ="";
+         return true;
+ 
+ 
+     }
+ 
+ 
+   function proOffer()
+     {
+       var offerprice = document.getElementById('offerValue').value;
+       if(offerprice=="")
+       {
+         proError.innerHTML= '<p class="help-block text-danger"> Please Enter the offer';
+         return false;
+       }
+       if(offerprice<0)
+       {
+         proError.innerHTML= '<p class="help-block text-danger"> Invalid Offer Value! Please Enter a Positive Number';
+         return false;
+       }
+         proError.innerHTML="";
+         return true;
+     
+     }
+ 
+   function catOffer()
+     {
+       var procat = document.getElementById('productCategory').value;
+       if(procat=="")
+       {
+         catError.innerHTML='<p class="help-block text-danger"> select any category.</p>';
+          return false;
+       }
+         catError.innerHTML="";
+         return true;
+ 
+     }
+ 
+ 
+     function proqty()
+     {
+ 
+         var proqty = document.getElementById('productQuantity').value;
+         if(proqty==0)
+         {
+           qtyError.innerHTML='<p class="help-block text-danger"> Quantity can not be empty </p>';
+           return false;
+         }
+        if(proqty<0){
+         qtyError.innerHTML='<p class="help-block text-danger"> Invalid input! Please enter a positive number.</p>' ;
+         return false;
+ 
+        }
+        qtyError.innerHTML ="";
+         return true;
+ 
+ 
+     }
+ 
+     function validateImageUpload()
+     {
+     var fileInput = document.getElementById('productImage');
+     var file = fileInput.files[0];
+     var allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i; // Define allowed image file extensions
+ 
+     if (!file) {
+         // No file selected
+         imageError.innerHTML = '<p class="help-block text-danger">Please select an image.</p>';
+         return false;
+     }
+ 
+     if (!allowedExtensions.exec(file.name)) {
+         // Invalid file type
+         imageError.innerHTML = '<p class="help-block text-danger">Invalid file type. Only JPG, JPEG, PNG, or GIF files are allowed.</p>';
+         return false;
+     }
+ 
+     // Add any additional validation rules here, such as file size
+ 
+     imageError.innerHTML = ""; // Clear any previous error message
+     return true;
+   }
+ 
+ 
+   function validateForm()
+     {
+         if(!validateName() || !validateDiscription() || !proPrice() || !proOffer() || !catOffer() || !proqty() || !alidateImageUpload())
+         {
+             submitError.style.display ='block';
+             submitError.style.color ='red';
+             submitError.innerHTML = 'please fill the all field';
+             setTimeout(function(){submitError.style.display ='none';}, 3000);
+             return false;
+           
+         }
+     }
+ 
+   
+ </script>
 </html>
