@@ -23,24 +23,29 @@
                 <div class="modal-content">
                   <div class="modal-header">
                     <h1 class="modal-title fs-5" id="exampleModalLabel">Enter the Category</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close"  data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
                   <div class="modal-body">
+                    <p id="cat-name-error"></p>
                     <label for="">Enter </label>
-                    <input type="text" placeholder="Enter the name" name="category" class="form-control">
+                    <input type="text" placeholder="Enter the name" required id="catname" onkeyup="categoryName()" onkeydown="if(arguments[0].code === 'Space' && document.getElementById('catname').value.length === 0) { return false; }" name="category" class="form-control">
+
                   </div>
                   <div class="modal-body">
+                    <p id="cat-offer-error"></p>
                     <label for="">Offer </label>
-                    <input type="text" placeholder="offer in %" name="offer" class="form-control">
+                    <input type="number" placeholder="offer in %" required id="catoffer" onkeyup="categoryOffer()" name="offer" class="form-control">
                   </div>
                   <div class="modal-footer">
+                    <span id="cat-submit-error"></span>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="submit" onclick="categorySubmit()" class="btn btn-primary">Save</button>
                   </div>
                 </div>
               </div>
             </div>
           </form>
+          
         </div>
   
         <h3 id="categoryFound" style="color: rgb(0, 0, 0);"><%= categoryFound %></h3>
@@ -97,17 +102,20 @@
                               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
+                              <p id="editcat-name-error"></p>
                               <label class="form-control-label">Category</label>
-                              <input type="text" value="<%= c.name %>" class="form-control" name="name">
+                              <input type="text" value="<%= c.name %>" required onkeyup="editCategoryName()" id="ecatname" onkeydown="if(arguments[0].code === 'Space' && document.getElementById('ecatname').value.length === 0) { return false; }"  class="form-control" name="name">
                               <input type="text" value="<%= c.name %>" class="form-control" name="oldname" hidden>
                             </div>
                             <div class="modal-body">
+                              <p id="editcat-offer-error"></p>
                               <label class="form-control-label">Offer</label>
-                              <input type="text" value="<%= c.offer %>" class="form-control" name="offer">
+                              <input type="text" value="<%= c.offer %>" onkeyup="editCategoryOffer()" id="ecatoffer" class="form-control" name="offer">
                             </div>  
                             <div class="modal-footer">
+                              <span id="editcat-submit-error"></span>
                               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                              <button type="submit" class="btn btn-primary">Save changes</button>
+                              <button type="submit" onclick="editCategorySubmit()" id="catsave" class="btn btn-primary">Save changes</button>
                             </div>
                           </div>
                           </div>
@@ -140,6 +148,124 @@
       setTimeout(() => {
         value.style.display = " none"
       }, 5000)
+  
+    </script>
+
+<script>
+
+  var catnameError = document.getElementById('cat-name-error');
+  var catofferError = document.getElementById('cat-offer-error');
+  var catsubmitError = document.getElementById('cat-submit-error');
+  
+  function categoryName()
+      {
+          var catname = document.getElementById('catname').value;
+          if(catname.length ==0)
+          {
+            catnameError.innerHTML ='<p class="help-block text-danger">category name is required !</p>';
+              return false;
+          }
+          if(!catname.match(/^[A-Za-z]/)){
+            catnameError.innerHTML ='<p class="help-block text-danger">category name Invalid !</p>';
+              return false;
+              
+          }
+          catnameError.innerHTML ="";
+          return true;
+      }
+  
+  
+      function categoryOffer()
+      {
+        var catoffer = document.getElementById('catoffer').value;
+        if(catoffer=="")
+        {
+          catofferError.innerHTML= '<p class="help-block text-danger"> Please Enter the offer';
+          return false;
+        }
+        if(catoffer<0)
+        {
+          catofferError.innerHTML= '<p class="help-block text-danger"> Invalid Offer Value! Please Enter a Positive Number';
+          return false;
+        }
+        catofferError.innerHTML="";
+          return true;
+      
+      }
+  
+      function categorySubmit()
+      {
+          if(!categoryName() || !categoryOffer())
+          {
+              catsubmitError.style.display ='block';
+              catsubmitError.style.color ='red';
+              catsubmitError.innerHTML = 'please fill the all field';
+              setTimeout(function(){catsubmitError.style.display ='none';}, 3000);
+              return false;
+          }
+        
+      }
+  
+  
+  
+    </script>
+
+<script>
+
+  var ecatnameError = document.getElementById('editcat-name-error');
+  var ecatofferError = document.getElementById('editcat-offer-error');
+  var ecatsubmitError = document.getElementById('editcat-submit-error');
+  
+  function editCategoryName()
+      {
+          var ecatname = document.getElementById('ecatname').value;
+          if(ecatname.length ==0)
+          {
+            ecatnameError.innerHTML ='<p class="help-block text-danger">category name is required !</p>';
+              return false;
+          }
+          if(!ecatname.match(/^[A-Za-z]/)){
+            ecatnameError.innerHTML ='<p class="help-block text-danger">category name Invalid !</p>';
+              return false;
+              
+          }
+          ecatnameError.innerHTML ="";
+          return true;
+      }
+  
+  
+      function editCategoryOffer()
+      {
+        var ecatoffer = document.getElementById('ecatoffer').value;
+        if(ecatoffer=="")
+        {
+          ecatofferError.innerHTML= '<p class="help-block text-danger"> Please Enter the offer';
+          return false;
+        }
+        if(ecatoffer<0)
+        {
+          ecatofferError.innerHTML= '<p class="help-block text-danger"> Invalid Offer Value! Please Enter a Positive Number';
+          return false;
+        }
+        ecatofferError.innerHTML="";
+          return true;
+      
+      }
+  
+      function editCategorySubmit()
+      {
+          if(!editCategoryName() || !editCategoryOffer())
+          {
+              ecatsubmitError.style.display ='block';
+              ecatsubmitError.style.color ='red';
+              ecatsubmitError.innerHTML = 'please fill the all field';
+              setTimeout(function(){ecatsubmitError.style.display ='none';}, 3000);
+              return false;
+            
+          }
+      }
+  
+  
   
     </script>
   
