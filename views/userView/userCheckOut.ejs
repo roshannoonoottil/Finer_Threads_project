@@ -127,7 +127,7 @@
                                                             value="">
                                                         --}} -->
                                                         <div class="form-group row">
-                                                            <input class="form-control" name="firstname"
+                                                            <input class="form-control" onkeydown="if(arguments[0].code === 'Space' && document.getElementById('name').value.length === 0) { return false; }" name="firstname"
                                                                 type="text" placeholder="Full name"
                                                                 id="name" required>
                                                         </div>
@@ -141,16 +141,16 @@
                                                                 id="phone" required>
                                                         </div>
                                                         <div class="form-group row">
-                                                            <input class="form-control" name="housename"
+                                                            <input class="form-control" onkeydown="if(arguments[0].code === 'Space' && document.getElementById('house').value.length === 0) { return false; }" name="housename"
                                                                 type="text" placeholder="House Name"
                                                                 id="house" required>
                                                         </div>
                                                         <div class="form-group row">
-                                                            <input class="form-control" name="city"
+                                                            <input class="form-control" onkeydown="if(arguments[0].code === 'Space' && document.getElementById('city').value.length === 0) { return false; }" name="city"
                                                                 type="text" placeholder="City" id="city" required>
                                                         </div>
                                                         <div class="form-group row">
-                                                            <input class="form-control" name="state"
+                                                            <input class="form-control" onkeydown="if(arguments[0].code === 'Space' && document.getElementById('state').value.length === 0) { return false; }" name="state"
                                                                 type="text" placeholder="State" id="state" required>
                                                         </div>
                                                         <div class="form-group row">
@@ -159,7 +159,7 @@
                                                                 id="pincode" required>
                                                         </div>
                                                         <div class="form-group row">
-                                                            <input class="form-control" name="country"
+                                                            <input class="form-control" onkeydown="if(arguments[0].code === 'Space' && document.getElementById('country').value.length === 0) { return false; }" name="country"
                                                                 type="text" placeholder="Country"
                                                                 id="country" required>
                                                         </div>

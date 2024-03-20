@@ -170,7 +170,7 @@
                                                                             <div class="form-group">
                                                                                 <label for="fullName">Full Name:</label>
                                                                                 <input type="text" class="form-control"
-                                                                                    id="userFullName" name="fullname"
+                                                                                    id="userFullName" onkeydown="if(arguments[0].code === 'Space' && document.getElementById('userFullName').value.length === 0) { return false; }" name="fullname"
                                                                                     required
                                                                                     placeholder="Enter your full name"
                                                                                     onkeyup="validateName(this)">
@@ -179,7 +179,7 @@
 
                                                                             <div class="form-group">
                                                                                 <label for="fullName">Phone:</label>
-                                                                                <input type="text" class="form-control"
+                                                                                <input type="number" class="form-control"
                                                                                     id="phone" name="phone" required
                                                                                     placeholder="Enter your number"
                                                                                     onkeyup="validatePhone()">
@@ -190,7 +190,7 @@
                                                                                 <label for="addressLine1">House
                                                                                     Name:</label>
                                                                                 <input type="text" class="form-control"
-                                                                                    id="house" name="house" required
+                                                                                    id="house" onkeydown="if(arguments[0].code === 'Space' && document.getElementById('house').value.length === 0) { return false; }" name="house" required
                                                                                     placeholder="Enter your House Name"
                                                                                     onkeyup="validateHouse()">
                                                                                 <span id="houseError"></span>
@@ -199,7 +199,7 @@
                                                                             <div class="form-group">
                                                                                 <label for="addressLine1">City:</label>
                                                                                 <input type="text" class="form-control"
-                                                                                    id="city" name="city" required
+                                                                                    id="city" onkeydown="if(arguments[0].code === 'Space' && document.getElementById('city').value.length === 0) { return false; }" name="city" required
                                                                                     placeholder="Enter your City"
                                                                                     onkeyup="validateCity()">
                                                                                 <span id="cityError"></span>
@@ -207,7 +207,7 @@
                                                                             <div class="form-group">
                                                                                 <label for="addressLine1">State:</label>
                                                                                 <input type="text" class="form-control"
-                                                                                    id="state" name="state" required
+                                                                                    id="state" onkeydown="if(arguments[0].code === 'Space' && document.getElementById('state').value.length === 0) { return false; }" name="state" required
                                                                                     placeholder="Enter your State"
                                                                                     onkeyup="validateState()">
                                                                                 <span id="stateError"></span>
@@ -216,7 +216,7 @@
                                                                                 <label
                                                                                     for="addressLine1">Country:</label>
                                                                                 <input type="text" class="form-control"
-                                                                                    id="country" name="country" required
+                                                                                    id="country" onkeydown="if(arguments[0].code === 'Space' && document.getElementById('country').value.length === 0) { return false; }" name="country" required
                                                                                     placeholder="Enter your Country"
                                                                                     onkeyup="validateCountry()">
                                                                                 <span id="countryError"></span>

@@ -72,6 +72,7 @@ const addAddress = async (req, res) => {
     try {
         console.log(req.session.name)
         const username = req.session.name
+        console.log(req.body.username," fullname");
 
         console.log(req.body)
         const addressData = new address({
@@ -176,9 +177,9 @@ const updateProfile = async (req, res) => {
 const updateProfileData = async (req, res) => {
     try {
         const userin = req.session.name
-        console.log(req.body)
+        console.log(req.body,"update profile")
         await address.updateOne({ username: userin }, {
-            fullname: req.body.name,
+            fullname: req.body.username,
             phone: req.body.phone,
             address: {
                 houseName: req.body.house,

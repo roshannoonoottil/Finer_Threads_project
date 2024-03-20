@@ -67,7 +67,7 @@
                 <form action="/newAddressEdit?userid=<%=userProfile._id%>" method="post">
                     <div class="form-group">
                         <label for="fullName">Full Name:</label>
-                        <input type="text" class="form-control" name="fullName"
+                        <input type="text" class="form-control" id="nfullname" onkeydown="if(arguments[0].code === 'Space' && document.getElementById('nfullname').value.length === 0) { return false; }" name="fullName"
                             placeholder="Enter your full name" required value="<%=userProfile.fullname%>">
                     </div>
 
@@ -79,31 +79,31 @@
 
                     <div class="form-group">
                         <label for="houseName">House Name:</label>
-                        <input type="text" class="form-control" name="houseName"
+                        <input type="text" class="form-control" id="nhouse" onkeydown="if(arguments[0].code === 'Space' && document.getElementById('nhouse').value.length === 0) { return false; }" name="houseName"
                             placeholder="Enter your house name" required value="<%=userProfile.address.houseName%>">
                     </div>
 
                     <div class="form-group">
                         <label for="city">City:</label>
-                        <input type="text" class="form-control" name="city" placeholder="Enter your city"
+                        <input type="text" class="form-control" id="ncity" onkeydown="if(arguments[0].code === 'Space' && document.getElementById('ncity').value.length === 0) { return false; }" name="city" placeholder="Enter your city"
                             required value="<%=userProfile.address.city%>">
                     </div>
 
                     <div class="form-group">
                         <label for="state">State:</label>
-                        <input type="text" class="form-control" name="state" placeholder="Enter your state"
+                        <input type="text" class="form-control" id="nstate" onkeydown="if(arguments[0].code === 'Space' && document.getElementById('nstate').value.length === 0) { return false; }" name="state" placeholder="Enter your state"
                             required value="<%=userProfile.address.state%>">
                     </div>
 
                     <div class="form-group">
                         <label for="country">Country:</label>
-                        <input type="text" class="form-control" name="country"
+                        <input type="text" class="form-control" id="ncountry" onkeydown="if(arguments[0].code === 'Space' && document.getElementById('ncountry').value.length === 0) { return false; }" name="country"
                             placeholder="Enter your country" required value="<%=userProfile.address.country%>">
                     </div>
 
                     <div class="form-group">
                         <label for="pincode">PIN Code:</label>
-                        <input type="text" class="form-control" name="pincode"
+                        <input type="number" class="form-control" name="pincode"
                             placeholder="Enter your PIN code" required value="<%=userProfile.address.pincode%>">
                     </div>
 

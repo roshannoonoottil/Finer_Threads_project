@@ -71,7 +71,7 @@
                     <!-- {{!-- <input type="hidden" name="back" value="my-account"> --}} -->
                     <div class="form-group no-gutters">
                         <label for="">Full Name: </label>
-                        <input class="form-control" name="username" type="text"
+                        <input class="form-control" required id="fullname" onkeydown="if(arguments[0].code === 'Space' && document.getElementById('fullname').value.length === 0) { return false; }" name="username" type="text"
                             value="<%=userProfile.fullname%>" data-msg="Please enter your username">
                     </div>
                     <!-- {{!-- <div class="form-group no-gutters">
@@ -82,33 +82,33 @@
                     </div> --}} -->
                     <div class="form-group no-gutters">
                         <label for="">Phone Number: </label>
-                        <input class="form-control" name="phone" type="number" value="<%=userProfile.phone%>"
+                        <input class="form-control" required name="phone" type="number" value="<%=userProfile.phone%>"
                             data-msg="Please enter your username">
                     </div>
                     <div class="form-group no-gutters">
                         <label for="">House Name: </label>
-                        <input class="form-control" name="house" type="text"
+                        <input class="form-control" name="house" id="housename" onkeydown="if(arguments[0].code === 'Space' && document.getElementById('housename').value.length === 0) { return false; }" required type="text"
                             value="<%=userProfile.address.houseName%>" data-msg="Please enter your username">
                     </div>
                     <div class="form-group no-gutters">
                         <label for="">City: </label>
-                        <input class="form-control" name="city" type="text"
+                        <input class="form-control" required id="cityy" onkeydown="if(arguments[0].code === 'Space' && document.getElementById('cityy').value.length === 0) { return false; }" name="city" type="text"
                             value="<%=userProfile.address.city%>" data-msg="Please enter your username">
                     </div>
 
                     <div class="form-group no-gutters">
                         <label for="">State: </label>
-                        <input class="form-control" name="state" type="text"
+                        <input class="form-control" required id="state" onkeydown="if(arguments[0].code === 'Space' && document.getElementById('state').value.length === 0) { return false; }" name="state" type="text"
                             value="<%=userProfile.address.state%>" data-msg="Please enter your username">
                     </div>
                     <div class="form-group no-gutters">
                         <label for="">Pin Code: </label>
-                        <input class="form-control" name="pin" type="number"
+                        <input class="form-control" required name="pin" type="number"
                             value="<%=userProfile.address.pincode%>" data-msg="Please enter your username">
                     </div>
                     <div class="form-group no-gutters">
                         <label for="">Country: </label>
-                        <input class="form-control" name="country" type="text"
+                        <input class="form-control" required id="country" onkeydown="if(arguments[0].code === 'Space' && document.getElementById('country').value.length === 0) { return false; }" name="country" type="text"
                             value="<%=userProfile.address.country%>" data-msg="Please enter your username">
                     </div>
 
@@ -119,7 +119,7 @@
                     <!-- {{!-- <input type="hidden" name="back" value="my-account"> --}} -->
                     <div class="form-group no-gutters">
                         <label for="">Full Name: </label>
-                        <input class="form-control" name="username" type="text" placeholder=" Full Name"
+                        <input class="form-control" name="username" id="eusername" onkeydown="if(arguments[0].code === 'Space' && document.getElementById('eusername').value.length === 0) { return false; }" type="text" placeholder=" Full Name"
                             data-msg="Please enter your Full Name" required>
                     </div>
                     <!-- {{!-- <div class="form-group no-gutters">
@@ -134,17 +134,17 @@
                     </div>
                     <div class="form-group no-gutters">
                         <label for="">House Name: </label>
-                        <input class="form-control" name="house" type="text" placeholder="House Name"
+                        <input class="form-control" name="house" id="ehouse" onkeydown="if(arguments[0].code === 'Space' && document.getElementById('ehouse').value.length === 0) { return false; }" type="text" placeholder="House Name"
                             data-msg="Please enter your House Name" required>
                     </div>
                     <div class="form-group no-gutters">
                         <label for="">City: </label>
-                        <input class="form-control" name="city" type="text" placeholder="City"
+                        <input class="form-control" name="city" id="ecity" onkeydown="if(arguments[0].code === 'Space' && document.getElementById('ecity').value.length === 0) { return false; }" type="text" placeholder="City"
                             data-msg="Please enter your City" required>
                     </div>
                     <div class="form-group no-gutters">
                         <label for="">State: </label>
-                        <input class="form-control" name="state" type="text" placeholder="State"
+                        <input class="form-control" name="state" id="estate" onkeydown="if(arguments[0].code === 'Space' && document.getElementById('estate').value.length === 0) { return false; }" type="text" placeholder="State"
                             data-msg="Please enter your state" required>
                     </div>
                     <div class="form-group no-gutters">
@@ -154,7 +154,7 @@
                     </div>
                     <div class="form-group no-gutters">
                         <label for="">Country: </label>
-                        <input class="form-control" name="country" type="text" placeholder="Country"
+                        <input class="form-control" name="country" id="ecountry" onkeydown="if(arguments[0].code === 'Space' && document.getElementById('ecountry').value.length === 0) { return false; }" type="text" placeholder="Country"
                             data-msg="Please enter the Country" required>
                     </div>
                     <button type="submit" class="btn btn-primary">Add Data</button>
