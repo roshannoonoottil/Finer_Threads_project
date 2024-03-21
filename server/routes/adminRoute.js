@@ -41,6 +41,11 @@ router.get('/deleteOrder', adminCheck.isAdmin, adminController.deleteOrder)
 router.get('/returnsuccess',adminCheck.isAdmin, adminController.returnDetails)
 router.get('/returnFail',adminCheck.isAdmin, adminController.returnFail)
 
+router.get('/coupon', adminCheck.isAdmin, adminController.coupon)
+router.post('/coupon', adminCheck.isAdmin, adminController.addCoupon)
+router.get('/removeCoupon', adminCheck.isAdmin, adminController.removeCoupon)
+router.post('/editCoupon', adminCheck.isAdmin, adminController.editCoupon)
+
 
   
 
