@@ -77,6 +77,8 @@ router.get("/Ucategory/sort/:number",userCheck.isUser,userController.categoryPro
 router.post('/couponCheck',userCheck.isUser, productController.couponCheck)
 router.post('/removeCoupon', userCheck.isUser, productController.removeCoupon)
 
+router.post('/createOrder', userCheck.isUser, productController.createOrder)
+
 
 
 

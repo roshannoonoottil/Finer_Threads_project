@@ -165,7 +165,7 @@
                                     <p id="cartotal" hidden><%= userin %></p>
                                     <div class="mt-3">
                                         <a href="/paymentSuccess" class="btn btn-primary">COD Payment</a>
-                                        <!-- <button class="btn btn-primary razaropay" onclick="">Online Payment</button> -->
+                                        <button class="btn btn-primary" id="razaropay" onclick="">Online Payment</button>
                                     </div>
 
 
@@ -279,7 +279,12 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.6/umd/popper.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.min.js"></script>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
     <script>
+
+        
 
 
 function checkCoupon(event) {
@@ -377,6 +382,61 @@ function removeCoupon() {
 
 
     </script>
+
+
+
+<script>
+
+    $(document).ready(function () {
+        $('#razaropay').click(function (e) {
+            e.preventDefault();
+
+            var username = document.getElementById('cartotal').innerHTML
+            console.log(username)
+            var amount = document.getElementById('totalAmount').innerHTML
+            console.log(amount)
+
+            $.ajax({
+                url: "/createOrder",
+                type: "POST",
+                data: {
+                    username: username,
+                    amount: amount
+                },
+                success: function (res) {
+                    if (res.success) {
+                        console.log(res)
+                        var options = {
+                            "key": "" + res.key_id + "",
+                            "amount": "" + res.amount + "",
+                            "currency": "INR",
+                            "name": "FinerThreads",
+                            "order_id": "" + res.order_id + "",
+                            "handler": function (response) {
+                                console.log("hiiiiiiiiiiiii")
+                                window.open("/paymentSuccess?pay=online", "_self")
+                            },
+                            "theme": {
+                                "color": "#2300a3"
+                            }
+                        };
+                        var razorpayObject = new Razorpay(options);
+                        razorpayObject.on('payment.failed', function (response) {
+                            alert("Payment Failed");
+                        });
+                        razorpayObject.open();
+                    }
+                    else {
+                        alert(res.msg);
+                    }
+                }
+            })
+
+        });
+    });
+
+</script>
+
     
     </body>
     

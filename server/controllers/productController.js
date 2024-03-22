@@ -2,7 +2,10 @@ const productModel = require("../models/productModel");
 const categoryModel = require("../models/categoryModel");
 const couponModel = require("../models/couponModel")
 const userDetails = require("../models/userModel")
+const cart = require('../models/cartModel')
+const Razorpay = require('razorpay')
 const multer = require("multer");
+require('dotenv').config();
 
 const adminProduct = async (req, res) => {
   try {
@@ -293,6 +296,62 @@ const removeCoupon = async (req, res) => {
 
 
 
+var instance = new Razorpay({
+  key_id: process.env.RAZORPAY_YOUR_KEY_ID,
+  key_secret: process.env.RAZORPAY_YOUR_KEY_SECRET,
+});
+
+
+const createOrder = async (req, res) => {
+  console.log('user online payment')
+  console.log('body:', req.body);
+  try {
+      console.log('1')
+      const userData = await cart.find({ username: req.body.username })
+      console.log('2')
+      console.log('3')
+      console.log(req.body)
+      let amount =req.session.amountToPay
+      const options = {
+          amount: amount * 100,
+          currency: 'INR',
+          receipt: 'razorUser@gmail.com'
+      }
+      console.log('4')
+
+      instance.orders.create(options,
+          (err, order) => {
+              console.log('6')
+              console.log(err)
+              console.log(order)
+              if (!err) {
+                  console.log('5')
+
+                  res.status(200).send({
+                      success: true,
+                      msg: 'Order Created',
+                      order_id: order.id,
+                      amount: req.session.amountToPay,
+                      key_id: process.env.RAZORPAY_YOUR_KEY_ID,
+                      product_name: req.body.name
+                  });
+                  console.log('100')
+              }
+              else {
+                console.log("london")
+                  res.status(400).send({ success: false, msg: 'Something went wrong!' });
+              }
+          }
+      );
+
+  } catch (error) {
+      console.log(error.message);
+      // res.redirect("/error")
+  }
+}
+
+
+
 
 module.exports = {
   adminProduct,
@@ -302,5 +361,6 @@ module.exports = {
   updateProduct,
   proBlock,
   couponCheck,
-  removeCoupon
+  removeCoupon,
+  createOrder
 };
