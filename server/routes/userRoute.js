@@ -74,6 +74,9 @@ router.get('/orderHistoryPage/:id', userCheck.isUser, orderController.showDetail
 
 router.get("/Ucategory/sort/:number",userCheck.isUser,userController.categoryProductSort);
 
+router.post('/couponCheck',userCheck.isUser, productController.couponCheck)
+router.post('/removeCoupon', userCheck.isUser, productController.removeCoupon)
+
 
 
 

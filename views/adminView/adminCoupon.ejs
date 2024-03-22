@@ -28,16 +28,16 @@
                         </div>
                         <div class="modal-body">
                             <label class="required" for="">Coupon Code </label>
-                            <input type="text" placeholder="Enter the name" name="coupon" class="form-control"
+                            <input type="text" placeholder="Enter the name" id="adcoupon" name="coupon" onkeydown="if(arguments[0].code === 'Space' && document.getElementById('adcoupon').value.length === 0) { return false; }" class="form-control"
                                 required>
                             <label class="required" for="">Expiry </label>
                             <input type="date" placeholder="enter the expiry date" name="expiry" id="expiryDate"
                                 class="form-control" required>
                             <label class="required" for="">Discount Amount </label>
-                            <input type="text" placeholder="Enter the name" name="discount" class="form-control"
+                            <input type="number" placeholder="Enter the name" name="discount"  class="form-control"
                                 required min="1">
                             <label class="required" for="">Minimum Amount </label>
-                            <input type="text" placeholder="Enter the name" name="minAmount" class="form-control"
+                            <input type="number" placeholder="Enter the name" name="minAmount" class="form-control"
                                 required min="1">
                         </div>
                         <div class="modal-footer">
@@ -93,16 +93,16 @@
                                                     aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
-                                                <label class="form-control-label">Category</label>
-                                                <input type="text" value="<%= coupon.name %>" class="form-control"
+                                                <label class="form-control-label">Edit Coupon</label>
+                                                <input type="text" id="editcoupon" value="<%= coupon.name %>" onkeydown="if(arguments[0].code === 'Space' && document.getElementById('editcoupon').value.length === 0) { return false; }" class="form-control"
                                                     name="coupon">
                                                 <input type="text" value="<%= coupon.name %>" class="form-control"
                                                     name="oldcoupon" hidden>
                                                 <label class="required" class="form-control-label">Expiry Date</label>
                                                 <input value="<%=coupon.expiry.toLocaleDateString()%>" class="form-control"
                                                     disabled>
-                                                <input type="date" id="editexpiryDate" value="<%= coupon.expiry%>"
-                                                    class="form-control" name="expiry">
+                                                <input type="date" id="editexpiryDate" value="<%= coupon.expiry %>"
+                                                    class="form-control" name="expiry" required>
                                                 <label class="form-control-label">Discount Amount</label>
                                                 <input type="number" value="<%= coupon.discount %>" class="form-control"
                                                     name="discount" required min="1">

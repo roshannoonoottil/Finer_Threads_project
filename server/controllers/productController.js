@@ -1,5 +1,7 @@
 const productModel = require("../models/productModel");
 const categoryModel = require("../models/categoryModel");
+const couponModel = require("../models/couponModel")
+const userDetails = require("../models/userModel")
 const multer = require("multer");
 
 const adminProduct = async (req, res) => {
@@ -222,6 +224,75 @@ const proBlock = async (req, res) => {
 };
 
 
+const couponCheck = async (req, res) => {
+  try {
+      const couponFound = await couponModel.findOne({ name: req.body.coupon })
+      console.log(couponFound ," coupon founded");
+      const couponUsed = await userDetails.findOne({ username: req.session.name, coupon: { $in: `${req.body.coupon}` } })
+      console.log(couponUsed,"coupon in")
+      if (!couponUsed) {
+          if (couponFound) {
+            console.log("coupon found");
+            console.log(req.body.amount, ">=",couponFound.minimumAmount );
+              if (req.body.amount >= couponFound.minimumAmount) {
+            console.log("coupon amound >= min amount");
+
+                  if (couponFound.expiry - new Date() >= 0) {
+                      const username = req.session.name
+                      const data = await userDetails.updateOne({ username: username }, { $push: { coupon: couponFound.name } })
+                      let discount = couponFound.discount
+                      req.session.amountToPay = req.session.amountToPay - discount
+                      let amount = req.session.amountToPay
+                      console.log(amount, 'amount amount')
+                      console.log(req.session.amountToPay)
+                      req.session.coupon = req.body.coupon
+                      //req.session.coupon = discount
+                      res.json({ success: true, amount, discount })
+                  } else {
+                      let msg = 'In valid Coupon Code'
+                      res.json({ success: false, msg })
+                  }
+              } else {
+                  let msg = `Minimum amount to purcahse : ${couponFound.minimumAmount}`
+                  res.json({ success: false, msg })
+              }
+          } else {
+              let msg = 'In valid Coupon Code'
+              res.json({ success: false, msg })
+          }
+
+      } else {
+          let msg = 'You have already used'
+          res.json({ success: false, msg })
+      }
+
+  } catch (e) {
+      console.log('error in the couponCheck in userside in couponController.js:', e)
+      // res.redirect("/error")
+  }
+}
+
+
+
+const removeCoupon = async (req, res) => {
+  try {
+      console.log(req.body)
+      const couponFound = await couponModel.findOne({ name: req.body.coupon })
+      const username = req.session.userName
+      const data = await userDetails.updateOne({ username: username }, { $pull: { coupon: couponFound.name } })
+      req.session.coupon = false
+      req.session.amountToPay = req.session.amountToPay + couponFound.discount
+      let amount = req.session.amountToPay
+      res.json({ success: true, amount })
+  } catch (e) {
+      console.log('error in the removeCoupon in the couponController in user side : ' + e)
+      res.redirect("/error")
+  }
+}
+
+
+
+
 
 module.exports = {
   adminProduct,
@@ -229,5 +300,7 @@ module.exports = {
   newProductPage,
   editProduct,
   updateProduct,
-  proBlock
+  proBlock,
+  couponCheck,
+  removeCoupon
 };
