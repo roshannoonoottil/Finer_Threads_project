@@ -115,12 +115,22 @@ const searchUser = async (req, res) => {
 
 const oders = async (req, res) => {
   try {
-    const dataOrder = await orderData.find({}).sort({ '_id': -1 }).limit(5)
-    console.log(dataOrder)
-    let current = 0
-    let displayprev = 0
-    let displaynxt = 1
-    res.render('adminOders', { dataOrder, current, displayprev, displaynxt, username: req.session.username })
+    var page = 1;
+        if (req.query.page) {
+          page = req.query.page;
+        }
+        const limit = 3;
+        var dataOrder = await orderData
+          .find({})
+          .sort({ _id: -1 })
+          .limit(limit * 1)
+          .skip((page - 1) * limit); //cant use const here as it will render error when a product is searched//
+    
+        const count = await orderData.find({}).countDocuments(); // counts the total products //
+        console.log("PRODUCT COUNT IS :" + count);
+    res.render('adminOders', { dataOrder, username: req.session.username,
+      totalPages: Math.ceil(count / limit),
+      currentPage: page,})
   } catch (e) {
 
       console.log('error in the orders in the adminController in the admin side : ' + e)
