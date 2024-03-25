@@ -35,17 +35,15 @@ const userData = new mongoose.Schema({
     required: true,
     default: 0,
   },
-  Order:{
-      type:Object
-      
+  Order: {
+    type: Object,
   },
-  coupon:{
-      type:Array
+  coupon: {
+    type: Array,
   },
-  wallet:{
-      type:Number
-  }
-
+  wallet: {
+    type: Number,
+  },
 });
 
 const Users = mongoose.model("User", userData);

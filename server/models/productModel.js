@@ -44,15 +44,15 @@ const productData = new mongoose.Schema({
     required: true,
     trim: true,
   },
-  offer:{
-        type:Number
+  offer: {
+    type: Number,
   },
-  discountAmount:{
-        type:Number
+  discountAmount: {
+    type: Number,
   },
-    catOffer:{
-        type:Number
-  }
+  catOffer: {
+    type: Number,
+  },
 });
 
 const proData = mongoose.model("product", productData);

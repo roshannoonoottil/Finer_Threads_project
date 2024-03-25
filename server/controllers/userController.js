@@ -1,7 +1,7 @@
 const userModel = require("../models/userModel");
 const categoryModel = require("../models/categoryModel");
 const productModel = require("../models/productModel");
-const userPro = require('../models/userAddressModel')
+const userPro = require("../models/userAddressModel");
 const otpSend = require("../middleware/otp");
 const bcrypt = require("bcrypt");
 
@@ -57,7 +57,7 @@ const verifyOTPS = (req, res) => {
     console.log(otpData);
     OTP = otpData;
     console.log("OTP received is: " + otpData);
-    res.render("otp",{OTP,email});
+    res.render("otp", { OTP, email });
     console.log("User OTP Page");
   } catch (err) {
     console.log("error in veriy otp" + err);
@@ -129,7 +129,7 @@ const redirectUser = async (req, res) => {
     const category = await categoryModel.find({ list: 1 });
     const product = await productModel.find({}).sort({ _id: 1 });
     console.log(userName);
-    res.render("home",{ category, product,userName });
+    res.render("home", { category, product, userName });
   } catch (error) {
     console.log("Error while redirection");
   }
@@ -180,16 +180,14 @@ const productView = async (req, res) => {
   }
 };
 
-
 const homePageCategory = async (req, res) => {
   console.log("category clicked");
   const params = req.params.name;
   console.log(params);
   const product = await productModel.find({ category: params });
   const category = await categoryModel.find({ list: 1 });
-  res.render("userProductCategory", { category, product,searchValue });
+  res.render("userProductCategory", { category, product, searchValue });
 };
-
 
 const userproductView = async (req, res) => {
   try {
@@ -216,7 +214,6 @@ const userproductView = async (req, res) => {
   }
 };
 
-
 const forgotPassword = (req, res) => {
   try {
     res.render("forgotPassword", { error: req.session.noRegisteredEmail });
@@ -225,7 +222,6 @@ const forgotPassword = (req, res) => {
     console.log("Error while redirecting to forgot password page :" + error);
   }
 };
-
 
 const authEmail = async (req, res) => {
   try {
@@ -272,7 +268,6 @@ const fpGetOTP = (req, res) => {
   }
 };
 
-
 const fpAuthOTP = (req, res) => {
   try {
     if (req.body.otp === newOTP) {
@@ -313,7 +308,6 @@ const updatePassword = async (req, res) => {
     console.log("Error while updating password :" + error);
   }
 };
-
 
 const resendOTP = (req, res) => {
   try {
@@ -365,11 +359,9 @@ const regResendOTP = (req, res) => {
   }
 };
 
-
-
 const search = async (req, res) => {
   try {
-    var currentPage ;
+    var currentPage;
     searchValue = req.body.searchValue;
     console.log("The searched data is: " + req.body.searchValue);
     const category = await categoryModel.find({});
@@ -378,14 +370,18 @@ const search = async (req, res) => {
     });
     console.log("searchData value is" + product);
     const noProduct = "No such product available";
-    res.render("userProductCategory", { category, product, searchValue, noProduct});
+    res.render("userProductCategory", {
+      category,
+      product,
+      searchValue,
+      noProduct,
+    });
   } catch (error) {
     console.log("Error while searching a product by guest: " + error);
   }
 };
 
 const shop = async (req, res) => {
-
   // var page = 1;
   // if (req.query.page) {
   //   page = req.query.page;
@@ -400,46 +396,51 @@ const shop = async (req, res) => {
   // const count = await productModel.find({}).countDocuments(); // counts the total products //
   // console.log("PRODUCT COUNT IS :" + count);
 
-
   console.log("Shop clicked");
   searchValue = req.body.searchValue;
-  const product = await productModel.find({ });
+  const product = await productModel.find({});
   const category = await categoryModel.find({ list: 1 });
-  res.render("userProductCategory", { category, product,searchValue,
+  res.render("userProductCategory", {
+    category,
+    product,
+    searchValue,
     // totalPages: Math.ceil(count / limit),
-    // currentPage: page, 
-   });
+    // currentPage: page,
+  });
 };
-
 
 const userAccount = async (req, res) => {
   try {
-    console.log(req.params.id)
-    const userin = req.session.name
+    console.log(req.params.id);
+    const userin = req.session.name;
 
-    const userData = await userPro.findOne({ username: userin, primary: 1 })
-    const user = await userModel.findOne({ username: userin })
-    const useraddress = await userPro.find({ username: userin, primary: 0 })
-    console.log(user)
-    const username = userin
-    const cat = await categoryModel.find({ list: 0 })
-    res.render('userProfile'
-    , { userData, user, userin, cat, useraddress, username }
-    )
+    const userData = await userPro.findOne({ username: userin, primary: 1 });
+    const user = await userModel.findOne({ username: userin });
+    const useraddress = await userPro.find({ username: userin, primary: 0 });
+    console.log(user);
+    const username = userin;
+    const cat = await categoryModel.find({ list: 0 });
+    res.render("userProfile", {
+      userData,
+      user,
+      userin,
+      cat,
+      useraddress,
+      username,
+    });
   } catch (e) {
-    console.log('error in the userAccount of userController in user side : ' + e)
+    console.log(
+      "error in the userAccount of userController in user side : " + e
+    );
     // res.redirect("/error")
   }
-}
-
-
-
+};
 
 const newAddress = async (req, res) => {
   try {
-    const userin = req.session.name
-    console.log(userin)
-    console.log(req.body)
+    const userin = req.session.name;
+    console.log(userin);
+    console.log(req.body);
     const newAddress = new userPro({
       username: userin,
       fullname: req.body.fullname,
@@ -449,18 +450,19 @@ const newAddress = async (req, res) => {
         city: req.body.city,
         state: req.body.state,
         country: req.body.country,
-        pincode: req.body.pincode
+        pincode: req.body.pincode,
       },
-      primary: 0
-    })
-    await newAddress.save()
-    res.redirect(`/useraccount/${userin}`)
-
+      primary: 0,
+    });
+    await newAddress.save();
+    res.redirect(`/useraccount/${userin}`);
   } catch (e) {
-    console.log('error in the newAddress in userController in the user side:' + e)
+    console.log(
+      "error in the newAddress in userController in the user side:" + e
+    );
     // res.redirect("/error")
   }
-}
+};
 
 const categoryProductSort = async (req, res) => {
   try {
@@ -474,11 +476,9 @@ const categoryProductSort = async (req, res) => {
     const number = req.params.number;
     //console.log(number);
     if (number == 1) {
-      var totalPages
-      var currentPage 
-      const product = await productModel
-        .find({})
-        .sort({ name: 1 });
+      var totalPages;
+      var currentPage;
+      const product = await productModel.find({}).sort({ name: 1 });
       console.log("DATA IF 1 is pressed:" + product);
       const value = "A - Z";
       res.re("userProductCategory", {
@@ -487,12 +487,10 @@ const categoryProductSort = async (req, res) => {
         searchValue,
         category,
         totalPages,
-        currentPage
+        currentPage,
       });
     } else if (number == 2) {
-      const product = await productModel
-        .find({})
-        .sort({ name: -1 });
+      const product = await productModel.find({}).sort({ name: -1 });
       console.log("DATA IF 2 is pressed:" + product);
       res.render("userProductCategory", {
         user: userName,
@@ -500,13 +498,10 @@ const categoryProductSort = async (req, res) => {
         searchValue,
         category,
         totalPages,
-        currentPage
-
+        currentPage,
       });
     } else if (number == 3) {
-      const product = await productModel
-        .find({})
-        .sort({ discountAmount: 1 });
+      const product = await productModel.find({}).sort({ discountAmount: 1 });
       console.log("DATA IF 3 is pressed:" + product);
       res.render("userProductCategory", {
         user: userName,
@@ -514,12 +509,10 @@ const categoryProductSort = async (req, res) => {
         searchValue,
         category,
         totalPages,
-        currentPage
+        currentPage,
       });
     } else if (number == 4) {
-      const product = await productModel
-        .find({})
-        .sort({ discountAmount: -1 });
+      const product = await productModel.find({}).sort({ discountAmount: -1 });
       console.log("DATA IF 4 is pressed:" + product);
       res.render("userProductCategory", {
         user: userName,
@@ -527,14 +520,13 @@ const categoryProductSort = async (req, res) => {
         searchValue,
         category,
         totalPages,
-        currentPage
+        currentPage,
       });
     }
   } catch (error) {
     console.log("Error happened while accessing categoryProductSort: " + error);
   }
 };
-
 
 module.exports = {
   index,
@@ -562,5 +554,5 @@ module.exports = {
   search,
   userAccount,
   newAddress,
-  categoryProductSort
+  categoryProductSort,
 };

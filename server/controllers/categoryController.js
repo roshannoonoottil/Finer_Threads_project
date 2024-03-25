@@ -1,7 +1,7 @@
 const userModel = require("../models/userModel");
 const bcrypt = require("bcrypt");
 const catMod = require("../models/categoryModel");
-const productDetails = require('../models/productModel')
+const productDetails = require("../models/productModel");
 
 const showCategory = async (req, res) => {
   try {
@@ -21,7 +21,6 @@ const showCategory = async (req, res) => {
     console.log("error in the showCategory in admin side : " + e);
   }
 };
-
 
 const addCategory = async (req, res) => {
   try {
@@ -61,15 +60,14 @@ const addCategory = async (req, res) => {
   }
 };
 
-
 const list = async (req, res) => {
   try {
     const { id: name } = req.params; // Destructuring req.params to get the id as name
     console.log(name);
-    
+
     // Finding a category by name
     const productData = await catMod.findOne({ name });
-    
+
     let val = 1;
     if (productData.list === 1) {
       val = 0;
@@ -85,54 +83,57 @@ const list = async (req, res) => {
   }
 };
 
-
-
 const categoryEdit = async (req, res) => {
   try {
-      // Retrieve category details from the request body
-      const { name, oldname, offer } = req.body;
+    // Retrieve category details from the request body
+    const { name, oldname, offer } = req.body;
 
-      // Find category by name ignoring case
-      const categoryFound = await catMod.find({ name: { $regex: new RegExp(`^${name}`, 'i') } });
+    // Find category by name ignoring case
+    const categoryFound = await catMod.find({
+      name: { $regex: new RegExp(`^${name}`, "i") },
+    });
 
-      if ((categoryFound.length == 0) || (categoryFound[0].name == oldname)) {
-          // Update category details
-          await catMod.updateOne({ name: req.params.id }, { $set: { name, offer } }, { upsert: true });
+    if (categoryFound.length == 0 || categoryFound[0].name == oldname) {
+      // Update category details
+      await catMod.updateOne(
+        { name: req.params.id },
+        { $set: { name, offer } },
+        { upsert: true }
+      );
 
-          // Update product details based on category changes
-          const productData = await productDetails.find({ category: req.params.id });
-          for (let i = 0; i < productData.length; i++) {
-              let discountAmount;
+      // Update product details based on category changes
+      const productData = await productDetails.find({
+        category: req.params.id,
+      });
+      for (let i = 0; i < productData.length; i++) {
+        let discountAmount;
 
-              if (offer !== '') {
-                  // Calculate discountAmount based on offer
-                  const sum = productData[i].rate * offer;
-                  const value = sum / 100;
-                  discountAmount = productData[i].rate - value;
-              } else {
-                  discountAmount = productData[i].rate;
-              }
+        if (offer !== "") {
+          // Calculate discountAmount based on offer
+          const sum = productData[i].rate * offer;
+          const value = sum / 100;
+          discountAmount = productData[i].rate - value;
+        } else {
+          discountAmount = productData[i].rate;
+        }
 
-              // Update product details with discountAmount
-              await productDetails.updateMany({ name: productData[i].name }, { $set: { discountAmount } }, { upsert: true });
-          }
-
-          res.redirect('/admin/category');
-      } else {
-          res.redirect('/admin/category?err=Category already exists');
+        // Update product details with discountAmount
+        await productDetails.updateMany(
+          { name: productData[i].name },
+          { $set: { discountAmount } },
+          { upsert: true }
+        );
       }
+
+      res.redirect("/admin/category");
+    } else {
+      res.redirect("/admin/category?err=Category already exists");
+    }
   } catch (e) {
-      console.log('Error in the edit_category of adminController:', e);
-      // res.redirect('/admin/errorPage');
+    console.log("Error in the edit_category of adminController:", e);
+    // res.redirect('/admin/errorPage');
   }
-}
-
-
-
-
-
-
-
+};
 
 module.exports = {
   showCategory,

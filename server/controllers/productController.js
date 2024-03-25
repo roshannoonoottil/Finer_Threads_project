@@ -1,11 +1,11 @@
 const productModel = require("../models/productModel");
 const categoryModel = require("../models/categoryModel");
-const couponModel = require("../models/couponModel")
-const userDetails = require("../models/userModel")
-const cart = require('../models/cartModel')
-const Razorpay = require('razorpay')
+const couponModel = require("../models/couponModel");
+const userDetails = require("../models/userModel");
+const cart = require("../models/cartModel");
+const Razorpay = require("razorpay");
 const multer = require("multer");
-require('dotenv').config();
+require("dotenv").config();
 
 const adminProduct = async (req, res) => {
   try {
@@ -24,7 +24,6 @@ const adminProduct = async (req, res) => {
   }
 };
 
-
 const addProduct = async (req, res) => {
   try {
     console.log(req.body);
@@ -37,43 +36,43 @@ const addProduct = async (req, res) => {
         .replace("public", "")
         .replace("/admin", "../");
     }
-    const { prodName, category, prodDesc, prodRate, quantity} = req.body;
-        let data=req.body;
-        let amount = 0
-        if (data.offer == '') {
-            const catdata = await categoryModel.find({ name: category })
-            if (catdata[0].offer == '') {
-                amount = Number(data.discount)
-            } else {
-                let sum = Number(data.rate) * Number(catdata[0].offer)
-                let value = sum / 100
-                amount = Number(data.rate) - value
-            }
-        } else {
-          const catdata = await categoryModel.find({ name: category })
-          if (catdata[0].offer == '') {
-              amount = Number(data.discount)
-          } else {
-              if (catdata[0].offer > data.offer) {
-                  let sum = Number(data.rate) * Number(catdata[0].offer)
-                  let value = sum / 100
-                  amount = Number(data.rate) - value
-              } else {
-                  amount = Number(data.discount)
-              }
-          }
+    const { prodName, category, prodDesc, prodRate, quantity } = req.body;
+    let data = req.body;
+    let amount = 0;
+    if (data.offer == "") {
+      const catdata = await categoryModel.find({ name: category });
+      if (catdata[0].offer == "") {
+        amount = Number(data.discount);
+      } else {
+        let sum = Number(data.rate) * Number(catdata[0].offer);
+        let value = sum / 100;
+        amount = Number(data.rate) - value;
       }
-      const newProd = new productModel({
-        name: prodName,
-        category: category,
-        description: prodDesc,
-        rate: prodRate,
-        stock: quantity,
-        list: 0,
-        hide: 0,
-        image: imagePath,
-        offer: data.offer,
-        discountAmount: amount
+    } else {
+      const catdata = await categoryModel.find({ name: category });
+      if (catdata[0].offer == "") {
+        amount = Number(data.discount);
+      } else {
+        if (catdata[0].offer > data.offer) {
+          let sum = Number(data.rate) * Number(catdata[0].offer);
+          let value = sum / 100;
+          amount = Number(data.rate) - value;
+        } else {
+          amount = Number(data.discount);
+        }
+      }
+    }
+    const newProd = new productModel({
+      name: prodName,
+      category: category,
+      description: prodDesc,
+      rate: prodRate,
+      stock: quantity,
+      list: 0,
+      hide: 0,
+      image: imagePath,
+      offer: data.offer,
+      discountAmount: amount,
     });
 
     await newProd.save();
@@ -82,14 +81,6 @@ const addProduct = async (req, res) => {
     console.log("error while adding product to the DB: " + err);
   }
 };
-
-
-
-
-
-
-
-
 
 const newProductPage = async (req, res) => {
   const category = await categoryModel.find({}).sort({ name: 1 });
@@ -126,7 +117,7 @@ const editProduct = async (req, res) => {
       category,
       oldOffer,
       allOldData,
-      totalImages
+      totalImages,
     });
   } catch (err) {
     console.log(err.message);
@@ -136,15 +127,15 @@ const editProduct = async (req, res) => {
 
 const updateProduct = async (req, res) => {
   try {
-    console.log(req.files," re uploding files");
+    console.log(req.files, " re uploding files");
     for (let i in req.files) {
       console.log(parseInt(`${i}`));
       let index = parseInt(`${i}`);
       console.log("pro img update");
       let newImagePath = req.files[i][0].path
-      .replace(/\\/g, "/")
-      .replace("public", "")
-      .replace("/admin", "../");
+        .replace(/\\/g, "/")
+        .replace("public", "")
+        .replace("/admin", "../");
       console.log(newImagePath);
       await productModel.updateOne(
         { name: req.body.oldProdName },
@@ -154,56 +145,54 @@ const updateProduct = async (req, res) => {
       );
     }
     console.log(req.body);
-    const catdata = await categoryModel.find({ name: req.body.newProdCat })
-        console.log(catdata,'caaaat data')
-        let offerPrice
-        if (req.body.offer != '') {
-            
-            if (req.body.offer > catdata[0].offer) {
-                let sum = Number(req.body.newProdRate) * Number(req.body.offer)
-                let dis = sum / 100
-                offerPrice = Number(req.body.newProdRate) - Math.floor(dis)
-                console.log(req.body.offer, 'if')
-            } else {
-                let sum = Number(req.body.newProdRate) * Number(catdata[0].offer)
-                let value = sum / 100
-                offerPrice = Number(req.body.newProdRate) - value
-            }
-
-        }else {
-          if (catdata[0].offer == '') {
-              console.log('offer is null')
-              offerPrice = Number(req.body.newProdRate)
-          } else {
-              console.log('offer is not null')
-              let sum = Number(req.body.newProdRate) * Number(catdata[0].offer)
-              let value = sum / 100
-              offerPrice = Number(req.body.newProdRate) - value
-              console.log(offerPrice,'offferprice - -- -- --')
-          }
+    const catdata = await categoryModel.find({ name: req.body.newProdCat });
+    console.log(catdata, "caaaat data");
+    let offerPrice;
+    if (req.body.offer != "") {
+      if (req.body.offer > catdata[0].offer) {
+        let sum = Number(req.body.newProdRate) * Number(req.body.offer);
+        let dis = sum / 100;
+        offerPrice = Number(req.body.newProdRate) - Math.floor(dis);
+        console.log(req.body.offer, "if");
+      } else {
+        let sum = Number(req.body.newProdRate) * Number(catdata[0].offer);
+        let value = sum / 100;
+        offerPrice = Number(req.body.newProdRate) - value;
       }
-      if(offerPrice>0){
-        
-    console.log(req.body);
-    if (req.body) {
-    await productModel.updateOne(
-      { name: req.body.oldProdName },
-      {
-        $set: {
-          name: req.body.newProdName,
-          category: req.body.newProdCat,
-          rate: req.body.newProdRate,
-          description: req.body.newProdDesc,
-          stock: req.body.newProStock,
-          discountAmount: offerPrice,
-          offer: req.body.offer,
-        }
-      },
-      {
-          upsert: true
-      })
+    } else {
+      if (catdata[0].offer == "") {
+        console.log("offer is null");
+        offerPrice = Number(req.body.newProdRate);
+      } else {
+        console.log("offer is not null");
+        let sum = Number(req.body.newProdRate) * Number(catdata[0].offer);
+        let value = sum / 100;
+        offerPrice = Number(req.body.newProdRate) - value;
+        console.log(offerPrice, "offferprice - -- -- --");
+      }
     }
-}
+    if (offerPrice > 0) {
+      console.log(req.body);
+      if (req.body) {
+        await productModel.updateOne(
+          { name: req.body.oldProdName },
+          {
+            $set: {
+              name: req.body.newProdName,
+              category: req.body.newProdCat,
+              rate: req.body.newProdRate,
+              description: req.body.newProdDesc,
+              stock: req.body.newProStock,
+              discountAmount: offerPrice,
+              offer: req.body.offer,
+            },
+          },
+          {
+            upsert: true,
+          }
+        );
+      }
+    }
     console.log("PRODUCT UPDATED");
     return res.redirect("/admin/product");
   } catch (err) {
@@ -226,169 +215,163 @@ const proBlock = async (req, res) => {
   }
 };
 
-
 const couponCheck = async (req, res) => {
   try {
-      const couponFound = await couponModel.findOne({ name: req.body.coupon })
-      console.log(couponFound ," coupon founded");
-      const couponUsed = await userDetails.findOne({ username: req.session.name, coupon: { $in: `${req.body.coupon}` } })
-      console.log(couponUsed,"coupon in")
-      if (!couponUsed) {
-          if (couponFound) {
-            console.log("coupon found");
-            console.log(req.body.amount, ">=",couponFound.minimumAmount );
-              if (req.body.amount >= couponFound.minimumAmount) {
-            console.log("coupon amound >= min amount");
+    const couponFound = await couponModel.findOne({ name: req.body.coupon });
+    console.log(couponFound, " coupon founded");
+    const couponUsed = await userDetails.findOne({
+      username: req.session.name,
+      coupon: { $in: `${req.body.coupon}` },
+    });
+    console.log(couponUsed, "coupon in");
+    if (!couponUsed) {
+      if (couponFound) {
+        console.log("coupon found");
+        console.log(req.body.amount, ">=", couponFound.minimumAmount);
+        if (req.body.amount >= couponFound.minimumAmount) {
+          console.log("coupon amound >= min amount");
 
-                  if (couponFound.expiry - new Date() >= 0) {
-                      const username = req.session.name
-                      const data = await userDetails.updateOne({ username: username }, { $push: { coupon: couponFound.name } })
-                      let discount = couponFound.discount
-                      req.session.amountToPay = req.session.amountToPay - discount
-                      let amount = req.session.amountToPay
-                      console.log(amount, 'amount amount')
-                      console.log(req.session.amountToPay)
-                      req.session.coupon = req.body.coupon
-                      //req.session.coupon = discount
-                      res.json({ success: true, amount, discount })
-                  } else {
-                      let msg = 'In valid Coupon Code'
-                      res.json({ success: false, msg })
-                  }
-              } else {
-                  let msg = `Minimum amount to purcahse : ${couponFound.minimumAmount}`
-                  res.json({ success: false, msg })
-              }
+          if (couponFound.expiry - new Date() >= 0) {
+            const username = req.session.name;
+            const data = await userDetails.updateOne(
+              { username: username },
+              { $push: { coupon: couponFound.name } }
+            );
+            let discount = couponFound.discount;
+            req.session.amountToPay = req.session.amountToPay - discount;
+            let amount = req.session.amountToPay;
+            console.log(amount, "amount amount");
+            console.log(req.session.amountToPay);
+            req.session.coupon = req.body.coupon;
+            //req.session.coupon = discount
+            res.json({ success: true, amount, discount });
           } else {
-              let msg = 'In valid Coupon Code'
-              res.json({ success: false, msg })
+            let msg = "In valid Coupon Code";
+            res.json({ success: false, msg });
           }
-
+        } else {
+          let msg = `Minimum amount to purcahse : ${couponFound.minimumAmount}`;
+          res.json({ success: false, msg });
+        }
       } else {
-          let msg = 'You have already used'
-          res.json({ success: false, msg })
+        let msg = "In valid Coupon Code";
+        res.json({ success: false, msg });
       }
-
+    } else {
+      let msg = "You have already used";
+      res.json({ success: false, msg });
+    }
   } catch (e) {
-      console.log('error in the couponCheck in userside in couponController.js:', e)
-      // res.redirect("/error")
+    console.log(
+      "error in the couponCheck in userside in couponController.js:",
+      e
+    );
+    // res.redirect("/error")
   }
-}
-
-
+};
 
 const removeCoupon = async (req, res) => {
   try {
-      console.log(req.body)
-      const couponFound = await couponModel.findOne({ name: req.body.coupon })
-      const username = req.session.name
-      const data = await userDetails.updateOne({ username: username }, { $pull: { coupon: couponFound.name } })
-      req.session.coupon = false
-      req.session.amountToPay = req.session.amountToPay + couponFound.discount
-      let amount = req.session.amountToPay
-      res.json({ success: true, amount })
+    console.log(req.body);
+    const couponFound = await couponModel.findOne({ name: req.body.coupon });
+    const username = req.session.name;
+    const data = await userDetails.updateOne(
+      { username: username },
+      { $pull: { coupon: couponFound.name } }
+    );
+    req.session.coupon = false;
+    req.session.amountToPay = req.session.amountToPay + couponFound.discount;
+    let amount = req.session.amountToPay;
+    res.json({ success: true, amount });
   } catch (e) {
-      console.log('error in the removeCoupon in the couponController in user side : ' + e)
-      res.redirect("/error")
+    console.log(
+      "error in the removeCoupon in the couponController in user side : " + e
+    );
+    res.redirect("/error");
   }
-}
-
-
-
+};
 
 var instance = new Razorpay({
   key_id: process.env.RAZORPAY_YOUR_KEY_ID,
   key_secret: process.env.RAZORPAY_YOUR_KEY_SECRET,
 });
 
-
 const createOrder = async (req, res) => {
-  console.log('user online payment')
-  console.log('body:', req.body);
+  console.log("user online payment");
+  console.log("body:", req.body);
   try {
-      console.log('1')
-      const userData = await cart.find({ username: req.body.username })
-      console.log('2')
-      console.log('3')
-      console.log(req.body)
-      let amount =req.session.amountToPay
-      const options = {
-          amount: amount * 100,
-          currency: 'INR',
-          receipt: 'razorUser@gmail.com'
+    console.log("1");
+    const userData = await cart.find({ username: req.body.username });
+    console.log("2");
+    console.log("3");
+    console.log(req.body);
+    let amount = req.session.amountToPay;
+    const options = {
+      amount: amount * 100,
+      currency: "INR",
+      receipt: "razorUser@gmail.com",
+    };
+    console.log("4");
+
+    instance.orders.create(options, (err, order) => {
+      console.log("6");
+      console.log(err);
+      console.log(order);
+      if (!err) {
+        console.log("5");
+
+        res.status(200).send({
+          success: true,
+          msg: "Order Created",
+          order_id: order.id,
+          amount: req.session.amountToPay,
+          key_id: process.env.RAZORPAY_YOUR_KEY_ID,
+          product_name: req.body.name,
+        });
+        console.log("100");
+      } else {
+        console.log("london");
+        res.status(400).send({ success: false, msg: "Something went wrong!" });
       }
-      console.log('4')
-
-      instance.orders.create(options,
-          (err, order) => {
-              console.log('6')
-              console.log(err)
-              console.log(order)
-              if (!err) {
-                  console.log('5')
-
-                  res.status(200).send({
-                      success: true,
-                      msg: 'Order Created',
-                      order_id: order.id,
-                      amount: req.session.amountToPay,
-                      key_id: process.env.RAZORPAY_YOUR_KEY_ID,
-                      product_name: req.body.name
-                  });
-                  console.log('100')
-              }
-              else {
-                console.log("london")
-                  res.status(400).send({ success: false, msg: 'Something went wrong!' });
-              }
-          }
-      );
-
+    });
   } catch (error) {
-      console.log(error.message);
-      // res.redirect("/error")
+    console.log(error.message);
+    // res.redirect("/error")
   }
-}
-
-
-
+};
 
 const applyWallet = async (req, res) => {
   try {
-      console.log(req.body, '==============================================================')
-      const userData = await userDetails.findOne({ username: req.session.name })
-      console.log(userData.wallet)
-      let amount = Math.max(1, req.session.amountToPay - userData.wallet)
-      let wallet = Math.max(0, userData.wallet - req.session.amountToPay)
-      req.session.amountToPay = amount
-      req.session.wallet = wallet
-      req.session.reducedWallet = userData.wallet - wallet
-      res.json({ success: true, amount, wallet })
+    console.log(
+      req.body,
+      "=============================================================="
+    );
+    const userData = await userDetails.findOne({ username: req.session.name });
+    console.log(userData.wallet);
+    let amount = Math.max(1, req.session.amountToPay - userData.wallet);
+    let wallet = Math.max(0, userData.wallet - req.session.amountToPay);
+    req.session.amountToPay = amount;
+    req.session.wallet = wallet;
+    req.session.reducedWallet = userData.wallet - wallet;
+    res.json({ success: true, amount, wallet });
   } catch (e) {
-      console.log('error in the applyWallet in the couponController in user side : ' + e)
+    console.log(
+      "error in the applyWallet in the couponController in user side : " + e
+    );
   }
-}
-
-
+};
 
 const removeWallet = (req, res) => {
   try {
-      req.session.wallet = false
-      let wallet = req.session.wallet + req.session.reducedWallet
-      let amount = req.session.amountToPay + req.session.reducedWallet
-      req.session.amountToPay = amount
-      res.json({ success: true ,amount,wallet})
+    req.session.wallet = false;
+    let wallet = req.session.wallet + req.session.reducedWallet;
+    let amount = req.session.amountToPay + req.session.reducedWallet;
+    req.session.amountToPay = amount;
+    res.json({ success: true, amount, wallet });
   } catch (e) {
-      console.log('error in the removeWallet in couponControler in userside')
+    console.log("error in the removeWallet in couponControler in userside");
   }
-}
-
-
-
-
-
-
-
+};
 
 module.exports = {
   adminProduct,
@@ -401,5 +384,5 @@ module.exports = {
   removeCoupon,
   createOrder,
   applyWallet,
-  removeWallet
+  removeWallet,
 };
