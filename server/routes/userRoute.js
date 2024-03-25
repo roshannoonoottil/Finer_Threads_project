@@ -79,6 +79,10 @@ router.post('/removeCoupon', userCheck.isUser, productController.removeCoupon)
 
 router.post('/createOrder', userCheck.isUser, productController.createOrder)
 
+router.post('/applyWallet', userCheck.isUser, productController.applyWallet)
+
+router.post('/removeWallet', userCheck.isUser, productController.removeWallet)
+
 
 
 

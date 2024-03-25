@@ -281,7 +281,7 @@ const removeCoupon = async (req, res) => {
   try {
       console.log(req.body)
       const couponFound = await couponModel.findOne({ name: req.body.coupon })
-      const username = req.session.userName
+      const username = req.session.name
       const data = await userDetails.updateOne({ username: username }, { $pull: { coupon: couponFound.name } })
       req.session.coupon = false
       req.session.amountToPay = req.session.amountToPay + couponFound.discount
@@ -353,6 +353,43 @@ const createOrder = async (req, res) => {
 
 
 
+const applyWallet = async (req, res) => {
+  try {
+      console.log(req.body, '==============================================================')
+      const userData = await userDetails.findOne({ username: req.session.name })
+      console.log(userData.wallet)
+      let amount = Math.max(1, req.session.amountToPay - userData.wallet)
+      let wallet = Math.max(0, userData.wallet - req.session.amountToPay)
+      req.session.amountToPay = amount
+      req.session.wallet = wallet
+      req.session.reducedWallet = userData.wallet - wallet
+      res.json({ success: true, amount, wallet })
+  } catch (e) {
+      console.log('error in the applyWallet in the couponController in user side : ' + e)
+  }
+}
+
+
+
+const removeWallet = (req, res) => {
+  try {
+      req.session.wallet = false
+      let wallet = req.session.wallet + req.session.reducedWallet
+      let amount = req.session.amountToPay + req.session.reducedWallet
+      req.session.amountToPay = amount
+      res.json({ success: true ,amount,wallet})
+  } catch (e) {
+      console.log('error in the removeWallet in couponControler in userside')
+  }
+}
+
+
+
+
+
+
+
+
 module.exports = {
   adminProduct,
   addProduct,
@@ -362,5 +399,7 @@ module.exports = {
   proBlock,
   couponCheck,
   removeCoupon,
-  createOrder
+  createOrder,
+  applyWallet,
+  removeWallet
 };

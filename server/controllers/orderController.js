@@ -178,6 +178,8 @@ const codPayment = async (req, res) => {
             specialChars: false,
             lowerCaseAlphabets: true
         });
+
+
         let paymentMentod = "COD"
 
         for (let i = 0; i < cartData.length; i++) {

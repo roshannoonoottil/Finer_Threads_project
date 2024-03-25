@@ -32,6 +32,13 @@
         .removeCoupon {
             visibility: hidden;
         }
+        .applyWallet {
+            visibility: visible;
+        }
+
+        .removeWallet {
+            visibility: hidden;
+        }
 
     </style>
     
@@ -95,21 +102,20 @@
                                                     
                                         </div>
                                         <br>
-                                                    <h6 style="color: red; margin-left: 20px;" id="couponmsg"></h6>
+                                                    <h6 style="color: red; margin-left: 14px;" id="couponmsg"></h6>
                                         <br>
-                                        <!-- <div class="input-group">
-                                            <span class="input-group-text">Wallet Amount</span>
-
-                                            <input type="text" aria-label="First name" class="form-control"
-                                                name="coupon" id="Wallet" value="{{userData.[0].wallet}}"
-                                                disabled>
-                                                <p id="wallethidden" hidden>{{userData.[0].wallet}}</p>
-                                            <button onclick="applyWallet()" class="btn btn-warning applyWallet"
+                                        <div class="input-group">
+                                            <input type="text"  class="form-control"
+                                                name="coupon" placeholder="Wallet Amount" id="Wallet"
+                                                 value="<%=userData[0].wallet%>"
+                                                max="<%=userData[0].wallet%>">
+                                                <p id="wallethidden" hidden><%=userData[0].wallet%></p>
+                                            <button onclick="applyWallet()" class="btn btn-secondary applyWallet"
                                                 id="applyWallet">use</button>
                                             <button onclick="removeWallet()"
-                                                class="btn btn-warning removeWallet"
+                                                class="btn btn-secondary removeWallet"
                                                 id="removeWallet">Remove</button>
-                                        </div> -->
+                                        </div>
 
                                     </div>
                                 </div>
@@ -151,7 +157,7 @@
                                     
                                     <h6 style="margin-top: -7%;padding-left: 8%;display: none;" id="discountValue"></h6>
                                     <br>
-                                    <!-- <h5 id="appliedWallet" style="display: none;">Wallet Applied</h5> -->
+                                    <h5 id="appliedWallet" style="display: none;">Wallet Applied</h5>
                                     <h6 style="margin-top: -6%;padding-left: 8%;display: none;" id="walletValue"></h6>
                                     <hr>
                                     <h5>Price</h5>
@@ -170,13 +176,6 @@
 
 
                                 </div>
-                                <!-- <div class="popup" id="popup">
-                                    <h3>Coupon Code</h3>
-                                    <p id="couponmsg"></p>
-                                    <button type="button" onclick="popupClose()">OK</button>
-
-                                </div> -->
-
                             </div>
                         </div>
                     </div>
@@ -381,6 +380,90 @@ function removeCoupon() {
         }
 
 
+         // wallet apply
+         function applyWallet() {
+            console.log('function called applyWallet')
+            const wallet = document.getElementById('wallethidden').innerHTML
+            const amount = document.getElementById('price').innerText
+            console.log(wallet)
+            $.ajax({
+                url: '/applyWallet',
+                data: {
+                    wallet: wallet,
+                    amount: amount
+                },
+                method: 'post',
+                dataType: 'json',
+                success: function (res) {
+                    if (res.success) {
+                        console.log(res, 'success ')
+                        const apply = document.getElementById('applyWallet')
+                        const remove = document.getElementById('removeWallet')
+                        document.getElementById('Wallet').value = res.wallet
+                        //console.log(data,'data data data data')
+                        remove.classList.remove('removeWallet')
+                        console.log(apply)
+                        apply.classList.add('removeWallet')
+                        const applied = document.getElementById('appliedWallet')
+                        console.log(applied)
+                        const appliedamount = document.getElementById('walletValue')
+                        applied.style.display = 'inline'
+                        appliedamount.style.display = 'inline'
+                        
+                            document.getElementById('walletValue').innerText = -(wallet -res.wallet) + "Rs."
+                            document.getElementById('totalAmount').innerText = res.amount
+                        
+
+                        document.getElementById('couponmsg').innerHTML = `Wallet amount applied Successfully`
+                        popup.classList.add("popupOpen")
+                    }
+                }
+            });
+        }
+
+
+
+
+        function removeWallet() {
+            console.log('function called removeWallet')
+            const wallet = document.getElementById('wallethidden').innerHTML
+            const amount = document.getElementById('price').innerText
+            console.log(wallet)
+            $.ajax({
+                url: '/removeWallet',
+                method: 'post',
+                data: {
+                    amount: amount
+                },
+                dataType: 'json',
+                success: function (res) {
+                    if (res.success) {
+                        console.log(res,'res in the remove Wallet ')
+                        const applied = document.getElementById('appliedWallet')
+                        console.log(applied)
+                        const appliedamount = document.getElementById('walletValue')
+                        applied.style.display = 'none'
+                        appliedamount.style.display = 'none'
+                        document.getElementById('Wallet').value = res.wallet
+                        document.getElementById('totalAmount').innerText = res.amount
+                        const apply = document.getElementById('applyWallet')
+                        const remove = document.getElementById('removeWallet')
+                        remove.classList.add('removeWallet')
+                        console.log(apply)
+                        apply.classList.remove('removeWallet')
+                        document.getElementById('couponmsg').innerHTML = `Wallet amount removed Successfully`
+                        popup.classList.add("popupOpen")
+
+                    } else {
+                        alert('something went wrong!!!!!')
+                    }
+                }
+
+            })
+        }
+
+
+
     </script>
 
 
@@ -436,7 +519,6 @@ function removeCoupon() {
     });
 
 </script>
-
     
     </body>
     
