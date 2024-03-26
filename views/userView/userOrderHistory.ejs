@@ -82,11 +82,11 @@
                     <td><%= item.product %></td>
                     <td><%= item.quentity %></td>
                     <% if (item.amountPaid) { %>
-                        <td><%= item.amountPaid %></td>
+                        <td>₹ <%= item.amountPaid %></td>
                     <% } else { %>
                         <td>₹ <%= item.price %></td>
                     <% } %>
-                    <td><%= item.orderDate %></td>
+                    <td><%= item.orderDate.toLocaleDateString() %></td>
                     <td><a href="/historyOrder?orderId=<%= item.orderId %>&product=<%= item.product %>" class="btn btn-dark">Details</a></td>
                     <!-- <td><a href="/invoice?orderId=<%= item.orderId %>&product=<%= item.product %>" class="btn btn-success">Download</a></td> -->
                 </tr>

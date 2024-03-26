@@ -3,11 +3,14 @@ const adminController = require("../controllers/adminController")
 const adminCheck = require("../middleware/adminMiddleware")
 const categoryController = require("../controllers/categoryController")
 const productController = require("../controllers/productController")
+const orderController = require("../controllers/orderController")
 const multer = require("../middleware/multer");  //for image uploading middleware
 
 router.get("/",adminController.adiminLogin);         //GET request to check if user is logged in or not
 router.post("/dashboard",adminController.adminDashboard);    //POST request for dashboard page
 router.get("/dashboard",adminCheck.isAdmin,adminController.toDashboard);   //redirects to the dashboard page after successful login
+router.post('/salesReport', adminCheck.isAdmin, orderController.salesReport);    // GET sales report by date range
+
 router.get("/adminlogout",adminController.adminLogout);      //GET request to log out the user from the account
 
 router.get("/user", adminCheck.isAdmin, adminController.adminShowUsers); // show users 

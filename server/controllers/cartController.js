@@ -12,7 +12,7 @@ const viewWish = async (req, res) => {
       page = req.query.page;
     }
     const limit = 4;
-    var wishData = await wishDetails
+    const wishData = await wishDetails
       .find({ username: req.session.name })
       .sort({ _id: -1 })
       .limit(limit * 1)

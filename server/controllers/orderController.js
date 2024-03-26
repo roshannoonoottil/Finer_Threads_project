@@ -6,6 +6,7 @@ const cart = require("../models/cartModel");
 const wish = require("../models/wishlistModel");
 const order = require("../models/orderModel");
 const orderid = require("otp-generator");
+const puppeteer = require("puppeteer");
 
 const proceedtoCheckOut = async (req, res) => {
   try {
@@ -206,6 +207,9 @@ const codPayment = async (req, res) => {
     });
 
     let paymentMentod = "COD";
+    if (req.query.pay) {
+      paymentMentod = "Online"
+  }
 
     for (let i = 0; i < cartData.length; i++) {
       const shippingAddress = new order({
@@ -232,6 +236,7 @@ const codPayment = async (req, res) => {
 
       await shippingAddress.save();
     }
+   
     // console.log(date.toDateString())
     const orderData = await order.find({ orderDate: date });
     const data = await order.aggregate([
@@ -248,6 +253,7 @@ const codPayment = async (req, res) => {
     console.log(data);
     let price = req.session.amountToPay;
     let qunatity = data[0].totalQuantity;
+
     await cart.deleteMany({ username: userin });
     req.session.amountToPay = 0;
     res.render("userOrderPlaced", {
@@ -259,6 +265,29 @@ const codPayment = async (req, res) => {
       price,
       qunatity,
     });
+
+  //   const user = await userDetails.find({ username: req.session.name });
+  //   console.log(user[0].wallet,"wallet check");
+  //   if(){
+
+  //     let amount = user[0].wallet - price ;
+  //   await userDetails.updateOne(
+  //     { username: req.session.name },
+  //     { $set: { wallet: amount } },
+  //     { upsert: true }
+  //   );
+
+  // }else{
+
+  //   await userDetails.updateOne(
+  //     { username: req.session.name },
+  //     { $set: { wallet: 0 } },
+  //     { upsert: true }
+  //   );
+
+  // }
+
+
   } catch (e) {
     console.log(
       "error in the codPayment of orderController in user side : " + e
@@ -385,6 +414,182 @@ const returnreason = async (req, res) => {
   }
 };
 
+
+
+
+
+const salesReport = async (req, res) => {
+  try {
+    const { startDate, endDate } = req.body;
+
+    // Aggregate to get total sales amount
+    const totalSales = await order.aggregate([
+      {
+        $match: {
+          orderDate: {
+            $gte: new Date(startDate),
+            $lte: new Date(endDate),
+          },
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          totalAmount: { $sum: "$price" }, // Assuming total amount field name is totalAmount
+        },
+      },
+    ]);
+
+    // Aggregate to get total discount amount
+    const totalDiscount = await order.aggregate([
+      {
+        $match: {
+          orderDate: {
+            $gte: new Date(startDate),
+            $lte: new Date(endDate),
+          },
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          totalDiscount: { $sum: "$amountPaid" }, // Assuming discount field name is discount
+        },
+      },
+    ]);
+
+    const Product = await order.aggregate([
+      {
+        $match: {
+          orderDate: {
+            $gte: new Date(startDate),
+            $lte: new Date(endDate),
+          },
+        },
+      },
+      {
+        $group: {
+          _id: "$product",
+          totalOrders: { $sum: 1 },
+        },
+      },
+    ]);
+
+    const status = await order.aggregate([
+      {
+        $match: {
+          orderDate: {
+            $gte: new Date(startDate),
+            $lte: new Date(endDate),
+          },
+        },
+      },
+      {
+        $group: {
+          _id: "$status",
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+
+    const htmlContent = `
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Sales Report</title>
+          <style>
+              body {
+                  margin-left: 20px;
+              }
+          </style>
+      </head>
+      <body>
+          <h2 align="center"> Sales Report</h2>
+          Start Date: ${startDate}<br>
+          End Date: ${endDate}<br>
+          <center>
+          <h3>Total Sales</h3>
+              <table style="border-collapse: collapse;">
+                  <thead>
+                      <tr>
+                          <th style="border: 1px solid #000; padding: 8px;">Sl N0</th>
+                          <th style="border: 1px solid #000; padding: 8px;">Product</th>
+                          <th style="border: 1px solid #000; padding: 8px;">Total Orders</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      ${Product
+                        .map(
+                          (item, index) => `
+                              <tr>
+                                  <td style="border: 1px solid #000; padding: 8px;">${index + 1
+                                  }</td>
+                                  <td style="border: 1px solid #000; padding: 8px;">${item._id
+                                  }</td>
+                                  <td style="border: 1px solid #000; padding: 8px;">${item.totalOrders
+                                  }</td>
+                              </tr>`
+                        )
+                      }
+
+                  </tbody>
+              </table>
+          </center>
+          <center>
+          <h3>Order Status</h3>
+              <table style="border-collapse: collapse;">
+                  <thead>
+                      <tr>
+                          <th style="border: 1px solid #000; padding: 8px;">Sl N0</th>
+                          <th style="border: 1px solid #000; padding: 8px;">Status</th>
+                          <th style="border: 1px solid #000; padding: 8px;">Total Count</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      ${status
+                        .map(
+                          (item, index) => `
+                              <tr>
+                                  <td style="border: 1px solid #000; padding: 8px;">${index + 1
+                                  }</td>
+                                  <td style="border: 1px solid #000; padding: 8px;">${item._id
+                                  }</td>
+                                  <td style="border: 1px solid #000; padding: 8px;">${item.count
+                                  }</td>
+                              </tr>`
+                        )
+                      }
+
+                  </tbody>
+              </table>
+          </center>
+          <h3>Total Sales Amount: ${totalSales.length > 0 ? totalSales[0].totalAmount : 0}</h3>
+          <h3>Total Discount Amount: ${totalDiscount.length > 0 ? totalDiscount[0].totalDiscount : 0}</h3>
+      </body>
+      </html>
+  `;
+
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
+    await page.setContent(htmlContent);
+
+    const pdfBuffer = await page.pdf();
+
+    await browser.close();
+
+    res.setHeader("Content-Length", pdfBuffer.length);
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader("Content-Disposition", "attachment; filename=sales.pdf");
+    res.status(200).end(pdfBuffer);
+  } catch (err) {
+    console.log(err);
+    // res.redirect('/admin/errorPage')
+  }
+}
+
+
 module.exports = {
   proceedtoCheckOut,
   displayaddress,
@@ -396,4 +601,5 @@ module.exports = {
   returnPro,
   returnreason,
   showDetailOrderHistory,
+  salesReport
 };

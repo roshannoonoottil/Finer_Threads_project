@@ -3,6 +3,37 @@
 
         <section class="content-main">
 
+                <div class="page-content">
+                        <div class="page-header" style="display: flex;">
+                          <div class="container-fluid">
+                            <h3 class="h5 no-margin-bottom">Dashboard</h3>
+                          </div>
+                          <div>
+                            <div class="dropdown">
+                              <button class="btn btn-primary btn-sm" type="button" id="cardOpt6" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Generate Report
+                              </button>
+                              <div class="dropdown-menu dropdown-menu-end p-3" aria-labelledby="cardOpt6">
+                                <h5 class="mb-3">Sales Report</h5>
+                                <form id="reportForm" action="salesReport" method="post">
+                                  <div class="mb-3">
+                                    <label for="startDate" class="form-label">Start Date:</label>
+                                    <input type="date" class="form-control" id="startDate" name="startDate">
+                                  </div>
+                                  <div class="mb-3">
+                                    <label for="endDate" class="form-label">End Date:</label>
+                                    <input type="date" class="form-control" id="endDate" name="endDate">
+                                  </div>
+                                  <button class="btn btn-success" type="submit">Download Report</button>
+                                </form>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      
+        
+
 
              
         </section> <!-- content-main end// -->

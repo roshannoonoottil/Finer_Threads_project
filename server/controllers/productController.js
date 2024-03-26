@@ -37,7 +37,9 @@ const addProduct = async (req, res) => {
         .replace("/admin", "../");
     }
     const { prodName, category, prodDesc, prodRate, quantity } = req.body;
+   
     let data = req.body;
+    console.log(data, "  data............");
     let amount = 0;
     if (data.offer == "") {
       const catdata = await categoryModel.find({ name: category });
@@ -62,6 +64,7 @@ const addProduct = async (req, res) => {
         }
       }
     }
+    console.log(amount," offer amound");
     const newProd = new productModel({
       name: prodName,
       category: category,

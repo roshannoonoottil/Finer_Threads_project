@@ -225,9 +225,10 @@ const returnDetails = async (req, res) => {
     console.log(user, "return details");
     let amount = user.price * user.quentity;
     console.log(amount);
+    // to update the wallet amount
     await userModel.updateOne(
       { username: user.username },
-      { $set: { wallet: amount } },
+      { $inc: { wallet: amount } },
       { upsert: true }
     );
     res.redirect(
