@@ -9,7 +9,7 @@ require("dotenv").config();
 
 const adminProduct = async (req, res) => {
   try {
-    var product = await productModel.find({}).sort({ _id: -1 });
+    let product = await productModel.find({}).sort({ _id: -1 });
     if (req.session.prodData) {
       product = req.session.prodData;
     }
@@ -294,7 +294,7 @@ const removeCoupon = async (req, res) => {
   }
 };
 
-var instance = new Razorpay({
+let instance = new Razorpay({
   key_id: process.env.RAZORPAY_YOUR_KEY_ID,
   key_secret: process.env.RAZORPAY_YOUR_KEY_SECRET,
 });

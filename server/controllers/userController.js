@@ -46,7 +46,7 @@ const signup = (req, res) => {
   }
 };
 
-var OTP;
+let OTP;
 const verifyOTPS = (req, res) => {
   try {
     console.log(req.body);
@@ -68,7 +68,7 @@ const authOTP = async (req, res) => {
   try {
     console.log(req.body.otp);
     if (req.body.otp === OTP) {
-      var bcryptPass = await bcrypt.hash(req.session.userDetails.password, 10);
+      let bcryptPass = await bcrypt.hash(req.session.userDetails.password, 10);
       // console.log(req.session.userDetails);
       const registeredUser = new userModel({
         username: req.session.userDetails.username,
@@ -248,7 +248,7 @@ const authEmail = async (req, res) => {
   }
 };
 
-var newOTP;
+let newOTP;
 const fpGetOTP = (req, res) => {
   try {
     const fpEmail = req.session.emailDetail;
@@ -361,7 +361,7 @@ const regResendOTP = (req, res) => {
 
 const search = async (req, res) => {
   try {
-    var currentPage;
+    let currentPage;
     searchValue = req.body.searchValue;
     console.log("The searched data is: " + req.body.searchValue);
     const category = await categoryModel.find({});
@@ -382,12 +382,12 @@ const search = async (req, res) => {
 };
 
 const shop = async (req, res) => {
-  // var page = 1;
+  // let page = 1;
   // if (req.query.page) {
   //   page = req.query.page;
   // }
   // const limit = 6;
-  // var product = await productModel
+  // let product = await productModel
   //   .find({})
   //   .sort({ _id: 1 })
   //   .limit(limit * 1)
@@ -476,12 +476,12 @@ const categoryProductSort = async (req, res) => {
     const number = req.params.number;
     //console.log(number);
     if (number == 1) {
-      var totalPages;
-      var currentPage;
+      let totalPages;
+      let currentPage;
       const product = await productModel.find({}).sort({ name: 1 });
       console.log("DATA IF 1 is pressed:" + product);
       const value = "A - Z";
-      res.re("userProductCategory", {
+      res.render("userProductCategory", {
         user: userName,
         product,
         searchValue,

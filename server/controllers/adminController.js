@@ -114,12 +114,12 @@ const searchUser = async (req, res) => {
 
 const oders = async (req, res) => {
   try {
-    var page = 1;
+    let page = 1;
     if (req.query.page) {
       page = req.query.page;
     }
     const limit = 3;
-    var dataOrder = await orderData
+    let dataOrder = await orderData
       .find({})
       .sort({ _id: -1 })
       .limit(limit * 1)

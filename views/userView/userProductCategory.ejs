@@ -99,12 +99,12 @@
                             </div>
                         </form>
                     </div>
-                    <!-- <div class="col-xl-3"> -->
+                    <div class="col-xl-3">
                       <!-- Content of the column goes here -->
                       <!-- For example, some text or other elements -->
                     
                       <!-- Move the selection box here -->
-                      <!-- <div style="margin-left: 400px;" class="bg-light rounded d-flex justify-content-between mt-3">
+                      <div style="margin-left: 400px;" class="bg-light rounded d-flex justify-content-between mt-3">
                         <h6 for="category">Sort:</h6>
                         <select id="category" name="category" class="border-0 form-select-sm bg-light me-3" form="category" onchange="redirectToSort()">
                           <option value=""> Default</option>
@@ -132,7 +132,7 @@
                           }
                         </script>
                       </div>
-                    </div> -->
+                    </div>
                 
                     <div class="col-lg-4">
                       
@@ -157,7 +157,7 @@
         </div>
         <div class="row" id="product-list">
           <% if(product=="") { %>
-            <p style="color: red"><%=noProduct %></p>
+            <!-- <p style="color: red"><%#=noProduct %></p> -->
             <%}else{%> 
           <% for(let p of product){%>
           <div class="col-lg-4 col-sm-6 mix all accesories bags">

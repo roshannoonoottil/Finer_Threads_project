@@ -62,6 +62,7 @@ router.post('/checkout', userCheck.isUser, orderController.proceedtoCheckOut)
 router.post('/displayaddress', userCheck.isUser, orderController.displayaddress)
 
 router.post('/toPayment', userCheck.isUser, orderController.toPayment)
+router.get('/toPayment', userCheck.isUser, orderController.toPayment)
 router.get('/paymentSuccess', userCheck.isUser, orderController.codPayment)
 
 router.get('/orderhistory', userCheck.isUser, orderController.orderData)

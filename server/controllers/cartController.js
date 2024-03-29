@@ -7,7 +7,7 @@ const session = require("express-session");
 
 const viewWish = async (req, res) => {
   try {
-    var page = 1;
+    let page = 1;
     if (req.query.page) {
       page = req.query.page;
     }
