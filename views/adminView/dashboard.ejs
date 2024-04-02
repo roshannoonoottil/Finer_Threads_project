@@ -10,8 +10,8 @@
                           </div>
                           <div>
                             <div class="dropdown">
-                              <button class="btn btn-primary btn-sm" type="button" id="cardOpt6" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Generate Report
+                              <button class="btn btn-primary" type="button" id="cardOpt6" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Report
                               </button>
                               <div class="dropdown-menu dropdown-menu-end p-3" aria-labelledby="cardOpt6">
                                 <h5 class="mb-3">Sales Report</h5>
@@ -31,12 +31,285 @@
                           </div>
                         </div>
                       </div>
-                      
-        
+                      <br>
 
+                      <div class="row">
+                        <div class="col-lg-3">
+                            <div class="card card-body mb-4">
+                                <article class="icontext">
+                                    <span class="icon icon-sm rounded-circle bg-primary-light"><i class="text-primary material-icons md-monetization_on"></i></span>
+                                    <div class="text">
+                                        <h6 class="mb-1 card-title">Revenue</h6>
+                                        <span>₹ <%=totalSales[0].totalAmount%></span>
+                                    </div>
+                                </article>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="card card-body mb-4">
+                                <article class="icontext">
+                                    <span class="icon icon-sm rounded-circle bg-success-light"><i class="text-success material-icons md-local_shipping"></i></span>
+                                    <div class="text">
+                                        <h6 class="mb-1 card-title">Orders</h6> <span><%=codPay+online%></span>
+                                    </div>
+                                </article>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="card card-body mb-4">
+                                <article class="icontext">
+                                    <span class="icon icon-sm rounded-circle bg-warning-light"><i class="text-warning material-icons md-qr_code"></i></span>
+                                    <div class="text">
+                                        <h6 class="mb-1 card-title">Products</h6> <span><%=productCount%></span>
+                                    </div>
+                                </article>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="card card-body mb-4">
+                                <article class="icontext">
+                                    <span class="icon icon-sm rounded-circle bg-info-light"><i class="text-info material-icons md-person"></i></span>
+                                    <div class="text">
+                                        <h6 class="mb-1 card-title">Users</h6> <span><%=userCount%></span>
+                                    </div>
+                                </article>
+                            </div>
+                        </div>
+                    </div>
+
+                    <section class="no-padding-bottom">
+                      <div class="container-fluid">
+                        <div class="row">
+                          <div class="col-lg-4">
+                            <div class="bar-chart block no-margin-bottom">
+                              <canvas id="year"></canvas>
+                            </div>
+                            <div class="bar-chart block no-margin-bottom">
+                              <canvas id="month"></canvas>
+                            </div>
+                          </div>
+              
+                          <div class="col-lg-8">
+                            <div class="line-cahrt block">
+                              <canvas id="canvasId"></canvas>
+                            </div>
+              
+                          </div>
+                        </div>
+                      </div>
+                    </section>
+                    <br>
+
+                    <section class="no-padding-bottom">
+                      <div class="container-fluid">
+                        <div class="row">
+                          <div class="col-lg-6">
+                            <div class="messages-block block">
+                              <div class="title"><strong>Order Status</strong></div>
+                              <div class="messages">
+                                <a href="#" class="message d-flex align-items-center">
+                                  <!-- <div class="profile"><img src="placed.png" alt="..." class="img-fluid"></div> -->
+                                  <div class="content" style="display: flex;">
+                                    <strong class="d-block">Placed:</strong>
+                                    <span class="d-block ml-5"><%= orderStatusP[0].count %></span>
+                                  </div>
+                                </a>
+                                <a href="#" class="message d-flex align-items-center">
+                                  <!-- <div class="profile"><img src="placed.png" alt="..." class="img-fluid"></div> -->
+                                  <div class="content" style="display: flex;">
+                                    <strong class="d-block">Cancelled:</strong>
+                                    <span class="d-block ml-5"><%= orderStatusC[0].count %></span>
+                                  </div>
+                                </a>
+                                <a href="#" class="message d-flex align-items-center">
+                                  <!-- <div class="profile"><img src="placed.png" alt="..." class="img-fluid"></div> -->
+                                  <div class="content" style="display: flex;">
+                                    <strong class="d-block">Out for delivery:</strong>
+                                    <span class="d-block ml-5"><%= orderStatusO[0].count %></span>
+                                  </div>
+                                </a>
+                                <a href="#" class="message d-flex align-items-center">
+                                  <!-- <div class="profile"><img src="placed.png" alt="..." class="img-fluid"></div> -->
+                                  <div class="content" style="display: flex;">
+                                    <strong class="d-block">Delivered:</strong>
+                                    <span class="d-block ml-5"><%= orderStatusD[0].count %></span>
+                                  </div>
+                                </a>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-lg-6">
+                            <div class="messages-block block">
+                              <div class="title"><strong>Transaction</strong></div>
+                              <div class="messages">
+                                <a href="#" class="message d-flex align-items-center">
+                                  <!-- <div class="profile"><img src="payment.jpg" alt="..." class="img-fluid"></div> -->
+                                  <div class="content" style="display: flex;">
+                                    <strong class="d-block">COD Payment :</strong>
+                                    <span class="d-block ml-5"><%= codPay %></span>
+                                  </div>
+                                </a>
+                                <a href="#" class="message d-flex align-items-center">
+                                  <!-- <div class="profile"><img src="payment.jpg" alt="..." class="img-fluid"></div> -->
+                                  <div class="content" style="display: flex;">
+                                    <strong class="d-block">Online Payment :</strong>
+                                    <span class="d-block ml-5"><%= online %></span>
+                                  </div>
+                                </a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </section>
+                    
+
+                      
 
              
         </section> <!-- content-main end// -->
+
+
+
+
+
+
+
+        <script>
+          document.addEventListener('DOMContentLoaded', function () {
+            console.log('function called ');
+      
+            fetch('/admin/chart-data')
+              .then(response => response.json())
+              .then(data => {
+                console.log(data);
+      
+                // Separate data for daily, monthly, and yearly charts
+                const dailyData = data.filter(entry => entry._id.day !== undefined);
+                const monthlyData = data.filter(entry => entry._id.month !== undefined);
+                const yearlyData = data.filter(entry => entry._id.year !== undefined);
+      
+                // Process the data and create the Chart.js chart for Daily chart
+                createChart('dailyChart', dailyData, 'Daily Orders', 'rgba(255, 99, 132, 0.2)', 'rgba(255, 99, 132, 1)');
+      
+                // Process the data and create the Chart.js chart for Monthly chart
+                createChart('monthlyChart', monthlyData, 'Monthly Orders', 'rgba(75, 192, 192, 0.2)', 'rgba(75, 192, 192, 1)');
+      
+                // Process the data and create the Chart.js chart for Yearly chart
+                createChart('yearlyChart', yearlyData, 'Yearly Orders', 'rgba(153, 102, 255, 0.2)', 'rgba(153, 102, 255, 1)');
+              })
+              .catch(error => console.error('Error fetching chart data:', error));
+      
+            function createChart(canvasId, chartData, label, backgroundColor, borderColor) {
+              const labels = chartData.map(entry => {
+                if (entry._id.day !== undefined) {
+                  return `${entry._id.year}-${entry._id.month}-${entry._id.day}`;
+                } else if (entry._id.month !== undefined) {
+                  return `${entry._id.year}-${entry._id.month}`;
+                } else if (entry._id.year !== undefined) {
+                  return entry._id.year.toString();
+                }
+              });
+      
+              const counts = chartData.map(entry => entry.count);
+      
+              const graph = document.getElementById('canvasId').getContext('2d');
+              new Chart(graph, {
+                type: 'bar',
+                data: {
+                  labels: labels,
+                  datasets: [{
+                    label: label,
+                    data: counts,
+                    backgroundColor: backgroundColor,
+                    borderColor: borderColor,
+                    borderWidth: 1
+                  }]
+                }
+              });
+            }
+          });
+        </script>
+
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    console.log('function called ');
+
+    fetch('/admin/chart-data-month')
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        const monthlyData = data.filter(entry => entry._id.month !== undefined);
+        createChart('monthlyChart', monthlyData, 'Monthly Orders', 'rgba(75, 192, 192, 0.2)', 'rgba(75, 192, 192, 1)');
+      })
+      .catch(error => console.error('Error fetching chart data:', error));
+
+    function createChart(canvasId, chartData, label, backgroundColor, borderColor) {
+      const labels = chartData.map(entry => {
+        return `${entry._id.year}-${entry._id.month}`;
+      });
+
+      const counts = chartData.map(entry => entry.count);
+
+      const graph = document.getElementById('month').getContext('2d');
+      new Chart(graph, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: label,
+            data: counts,
+            backgroundColor: backgroundColor,
+            borderColor: borderColor,
+            borderWidth: 1
+          }]
+        }
+      });
+    }
+  });
+</script>
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    console.log('function called ');
+
+    fetch('/admin/chart-data-year')
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+
+        const yearlyData = data.filter(entry => entry._id.year !== undefined);
+        createChart('yearlyChart', yearlyData, 'Yearly Orders', 'rgba(153, 102, 255, 0.2)', 'rgba(153, 102, 255, 1)');
+      })
+      .catch(error => console.error('Error fetching chart data:', error));
+
+    function createChart(canvasId, chartData, label, backgroundColor, borderColor) {
+      const labels = chartData.map(entry => {
+        return entry._id.year.toString();
+      });
+
+      const counts = chartData.map(entry => entry.count);
+
+      const graph = document.getElementById('year').getContext('2d');
+      new Chart(graph, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: label,
+            data: counts,
+            backgroundColor: backgroundColor,
+            borderColor: borderColor,
+            borderWidth: 1
+          }]
+        }
+      });
+    }
+  });
+</script>
 
 
         <%- include ('adminFooter') %>
