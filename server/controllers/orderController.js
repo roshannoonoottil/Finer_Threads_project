@@ -99,7 +99,7 @@ const toPayment = async (req, res) => {
   try {
     req.session.address = req.body;
     const address = req.body;
-    console.log(req.body + "req.session.address");
+    console.log(req.body + "req.session.address");``
     console.log(req.body.newAddress);
     const userin = req.session.name;
     const cartCount = await cart
@@ -222,7 +222,7 @@ const codPayment = async (req, res) => {
         img: cartData[i].image,
         product: cartData[i].product,
         quentity: cartData[i].quentity,
-        price: cartData[i].quentity * cartData[i].rate,
+        price: cartData[i].quentity * cartData[i].offerPrice,
         paymentMentod: paymentMentod,
         amountPaid: req.session.amountToPay,
         address: {
