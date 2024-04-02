@@ -9,6 +9,9 @@ const multer = require("../middleware/multer");  //for image uploading middlewar
 router.get("/",adminController.adiminLogin);         //GET request to check if user is logged in or not
 router.post("/dashboard",adminController.adminDashboard);    //POST request for dashboard page
 router.get("/dashboard",adminCheck.isAdmin,adminController.toDashboard);   //redirects to the dashboard page after successful login
+router.get('/chart-data', adminCheck.isAdmin, adminController.chartData)
+router.get('/chart-data-month', adminCheck.isAdmin, adminController.chartDataMonth)
+router.get('/chart-data-year', adminCheck.isAdmin, adminController.chartDataYear)
 router.post('/salesReport', adminCheck.isAdmin, orderController.salesReport);    // GET sales report by date range
 
 router.get("/adminlogout",adminController.adminLogout);      //GET request to log out the user from the account

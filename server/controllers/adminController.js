@@ -1,6 +1,7 @@
 const userModel = require("../models/userModel");
 const orderData = require("../models/orderModel");
 const couponModel = require("../models/couponModel");
+const productDetails = require("../models/productModel");
 const bcrypt = require("bcrypt");
 
 let nameSearch;
@@ -41,12 +42,58 @@ const adminDashboard = async (req, res) => {
   }
 };
 
-const toDashboard = (req, res) => {
+const toDashboard = async (req, res) => {
   try {
-    res.render("dashboard", { username: req.session.username });
-    console.log("Admin Dashboard");
-  } catch (error) {
-    console.log("Dashboard  Error:" + error);
+    const userCount = await userModel.find({ isAdmin: 0 }).count();
+    const productCount = await productDetails.find({}).count();
+    const orders = await orderData.distinct("orderId");
+    const orderStatusP = await orderData.aggregate([
+      { $match: { status: "placed" } },
+      { $group: { _id: "$status", count: { $sum: 1 } } },
+    ]);
+    const orderStatusC = await orderData.aggregate([
+      { $match: { status: "CANCELED" } },
+      { $group: { _id: "$status", count: { $sum: 1 } } },
+    ]);
+    const orderStatusD = await orderData.aggregate([
+      { $match: { status: "Delivered Successfully" } },
+      { $group: { _id: "$status", count: { $sum: 1 } } },
+    ]);
+    const orderStatusO = await orderData.aggregate([
+      { $match: { status: "Out for delivery" } },
+      { $group: { _id: "$status", count: { $sum: 1 } } },
+    ]);
+    const totalSales = await orderData.aggregate([
+      {
+        $group: {
+          _id: null,
+          totalAmount: { $sum: "$amountPaid" }, // Assuming total amount field name is totalAmount
+        },
+      },
+    ]);
+    let codPay = await orderData.find({}).count();
+    const online = await orderData.find({ paymentMentod: "Online" }).count();
+    console.log(online);
+    codPay = codPay - online;
+    console.log(codPay);
+    const orderCount = orders.length;
+
+    res.render("dashboard", {
+      userCount,
+      productCount,
+      orderCount,
+      orderStatusP,
+      orderStatusC,
+      orderStatusD,
+      orderStatusO,
+      codPay,
+      online,
+      username: req.session.username,
+      totalSales,
+    });
+  } catch (e) {
+    // res.redirect('/admin/errorPage')
+    console.log("error in the dashbord of admin controller :" + e);
   }
 };
 
@@ -356,6 +403,102 @@ const editCoupon = async (req, res) => {
   }
 };
 
+const chartData = async (req, res) => {
+  try {
+    console.log("chart data");
+    const Aggregation = await orderData.aggregate([
+      {
+        $match: {
+          orderDate: { $exists: true },
+        },
+      },
+      {
+        $group: {
+          _id: {
+            year: { $year: "$orderDate" },
+            month: { $month: "$orderDate" },
+            day: { $dayOfMonth: "$orderDate" },
+          },
+          count: { $sum: 1 },
+        },
+      },
+      {
+        $sort: {
+          "_id.year": 1,
+          "_id.month": 1,
+          "_id.day": 1,
+        },
+      },
+    ]);
+    res.json(Aggregation);
+  } catch (error) {
+    res.redirect("/admin/errorPage");
+    console.error(error);
+    // res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+const chartDataMonth = async (req, res) => {
+  try {
+    console.log("/chart-data month");
+    const Aggregation = await orderData.aggregate([
+      {
+        $match: {
+          orderDate: { $exists: true },
+        },
+      },
+      {
+        $group: {
+          _id: {
+            year: { $year: "$orderDate" },
+            month: { $month: "$orderDate" },
+          },
+          count: { $sum: 1 },
+        },
+      },
+      {
+        $sort: {
+          "_id.year": 1,
+          "_id.month": 1,
+        },
+      },
+    ]);
+    res.json(Aggregation);
+  } catch (error) {
+    res.redirect("/admin/errorPage");
+  }
+};
+
+const chartDataYear = async (req, res) => {
+  try {
+    console.log("/chart-data calle");
+    const Aggregation = await orderData.aggregate([
+      {
+        $match: {
+          orderDate: { $exists: true },
+        },
+      },
+      {
+        $group: {
+          _id: {
+            year: { $year: "$orderDate" },
+          },
+          count: { $sum: 1 },
+        },
+      },
+      {
+        $sort: {
+          "_id.year": 1,
+        },
+      },
+    ]);
+    res.json(Aggregation);
+  } catch (error) {
+    res.redirect("/admin/errorPage");
+    console.error(error);
+  }
+};
+
 module.exports = {
   adiminLogin,
   adminDashboard,
@@ -375,4 +518,7 @@ module.exports = {
   addCoupon,
   removeCoupon,
   editCoupon,
+  chartData,
+  chartDataMonth,
+  chartDataYear,
 };

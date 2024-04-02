@@ -51,7 +51,7 @@
                                     <td><%= order.product %></td>
                                     <td><%= order.quentity %></td>
                                     <td><%= order.price %></td>
-                                    <td>COD</td>
+                                    <td><%= order.paymentMentod %></td>
                                     <td>
                                         <% if (order.status === 'CANCELED') { %>
                                             <button class="btn btn-danger" disabled>canceled</button>
