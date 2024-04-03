@@ -39,16 +39,16 @@ const addProduct = async (req, res) => {
     const { prodName, category, prodDesc, prodRate, quantity } = req.body;
    
     let data = req.body;
-    console.log(data, "  data............");
+    console.log(data.offer, "  data............");
     let amount = 0;
     if (data.offer == "") {
       const catdata = await categoryModel.find({ name: category });
       if (catdata[0].offer == "") {
         amount = Number(data.discount);
       } else {
-        let sum = Number(data.rate) * Number(catdata[0].offer);
+        let sum = Number(data.prodRate) * Number(catdata[0].offer);
         let value = sum / 100;
-        amount = Number(data.rate) - value;
+        amount = Number(data.prodRate) - value;
       }
     } else {
       const catdata = await categoryModel.find({ name: category });
@@ -56,9 +56,9 @@ const addProduct = async (req, res) => {
         amount = Number(data.discount);
       } else {
         if (catdata[0].offer > data.offer) {
-          let sum = Number(data.rate) * Number(catdata[0].offer);
+          let sum = Number(data.prodRate) * Number(catdata[0].offer);
           let value = sum / 100;
-          amount = Number(data.rate) - value;
+          amount = Number(data.prodRate) - value;
         } else {
           amount = Number(data.discount);
         }

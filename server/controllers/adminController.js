@@ -64,6 +64,7 @@ const toDashboard = async (req, res) => {
       { $group: { _id: "$status", count: { $sum: 1 } } },
     ]);
     const totalSales = await orderData.aggregate([
+      { $match: { status: { $ne: "CANCELED" } } },
       {
         $group: {
           _id: null,
@@ -92,7 +93,6 @@ const toDashboard = async (req, res) => {
       totalSales,
     });
   } catch (e) {
-    // res.redirect('/admin/errorPage')
     console.log("error in the dashbord of admin controller :" + e);
   }
 };
@@ -317,7 +317,6 @@ const coupon = async (req, res) => {
       username: req.session.username,
     });
   } catch (e) {
-    // res.redirect('/admin/errorPage')
     console.log("error in the coupon controller in admin side :" + e);
   }
 };
@@ -336,9 +335,9 @@ const addCoupon = async (req, res) => {
           minimumAmount: req.body.minAmount,
         });
         await newCoupon.save();
-        res.redirect("/admin/coupon?found= Coupon add successful");
+        res.redirect("/admin/coupon?found= Coupon Added Successfully");
       } else {
-        res.redirect("/admin/coupon?found=Coupon Name Found");
+        res.redirect("/admin/coupon?found=This Coupon Already Exist");
       }
     } else {
       res.redirect(
@@ -346,7 +345,6 @@ const addCoupon = async (req, res) => {
       );
     }
   } catch (e) {
-    // res.redirect('/admin/errorPage')
     console.log(
       "error in the addCoupon in couponController in admin side: " + e
     );
@@ -358,7 +356,6 @@ const removeCoupon = async (req, res) => {
     await couponModel.deleteOne({ name: req.query.name });
     res.redirect("/admin/coupon?found=Coupon Removed");
   } catch (e) {
-    // res.redirect('/admin/errorPage')
     console.log(
       "error in the removeCoupon in couponController in admin side:" + e
     );
@@ -396,7 +393,6 @@ const editCoupon = async (req, res) => {
       );
     }
   } catch (e) {
-    // res.redirect('/admin/errorPage')
     console.log(
       "error in the editCoupon in couponController in admin side : " + e
     );
@@ -432,9 +428,7 @@ const chartData = async (req, res) => {
     ]);
     res.json(Aggregation);
   } catch (error) {
-    res.redirect("/admin/errorPage");
     console.error(error);
-    // res.status(500).json({ error: 'Internal Server Error' });
   }
 };
 
@@ -465,7 +459,6 @@ const chartDataMonth = async (req, res) => {
     ]);
     res.json(Aggregation);
   } catch (error) {
-    res.redirect("/admin/errorPage");
   }
 };
 
@@ -494,7 +487,6 @@ const chartDataYear = async (req, res) => {
     ]);
     res.json(Aggregation);
   } catch (error) {
-    res.redirect("/admin/errorPage");
     console.error(error);
   }
 };
