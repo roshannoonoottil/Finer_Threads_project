@@ -23,9 +23,9 @@
     <div class="screen-overlay"></div>
     <aside class="navbar-aside" id="offcanvas_aside">
         <div class="aside-top">
-            <!-- <a href="./" class="brand-wrap">
+            <a href="#" class="brand-wrap">
                 <img src="/assets/imgs/theme/logo.png" class="logo" alt="Finer Threads">
-            </a> -->
+            </a>
             <div>
                 <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i> </button>
             </div>
@@ -37,7 +37,7 @@
                         <span class="text">Dashboard</span>
                     </a>
                 </li> -->
-                <li class="menu-item">
+                <!-- <li class="menu-item">
                     <a class="menu-link" href="./product"> <i class="icon material-icons md-shopping_bag"></i>
                         <span class="text">Products</span>
                     </a>
@@ -51,7 +51,7 @@
                     <a class="menu-link" href="./category"> <i class="icon material-icons md-category"></i>
                         <span class="text">category</span>
                     </a>
-                </li>
+                </li> -->
                 <!-- <li class="menu-item">
                     <a class="menu-link" href="page-sellers-cards.html"> <i class="icon material-icons md-shopping_cart"></i>
                         <span class="text">Orders</span>
@@ -133,10 +133,12 @@
                   <label for="description" style="font-size:large;">Choose new category</label>
                   <select class="form-control" onkeyup="catOffer()" id="productCategory" name="newProdCat" required>
           
-                <option value="" selected disabled>Choose a category</option>
-                <% for(let a of category) { %>
-                <option value="<%=a.name %>"><%=a.name %></option> 
-                <% } %>
+                    <option value="<%=oldCategory%>" selected><%=oldCategory%></option>
+                    <% for(let a of category) { %>
+                        <% if (a.name !== oldCategory) { %>
+                            <option value="<%=a.name %>"><%=a.name %></option> 
+                        <% } %>
+                    <% } %>
                 </select> 
                 </div>
                 <br>
@@ -183,15 +185,18 @@
                       <p id="img-error"></p>
                     <input type="text" value="<%=i %>" name="image <%=i %>" hidden >
                     <img src="/<%= allOldData.image[i] %>" alt="image of <%= oldName %>" style="height: 100px; width: 130px; padding: 10px;">
-          <!-- <button style="margin-left: auto;" onclick="">Delete</button> -->
           
                     </div>
-                    <div><input name="<%=i%>Image" type="file" id="fileInput" onclick="imgup()"  accept="image/*" class='form' >
+                    <div><input name="<%=i%>Image" type="file" class="form-control" id="fileInput" onclick="imgup()"  accept="image/*" class='form' >
                     
                     </div>
                   </div>
                 <% } %>
                 <br>
+                <div>
+                  <label for="username" style="font-size:large;">Add More Images</label>
+                  <input type="file"  class="form-control" accept="image/*" class='form'>
+                </div>
                 <br>
                 <span id="submit-error"></span>
                 <button type="submit" onclick="validateForm()" class="btn btn-primary btn-block">

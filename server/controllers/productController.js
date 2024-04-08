@@ -6,16 +6,21 @@ const cart = require("../models/cartModel");
 const Razorpay = require("razorpay");
 const multer = require("multer");
 require("dotenv").config();
-
+let productSearch
 const adminProduct = async (req, res) => {
   try {
+
+
     let product = await productModel.find({}).sort({ _id: -1 });
     if (req.session.prodData) {
       product = req.session.prodData;
     }
+
+    
     res.render("productManagement", {
       username: req.session.username,
       product,
+      productSearch
     });
     console.log(product.name, +"product console");
     //console.log(req.session.prodData);
@@ -23,6 +28,28 @@ const adminProduct = async (req, res) => {
     res.send("Error Occurred");
   }
 };
+
+const searchProduct = async(req,res)=>{
+  try {
+  productSearch = req.body.psearch;
+  const regex = new RegExp(`${productSearch}`, "i");
+  console.log(regex);
+  const product = await productModel.find({
+    $and: [{ name: { $regex: regex } }],
+    });
+
+    res.render("productManagement", {
+      username: req.session.username,
+      product,
+      productSearch
+    });
+  } catch (e) {
+    console.log("catch of searchUser in admin : " + e);
+  }
+
+}
+
+
 
 const addProduct = async (req, res) => {
   try {
@@ -37,6 +64,7 @@ const addProduct = async (req, res) => {
         .replace("/admin", "../");
     }
     const { prodName, category, prodDesc, prodRate, quantity } = req.body;
+    const product = await productModel.find({name: prodName});
    
     let data = req.body;
     console.log(data.offer, "  data............");
@@ -64,6 +92,8 @@ const addProduct = async (req, res) => {
         }
       }
     }
+    if(!product.name)
+    {
     console.log(amount," offer amound");
     const newProd = new productModel({
       name: prodName,
@@ -79,6 +109,7 @@ const addProduct = async (req, res) => {
     });
 
     await newProd.save();
+  }
     return res.redirect(`/admin/product`);
   } catch (err) {
     console.log("error while adding product to the DB: " + err);
@@ -388,4 +419,5 @@ module.exports = {
   createOrder,
   applyWallet,
   removeWallet,
+  searchProduct
 };

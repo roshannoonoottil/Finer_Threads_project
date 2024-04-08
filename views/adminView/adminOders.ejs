@@ -47,7 +47,7 @@
                             <form action="/admin/updatestatus?orderId=<%= order.orderId %>&product=<%= order.product %>" method="post">
                                 <tr>
                                     <td><%= order.username %></td>
-                                    <td><%= order.orderDate %></td>
+                                    <td><%= order.orderDate.toLocaleDateString() %></td>
                                     <td><%= order.product %></td>
                                     <td><%= order.quentity %></td>
                                     <td><%= order.price %></td>

@@ -79,7 +79,7 @@
             <% dataOrder.forEach(function(item) { %>
                 <tr>
                     <th scope="row"><img src="<%= item.img %>" alt="Product Image" style="height: 80px;"></th>
-                    <td><%= item.product %></td>
+                    <td><%= item.product %><br>Order id : <span><%= item.orderId %></span></td>
                     <td><%= item.quentity %></td>
                     <% if (item.amountPaid) { %>
                         <td>₹ <%= item.amountPaid %></td>
@@ -88,7 +88,7 @@
                     <% } %>
                     <td><%= item.orderDate.toLocaleDateString() %></td>
                     <td><a href="/historyOrder?orderId=<%= item.orderId %>&product=<%= item.product %>" class="btn btn-dark">Details</a></td>
-                    <!-- <td><a href="/invoice?orderId=<%= item.orderId %>&product=<%= item.product %>" class="btn btn-success">Download</a></td> -->
+                    <td><a href="/invoice?orderId=<%= item.orderId %>&product=<%= item.product %>" class="btn btn-primary">Download</a></td>
                 </tr>
             <% }); %>
             

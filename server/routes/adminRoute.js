@@ -12,12 +12,13 @@ router.get("/dashboard",adminCheck.isAdmin,adminController.toDashboard);   //red
 router.get('/chart-data', adminCheck.isAdmin, adminController.chartData)
 router.get('/chart-data-month', adminCheck.isAdmin, adminController.chartDataMonth)
 router.get('/chart-data-year', adminCheck.isAdmin, adminController.chartDataYear)
+router.get('/report' , adminCheck.isAdmin, adminController.reportPage )
 router.post('/salesReport', adminCheck.isAdmin, orderController.salesReport);    // GET sales report by date range
 
 router.get("/adminlogout",adminController.adminLogout);      //GET request to log out the user from the account
 
 router.get("/user", adminCheck.isAdmin, adminController.adminShowUsers); // show users 
-router.post('/user', adminCheck.isAdmin, adminController.searchUser); // search user
+router.post('/userS', adminCheck.isAdmin, adminController.searchUser); // search user
 router.get('/block/:username', adminCheck.isAdmin, adminController.block); // block user by username
 
 
@@ -28,6 +29,7 @@ router.get('/list/:id', adminCheck.isAdmin, categoryController.list) //list or u
 
 
 router.get("/product", adminCheck.isAdmin, productController.adminProduct); // show  products
+router.post("/proSearch", adminCheck.isAdmin, productController.searchProduct)
 router.post("/product", adminCheck.isAdmin, multer.array("images", 4), productController.addProduct ); //admin add products
 router.get("/addProduct", adminCheck.isAdmin,  productController.newProductPage );  // go to the add product page
 router.post("/productEdit/:name", adminCheck.isAdmin, productController.editProduct ); // Edit Product Page

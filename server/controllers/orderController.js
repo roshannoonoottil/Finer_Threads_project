@@ -222,7 +222,8 @@ const codPayment = async (req, res) => {
         img: cartData[i].image,
         product: cartData[i].product,
         quentity: cartData[i].quentity,
-        price: cartData[i].quentity * cartData[i].offerPrice,
+        price: cartData[i].quentity * cartData[i].rate,
+        offerPrice: cartData[i].quentity * cartData[i].offerPrice,
         paymentMentod: paymentMentod,
         amountPaid: req.session.amountToPay,
         address: {
@@ -448,6 +449,7 @@ const salesReport = async (req, res) => {
             $gte: new Date(startDate),
             $lte: new Date(endDate),
           },
+          status: { $ne: "CANCELED" }
         },
       },
       {
@@ -471,6 +473,7 @@ const salesReport = async (req, res) => {
         $group: {
           _id: "$product",
           totalOrders: { $sum: 1 },
+          imageUrl: { $first: "$img" }
         },
       },
     ]);
@@ -516,6 +519,7 @@ const salesReport = async (req, res) => {
                       <tr>
                           <th style="border: 1px solid #000; padding: 8px;">Sl N0</th>
                           <th style="border: 1px solid #000; padding: 8px;">Product</th>
+                          <th style="border: 1px solid #000; padding: 8px;">Product Name</th>
                           <th style="border: 1px solid #000; padding: 8px;">Total Orders</th>
                       </tr>
                   </thead>
@@ -526,6 +530,8 @@ const salesReport = async (req, res) => {
                               <tr>
                                   <td style="border: 1px solid #000; padding: 8px;">${index + 1
                                   }</td>
+                                  <td scope="row"><img src="${ item.imageUrl }" alt="Product Image" style="height: 80px;">
+                                  </td>
                                   <td style="border: 1px solid #000; padding: 8px;">${item._id
                                   }</td>
                                   <td style="border: 1px solid #000; padding: 8px;">${item.totalOrders
@@ -565,7 +571,6 @@ const salesReport = async (req, res) => {
                   </tbody>
               </table>
           </center>
-          <h3>Total Sales Amount: ${totalSales.length > 0 ? totalSales[0].totalAmount : 0}</h3>
           <h3>Total Discount Amount: ${totalDiscount.length > 0 ? totalDiscount[0].totalDiscount : 0}</h3>
       </body>
       </html>
