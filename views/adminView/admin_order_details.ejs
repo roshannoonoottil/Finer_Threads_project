@@ -30,7 +30,7 @@
                             <p>Address : <%= data.address.houseName %>, <%= data.address.city %>, <%= data.address.state %>,
                                 <%= data.address.country %></p>
                             <p>Pin Code: <%= data.address.pincode %></p>
-                            <p>Payment Type : COD</p>
+                            <p>Payment Type : <%= data.paymentMentod %></p>
     
                             <% if (data.status === 'CANCELED') { %>
                                 <p style="color: red;">Status : <%= data.status %></p>

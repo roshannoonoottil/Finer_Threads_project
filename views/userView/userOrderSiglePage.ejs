@@ -71,7 +71,7 @@
                         <div>
                             <img src="<%= data[0].img %>" alt="Product Image" style="height: 150px;">
                             <h5 class="card-title">Order ID: <%= data[0].orderId %></h5>
-                            <p class="card-text">Order Date: <%= data[0].orderDate %></p>
+                            <p class="card-text">Order Date: <%= data[0].orderDate.toLocaleDateString() %></p>
                         </div>
                         <div style="color: gray; margin-left: 10%;">
                             <h5 class="mt-4 mb-3">Product Name : <%= data[0].product %></h5>

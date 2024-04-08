@@ -68,7 +68,7 @@ const toDashboard = async (req, res) => {
       {
         $group: {
           _id: null,
-          totalAmount: { $sum: "$amountPaid" }, // Assuming total amount field name is totalAmount
+          totalAmount: { $sum: "$offerPrice" },
         },
       },
     ]);
@@ -445,7 +445,7 @@ const chartDataMonth = async (req, res) => {
         $group: {
           _id: {
             year: { $year: "$orderDate" },
-            month: { $month: "$orderDate" },
+             month: { $month: "$orderDate" },
           },
           count: { $sum: 1 },
         },
@@ -491,6 +491,40 @@ const chartDataYear = async (req, res) => {
   }
 };
 
+
+const reportPage = async (req,res)=>{
+
+
+  const totalSales = await orderData.aggregate([
+    { $match: { status: { $ne: "CANCELED" } } },
+    {
+      $group: {
+        _id: null,
+        totalAmount: { $sum: "$price" },
+        totalDiscountAmount: { $sum: "$offerPrice" }
+      },
+    },
+  ]);
+
+  const Product = await orderData.aggregate([
+    {
+      $match: {status: { $ne: "CANCELED" }},
+    },
+    {
+      $group: {
+        _id: "$product",
+        totalOrders: { $sum: 1 },
+        imageUrl: { $first: "$img" }
+      },
+    },
+  ]);
+
+  console.log(totalSales[0].totalAmount,totalSales[0].totalDiscountAmount, "report");
+
+
+  res.render('reportPage',{username: req.session.username,totalSales,Product})
+};
+
 module.exports = {
   adiminLogin,
   adminDashboard,
@@ -513,4 +547,5 @@ module.exports = {
   chartData,
   chartDataMonth,
   chartDataYear,
+  reportPage
 };
