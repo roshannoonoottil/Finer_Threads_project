@@ -209,11 +209,12 @@ const updateOrderStatus = async (req, res) => {
 
 const searchOrder = async (req, res) => {
   try {
+    let totalPages
     let search = req.body.search;
     console.log(search);
     const regex = new RegExp(`${search}`, "i");
     const dataOrder = await orderData.find({ product: { $regex: regex } });
-    res.render("adminOders", { dataOrder, username: req.session.username });
+    res.render("adminOders", { dataOrder, username: req.session.username,totalPages });
   } catch (e) {
     console.log(
       "error in the searchOrder in orderController in admin side : " + e

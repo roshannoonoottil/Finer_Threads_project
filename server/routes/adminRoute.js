@@ -38,6 +38,7 @@ router.post("/productUpdate", adminCheck.isAdmin, multer.fields([
     { name: "1Image", maxCount: 1 },
     { name: "2Image", maxCount: 1 },
     { name: "3Image", maxCount: 1 },
+    { name: "4Image", maxCount: 1 },
   ]), productController.updateProduct ); // Update Product
 router.get('/proHide/:name' , adminCheck.isAdmin, productController.proBlock ) ; // Hide the product from frontend
 

@@ -6,24 +6,26 @@ const cart = require("../models/cartModel");
 const Razorpay = require("razorpay");
 const multer = require("multer");
 require("dotenv").config();
+
 let productSearch
 const adminProduct = async (req, res) => {
   try {
-
-
-    let product = await productModel.find({}).sort({ _id: -1 });
-    if (req.session.prodData) {
-      product = req.session.prodData;
-    }
-
-    
+    let page = 1;
+    const limit = 3;
+    let product = await productModel
+      .find({})
+      .sort({ _id: -1 })
+      .limit(limit * 1)
+      .skip((page - 1) * limit); //cant use const here as it will render error when a product is searched//
+      const count = await productModel.find({}).countDocuments(); // counts the total products //
     res.render("productManagement", {
       username: req.session.username,
       product,
-      productSearch
+      productSearch,
+      totalPages: Math.ceil(count / limit),
+      currentPage: page,
     });
     console.log(product.name, +"product console");
-    //console.log(req.session.prodData);
   } catch (err) {
     res.send("Error Occurred");
   }
@@ -31,6 +33,7 @@ const adminProduct = async (req, res) => {
 
 const searchProduct = async(req,res)=>{
   try {
+    let totalPages
   productSearch = req.body.psearch;
   const regex = new RegExp(`${productSearch}`, "i");
   console.log(regex);
@@ -41,7 +44,8 @@ const searchProduct = async(req,res)=>{
     res.render("productManagement", {
       username: req.session.username,
       product,
-      productSearch
+      productSearch,
+      totalPages
     });
   } catch (e) {
     console.log("catch of searchUser in admin : " + e);
@@ -178,6 +182,7 @@ const updateProduct = async (req, res) => {
         }
       );
     }
+
     console.log(req.body);
     const catdata = await categoryModel.find({ name: req.body.newProdCat });
     console.log(catdata, "caaaat data");

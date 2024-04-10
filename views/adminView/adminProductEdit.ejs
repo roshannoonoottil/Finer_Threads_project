@@ -179,24 +179,23 @@
                     value="<%=oldDesc %>"
                     onkeyup="validateDiscription()"
                   /><br>
-                  <% for(let i=0; i<totalImages; i++){ %>
+                  <% for(let i=0; i<totalImages+1; i++){ %>
                     <div class="row">
                     <div style="display: flex; align-items: center;">
                       <p id="img-error"></p>
                     <input type="text" value="<%=i %>" name="image <%=i %>" hidden >
-                    <img src="/<%= allOldData.image[i] %>" alt="image of <%= oldName %>" style="height: 100px; width: 130px; padding: 10px;">
-          
+                    <% if(i<totalImages) {%>
+                    <img src="/<%= allOldData.image[i] %>"  style="height: 100px; width: 130px; padding: 10px;">
+                      <% }%>
                     </div>
+                    <% if(i < 4) { %>
                     <div><input name="<%=i%>Image" type="file" class="form-control" id="fileInput" onclick="imgup()"  accept="image/*" class='form' >
-                    
                     </div>
+                    <% } %>
                   </div>
                 <% } %>
+                <label style="color: rgb(240, 105, 132);">Maximum 5 Images Per Product</label>
                 <br>
-                <div>
-                  <label for="username" style="font-size:large;">Add More Images</label>
-                  <input type="file"  class="form-control" accept="image/*" class='form'>
-                </div>
                 <br>
                 <span id="submit-error"></span>
                 <button type="submit" onclick="validateForm()" class="btn btn-primary btn-block">
