@@ -88,6 +88,10 @@ router.post('/applyWallet', userCheck.isUser, productController.applyWallet)
 
 router.post('/removeWallet', userCheck.isUser, productController.removeWallet)
 
+router.get("/wallet", userCheck.isUser, userController.wallet);
+
+router.get('/invoice',userCheck.isUser,orderController.invoice)
+
 
 
 

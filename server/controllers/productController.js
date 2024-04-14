@@ -5,6 +5,7 @@ const userDetails = require("../models/userModel");
 const cart = require("../models/cartModel");
 const Razorpay = require("razorpay");
 const multer = require("multer");
+const walletModel = require("../models/walletModel");
 require("dotenv").config();
 
 let productSearch
@@ -388,12 +389,14 @@ const applyWallet = async (req, res) => {
       req.body,
       "=============================================================="
     );
-    const userData = await userDetails.findOne({ username: req.session.name });
+    const userDataId = await userDetails.findOne({ username: req.session.name });
+    const userData =await walletModel.findOne({userId:userDataId._id});
     console.log(userData.wallet);
     let amount = Math.max(1, req.session.amountToPay - userData.wallet);
     let wallet = Math.max(0, userData.wallet - req.session.amountToPay);
     req.session.amountToPay = amount;
-    req.session.wallet = wallet;
+    req.session.wallet = true;
+    req.session.walletAmount = wallet;
     req.session.reducedWallet = userData.wallet - wallet;
     res.json({ success: true, amount, wallet });
   } catch (e) {
@@ -402,6 +405,7 @@ const applyWallet = async (req, res) => {
     );
   }
 };
+
 
 const removeWallet = (req, res) => {
   try {

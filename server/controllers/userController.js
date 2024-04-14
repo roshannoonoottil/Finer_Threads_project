@@ -3,6 +3,7 @@ const categoryModel = require("../models/categoryModel");
 const productModel = require("../models/productModel");
 const userPro = require("../models/userAddressModel");
 const otpSend = require("../middleware/otp");
+const walletModel = require("../models/walletModel");
 const bcrypt = require("bcrypt");
 
 const index = async (req, res) => {
@@ -528,6 +529,60 @@ const categoryProductSort = async (req, res) => {
   }
 };
 
+
+const wallet = async (req, res) => {
+  try {
+    console.log("user entered wallet");
+    var page = 1;
+    if (req.query.page) {
+      page = req.query.page;
+    }
+    const limit = 5;
+
+    const userName = req.session.name;
+    const userData = await userModel.findOne({ username: userName });
+    const walletData = await walletModel.aggregate([
+      {
+        $match: {
+          userId: userData._id,
+        },
+      },
+      {
+        $unwind: "$walletTransactions",
+      },
+
+      {
+        $sort: {
+          "walletTransactions.date": -1,
+        },
+      },
+      {
+        $project: {
+          wallet: 1,
+          walletTransactions: 1,
+          _id: 0,
+        },
+      },
+    ]);
+
+    console.log("walletData is::", walletData);
+    const length = walletData.length;
+    console.log("length is :", length);
+    console.log("------------------------------->>>>");
+    const totalPages = Math.ceil(length / limit);
+    res.render("wallet", {
+      user: userName,
+      userData,
+      walletData,
+      totalPages,
+      currentPage: page,
+    });
+  } catch (error) {
+    console.log("Error while displaying wallet ", error);
+  }
+};
+
+
 module.exports = {
   index,
   login,
@@ -555,4 +610,5 @@ module.exports = {
   userAccount,
   newAddress,
   categoryProductSort,
+  wallet
 };

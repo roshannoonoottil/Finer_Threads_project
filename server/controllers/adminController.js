@@ -2,6 +2,7 @@ const userModel = require("../models/userModel");
 const orderData = require("../models/orderModel");
 const couponModel = require("../models/couponModel");
 const productDetails = require("../models/productModel");
+const wallet = require("../models/walletModel");
 const bcrypt = require("bcrypt");
 
 let nameSearch;
@@ -209,12 +210,16 @@ const updateOrderStatus = async (req, res) => {
 
 const searchOrder = async (req, res) => {
   try {
-    let totalPages
+    let totalPages;
     let search = req.body.search;
     console.log(search);
     const regex = new RegExp(`${search}`, "i");
     const dataOrder = await orderData.find({ product: { $regex: regex } });
-    res.render("adminOders", { dataOrder, username: req.session.username,totalPages });
+    res.render("adminOders", {
+      dataOrder,
+      username: req.session.username,
+      totalPages,
+    });
   } catch (e) {
     console.log(
       "error in the searchOrder in orderController in admin side : " + e
@@ -265,6 +270,7 @@ const returnDetails = async (req, res) => {
       { orderId: req.query.id, product: req.query.product },
       { returnStatus: 1 }
     );
+
     const user = await orderData.findOne({
       orderId: req.query.id,
       product: req.query.product,
@@ -274,11 +280,52 @@ const returnDetails = async (req, res) => {
     let amount = user.price * user.quentity;
     console.log(amount);
     // to update the wallet amount
-    await userModel.updateOne(
-      { username: user.username },
-      { $inc: { wallet: amount } },
-      { upsert: true }
-    );
+    const userData = await userModel.findOne({ username: user.username });
+    console.log(userData);
+    const userWallet = await wallet.findOne({ userId: userData._id });
+    if (userWallet) {
+      walletTransactions = {
+        date: new Date(),
+        type: `Credited for cancelling ${req.query.id}`,
+        amount: user.offerPrice,
+      };
+
+      let updateWallet = await wallet.updateOne(
+        { userId: userData._id },
+        {
+          $inc: { wallet: + user.offerPrice },
+          $push: { walletTransactions: walletTransactions },
+        }
+      );
+      console.log("userWallet is not empty");
+    } else {
+      walletTransactions = [{
+        date: new Date(),
+        type: `Credited for cancelling ${req.query.id}`,
+        amount :user.offerPrice
+        // amount: productPrice[0].products.product_rate,
+        
+      }];
+      let newUserWallet = new wallet({
+        userId: userData._id,
+        wallet: user.offerPrice,
+        walletTransactions :walletTransactions
+      });
+
+      await newUserWallet.save();
+
+      console.log("userWallet is empty");
+    }
+
+    const userWallet1 = await wallet.findOne({ userId: userData._id });
+    console.log(userWallet1,"////////////////////////////");
+
+    // await userModel.updateOne(
+    //   { username: user.username },
+    //   { $inc: { wallet: amount } },
+    //   { upsert: true }
+    // );
+
     res.redirect(
       `/admin/orderDetails?orderId=${req.query.id}&product=${req.query.product}`
     );
@@ -446,7 +493,7 @@ const chartDataMonth = async (req, res) => {
         $group: {
           _id: {
             year: { $year: "$orderDate" },
-             month: { $month: "$orderDate" },
+            month: { $month: "$orderDate" },
           },
           count: { $sum: 1 },
         },
@@ -459,8 +506,7 @@ const chartDataMonth = async (req, res) => {
       },
     ]);
     res.json(Aggregation);
-  } catch (error) {
-  }
+  } catch (error) {}
 };
 
 const chartDataYear = async (req, res) => {
@@ -492,38 +538,42 @@ const chartDataYear = async (req, res) => {
   }
 };
 
-
-const reportPage = async (req,res)=>{
-
-
+const reportPage = async (req, res) => {
   const totalSales = await orderData.aggregate([
     { $match: { status: { $ne: "CANCELED" } } },
     {
       $group: {
         _id: null,
         totalAmount: { $sum: "$price" },
-        totalDiscountAmount: { $sum: "$offerPrice" }
+        totalDiscountAmount: { $sum: "$offerPrice" },
       },
     },
   ]);
 
   const Product = await orderData.aggregate([
     {
-      $match: {status: { $ne: "CANCELED" }},
+      $match: { status: { $ne: "CANCELED" } },
     },
     {
       $group: {
         _id: "$product",
         totalOrders: { $sum: 1 },
-        imageUrl: { $first: "$img" }
+        imageUrl: { $first: "$img" },
       },
     },
   ]);
 
-  console.log(totalSales[0].totalAmount,totalSales[0].totalDiscountAmount, "report");
+  console.log(
+    totalSales[0].totalAmount,
+    totalSales[0].totalDiscountAmount,
+    "report"
+  );
 
-
-  res.render('reportPage',{username: req.session.username,totalSales,Product})
+  res.render("reportPage", {
+    username: req.session.username,
+    totalSales,
+    Product,
+  });
 };
 
 module.exports = {
@@ -548,5 +598,5 @@ module.exports = {
   chartData,
   chartDataMonth,
   chartDataYear,
-  reportPage
+  reportPage,
 };
