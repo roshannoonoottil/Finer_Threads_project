@@ -32,7 +32,7 @@
                             <p>Pin Code: <%= data.address.pincode %></p>
                             <p>Payment Type : <%= data.paymentMentod %></p>
     
-                            <% if (data.status === 'CANCELED') { %>
+                            <% if (data.status === 'CANCELED' || data.status === "Failed" ) { %>
                                 <p style="color: red;">Status : <%= data.status %></p>
                             <% } else if (data.status === 'Delivered Successfully') { %>
                                 <% if (data.returnStatus) { %>
@@ -45,9 +45,9 @@
                                     <% if (!data.returnStatus) { %>
                                         <p style="color: aquamarine;">Return reason : <%= data.returnreason %></p>
                                         <a href="/admin/returnFail?id=<%= data.orderId %>&product=<%= data.product %>"
-                                            class="btn btn-danger" onclick="return confirm('Do you want to reject the return?')">Reject</a>
+                                            class="btn btn-sm btn-danger" onclick="return confirm('Do you want to reject the return?')">Reject</a>
                                         <a href="/admin/returnsuccess?id=<%= data.orderId %>&product=<%= data.product %>"
-                                            class="btn btn-success" onclick="return confirm('Do you want to accept the return?')">Accepte</a>
+                                            class="btn btn-sm btn-success" onclick="return confirm('Do you want to accept the return?')">Accepte</a>
                                     <% } %>
                                 <% } else { %>
                                     <p style="color: green;">Status : <%= data.status %></p>
@@ -55,7 +55,7 @@
                             <% } else { %>
                                 <p>Status : <%= data.status %></p>
                                 Cancel : <a href="/admin/deleteOrder?orderId=<%= data.orderId %>&product=<%= data.product %>"
-                                    class="btn btn-danger" onclick="return confirm('Do you want to cancel the order?')">Cancel</a>
+                                    class="btn btn-sm btn-danger" onclick="return confirm('Do you want to cancel the order?')">Cancel</a>
                             <% } %>
                         </div>
                     </div>

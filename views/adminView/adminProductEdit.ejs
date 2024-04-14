@@ -188,7 +188,7 @@
                     <img src="/<%= allOldData.image[i] %>"  style="height: 100px; width: 130px; padding: 10px;">
                       <% }%>
                     </div>
-                    <% if(i < 4) { %>
+                    <% if(i <= 4) { %>
                     <div><input name="<%=i%>Image" type="file" class="form-control" id="fileInput" onclick="imgup()"  accept="image/*" class='form' >
                     </div>
                     <% } %>

@@ -174,11 +174,13 @@
             <div class="product-content">
               <h2><%=productDetails.name %></h2>
               <div class="pc-meta">
-                <% if (productDetails.offer) { %>
-                  <span class="price"><del>₹ <%= productDetails.rate %></del>
-                    <h5>₹ <%= productDetails.discountAmount %></h5></span>
+                <% if (productDetails.rate == productDetails.discountAmount) { %>
+
+                  <span class="price">₹ <%= productDetails.rate %></span>
+                  
                   <% } else { %>
-                    <span class="price">₹ <%= productDetails.rate %></span>
+                    <span class="price"><del>₹ <%= productDetails.rate %></del>
+                      <h5>₹ <%= productDetails.discountAmount %></h5></span>
                     <% } %>
                 <div class="rating">
                   <i class="fa fa-star"></i>

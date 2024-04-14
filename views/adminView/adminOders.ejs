@@ -74,6 +74,10 @@
                                                     <option value="Out for delivery" style="color: green;">Out for delivery</option>
                                                     <option value="Delivered Successfully" style="color: green;">Delivered Successfully</option>
                                                 </select>
+                                            <% } else if (order.status === 'Failed') { %>
+                                                <select class="form-select" aria-label="Default select example" style="color: green;" name="status">
+                                                    <option value="Failed" style="color: green;">Failed</option>
+                                                </select>
                                             <% } else { %>
                                                 <% if (order.returnStatus) { %>
                                                     <p style="color: red;">Product Returned</p>
@@ -86,7 +90,7 @@
                                         <% } %>
                                     </td>
                                     <td><button class="btn btn-primary" type="submit">Update</button></td>
-                                    <td><a href="/admin/orderDetails?orderId=<%= order.orderId %>&product=<%= order.product %>">Details</a></td>
+                                    <td><button class="btn btn-sm btn-success"><a style="color: white;" href="/admin/orderDetails?orderId=<%= order.orderId %>&product=<%= order.product %>">Details</a></button></td>
                                 </tr>
                             </form>
                         </tbody>

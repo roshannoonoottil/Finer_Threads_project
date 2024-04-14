@@ -60,53 +60,79 @@
 
 
 
-<!-- main -->
-<div class="container mt-5">
-    <h2>Order History</h2>
-    <table class="table">
+
+<div class="container-fluid  mb-5">
+    <div
+      class="d-flex flex-column align-items-center "
+      style="min-height: 110px"
+    >
+      <h1 class="title-page">Orders</h1>
+     
+    </div>
+  </div>
+
+  <div class="container">
+    <p style="font-size: large; color: black">
+      Total Amount in Wallet:
+      <span 
+        >₹<%=walletData[0].wallet %></span
+      >
+    </p>
+
+    <br />
+    <h5>Wallet Transaction</h5>
+  </div>
+
+  <div class="container" style="text-align: center">
+  </div>
+
+  <div class="container mt-5">
+    <div class="border p-3" style="width: 700px">
+      <table class="table table-striped-columns">
         <thead>
-            <tr>
-                <th scope="col">Image</th>
-                <th scope="col">Product</th>
-                <th scope="col">Status</th>
-                <th scope="col">Quantity</th>
-                <th scope="col">Price</th>
-                <th scope="col">Date</th>
-                <th scope="col">Details</th>
-                <!-- <th scope="col">Download Invoice</th> -->
-            </tr>
+          <tr>
+            <th>#</th>
+            <th>Date</th>
+            <th>Description</th>
+            <th>Amount</th>
+          </tr>
         </thead>
         <tbody>
-            <% dataOrder.forEach(function(item) { %>
-                <tr>
-                    <th scope="row"><img src="<%= item.img %>" alt="Product Image" style="height: 80px;"></th>
-                    <td><%= item.product %><br>Order id : <span><%= item.orderId %></span></td>
-                    <td><%= item.status %></td>
-                    <td><%= item.quentity %></td>
-                    <% if (item.amountPaid) { %>
-                        <td>₹ <%= item.amountPaid %></td>
-                    <% } else { %>
-                        <td>₹ <%= item.price %></td>
-                    <% } %>
-                    <td><%= item.orderDate.toLocaleDateString() %></td>
-                    <td><a href="/historyOrder?orderId=<%= item.orderId %>&product=<%= item.product %>" class="btn btn-dark">Details</a></td>
-                    <% if (item.status =="Delivered Successfully") { %>
-                    <td><a href="/invoice?orderId=<%= item.orderId %>&product=<%= item.product %>" class="btn btn-primary">Download</a></td>
-                    <% } %>
-                </tr>
-            <% }); %>
-            
-            <!-- Add more rows as needed -->
+          <% for(let [index,wallet] of walletData.entries()){ %>
+          <tr>
+            <td><%=index+1%></td>
+            <td><%=wallet.walletTransactions.date.toLocaleDateString()%></td>
+            <td><%=wallet.walletTransactions.type%></td>
+            <td>₹<%=wallet.walletTransactions.amount%></td>
+          </tr>
+          <% } %>
         </tbody>
-    </table>
-</div>
-</div>
-</div>
+      </table>
+    </div>
+  </div>
 
+  <div class="col-12 pb-1">
+    <nav aria-label="Page navigation">
+      <ul class="pagination justify-content-center mb-3">
+        <% for(let page = 1; page <= totalPages; page++){ %>
+        <li class="page-item <%= currentPage === page ? 'active' : '' %>">
+          <a
+            class="page-item active"
+            href="?page=<%=page%>"
+            style="margin-right: 20px"
+          >
+            <%=page%>
+          </a>
+        </li>
+        <%}%>
+      </ul>
+    </nav>
+  </div>
 
+  <div class="container-fluid"><br /><br /><br /><br /><br /><br /></div>
 
-  <!-- Footer Section Begin -->
-  <footer class="footer-section spad">
+   <!-- Footer Section Begin -->
+ <footer class="footer-section spad">
     <div class="container">
         <div class="footer-widget">
             <div class="row">
@@ -193,7 +219,6 @@
 <script src="/js/main.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.6/umd/popper.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.min.js"></script>
-
 </body>
 
 </html>

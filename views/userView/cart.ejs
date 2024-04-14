@@ -110,10 +110,11 @@
                                 <h5><%=i.product %></h5>
                             </div>
                         </td>
-                        <% if (i.offer) { %>
-                        <td class="price-col"><del>₹ <%=i.rate %></del><br>  ₹ <%=i.offerPrice%></td>
+                        <% if (i.rate == i.offerPrice ) { %>
+                          <td class="price-col"> ₹ <%=i.rate%></td>
+                        
                         <% } else { %>
-                         <td class="price-col"> ₹ <%=i.rate%></td>
+                          <td class="price-col"><del>₹ <%=i.rate %></del><br>  ₹ <%=i.offerPrice%></td>
                          <%} %>
                         <td class="quantity-col">
                           <div
