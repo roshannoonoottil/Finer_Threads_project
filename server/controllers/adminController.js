@@ -559,6 +559,8 @@ const reportPage = async (req, res) => {
         _id: "$product",
         totalOrders: { $sum: 1 },
         imageUrl: { $first: "$img" },
+        price: { $sum: "$price" },
+        Offerprice: { $sum: "$offerPrice" },
       },
     },
   ]);

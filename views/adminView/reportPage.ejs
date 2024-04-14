@@ -48,6 +48,8 @@
                                 <th>Product No</th>
                                 <th>Product</th>
                                 <th>Product Name</th>
+                                <th>Product price</th>
+                                <th>Product Offer price</th>
                                 <th>Total Orders</th>
                             </tr>
                         </thead>
@@ -56,7 +58,9 @@
                                 <tr>
                                     <td><%= index + 1 %></td>
                                     <th scope="row"><img src="<%= item.imageUrl %>" alt="Product Image" style="height: 80px;"></th>
-                                    <td><%= item._id %></td>     
+                                    <td><%= item._id %></td> 
+                                    <td>₹ <%= item.price %></td>
+                                    <td>₹ <%= item.Offerprice %></td>    
                                     <td><%= item.totalOrders %></td>
                                 </tr>
                             <% }); %>
