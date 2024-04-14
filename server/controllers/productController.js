@@ -11,6 +11,9 @@ let productSearch
 const adminProduct = async (req, res) => {
   try {
     let page = 1;
+    if (req.query.page) {
+      page = req.query.page;
+    }
     const limit = 3;
     let product = await productModel
       .find({})

@@ -7,6 +7,14 @@ const wish = require("../models/wishlistModel");
 const order = require("../models/orderModel");
 const orderid = require("otp-generator");
 const puppeteer = require("puppeteer");
+const Razorpay = require("razorpay");
+require("dotenv").config();
+
+
+const razorpayInstance = new Razorpay({
+  key_id: process.env.RAZORPAY_YOUR_KEY_ID,
+  key_secret: process.env.RAZORPAY_YOUR_KEY_SECRET,
+});
 
 const proceedtoCheckOut = async (req, res) => {
   try {
@@ -174,7 +182,7 @@ const codPayment = async (req, res) => {
   try {
     const userin = req.session.name;
     console.log(req.session.address);
-    console.log(req.body);
+    // console.log(req.body,"this is body");
     const cartData = await cart.find({ username: userin });
     const cartCount = await cart
       .find({ username: req.session.name })
@@ -205,6 +213,7 @@ const codPayment = async (req, res) => {
       specialChars: false,
       lowerCaseAlphabets: true,
     });
+    req.session.order_ID = id;
 
     let paymentMentod = "COD";
     if (req.query.pay) {
@@ -254,6 +263,7 @@ const codPayment = async (req, res) => {
     console.log(data);
     let price = req.session.amountToPay;
     let qunatity = data[0].totalQuantity;
+    req.session.qunatityy=qunatity
 
     await cart.deleteMany({ username: userin });
     req.session.amountToPay = 0;
@@ -296,6 +306,184 @@ const codPayment = async (req, res) => {
     // res.redirect("/error")
   }
 };
+
+const razorpayPaymentFailed = async (req, res) => {
+  try {
+    const userin = req.session.name;
+    console.log(req.session.address);
+    const cartData = await cart.find({ username: userin });
+    const cartCount = await cart
+      .find({ username: req.session.name })
+      .countDocuments();
+    const wishCount = await wish.find({ username: userin }).countDocuments();
+    const date = new Date();
+    req.session.order_Date = date
+    req.session.wishCount = wishCount
+    req.session.cartCount = cartCount
+    console.log(date);
+    if (req.session.address.newAddress) {
+      const newAddress = new userPro({
+        username: req.session.name,
+        fullname: req.session.address.firstname,
+        phone: req.session.address.phone,
+        address: {
+          houseName: req.session.address.housename,
+          city: req.session.address.city,
+          state: req.session.address.state,
+          pincode: req.session.address.pincode,
+          country: req.session.address.country,
+        },
+        primary: 0,
+      });
+
+      await newAddress.save();
+    }
+    const id = orderid.generate(15, {
+      digits: true,
+      upperCaseAlphabets: true,
+      specialChars: false,
+      lowerCaseAlphabets: true,
+    });
+    req.session.order_ID = id
+    let amount = req.session.amountToPay;
+
+    for (let i = 0; i < cartData.length; i++) {
+      const shippingAddress = new order({
+        username: req.session.name,
+        orderDate: date,
+        orderId: id,
+        status: "Failed",
+        userCacel: 0,
+        adminCancel: 0,
+        img: cartData[i].image,
+        product: cartData[i].product,
+        quentity: cartData[i].quentity,
+        price: cartData[i].quentity * cartData[i].rate,
+        offerPrice: cartData[i].quentity * cartData[i].offerPrice,
+        paymentMentod: "Online",
+        amountPaid: 0,
+        address: {
+          houseName: req.session.address.housename,
+          city: req.session.address.city,
+          state: req.session.address.state,
+          pincode: req.session.address.pincode,
+          country: req.session.address.country,
+        },
+      });
+
+      await shippingAddress.save();
+    }
+
+    
+    res.render("rPayFail", {
+      user: req.session.name,
+      id,
+      date,
+      amount,
+    });
+  } catch (e) {
+    console.log(
+      "error in the razorpayPaymentFailed of orderController in user side : " + e
+    );
+  }
+};
+
+
+const reRazorpay = async (req, res) => {
+  try {
+    console.log("reRazorpay invoked");
+    console.log(req.body.id);
+
+    const splitValues = req.body.id.split("-");
+    let id = splitValues[0];
+    let amount = splitValues[1] * 100;
+    console.log("Order ID is :", id);
+    console.log("Amount is:", amount);
+    req.session.orderid_in_repay = id;
+
+    const options = {
+      amount: amount,
+      currency: "INR",
+      receipt: "razorUser@gmail.com",
+    };
+
+    razorpayInstance.orders.create(options, (err, order) => {
+      console.log(err);
+      console.log(order);
+      if (!err) {
+        res.status(200).send({
+          success: true,
+          msg: "Order Created",
+          order_id: order.id,
+          amount: amount,
+          key_id: process.env.RAZORPAY_YOUR_KEY_ID,
+          product_name: req.body.name,
+          description: req.body.description,
+          contact: "9633464005",
+          name: "FinerThreads",
+          email: "info@finerThreadsgmail.com",
+        });
+      } else {
+        res.status(400).send({ success: false, msg: "Something went wrong!" });
+      }
+    });
+  } catch (error) {
+    console.log("error happened between reRazorpay in orderController.", error);
+  }
+};
+
+
+const orderPlaced = async (req, res) => {
+  try {
+    const userin = req.session.name;
+    console.log("ORderplaced page");
+
+    if (req.query.statuss) {
+      console.log("Status passed as query:", req.query.statuss);
+      console.log(
+        "Order Id kept in session from repay is: ",
+        req.session.orderid_in_repay
+      );
+      req.session.initial_status = "Placed";
+
+      await order.updateOne(
+        { orderId: req.session.orderid_in_repay },
+        { $set: { status: "Placed", amountPaid: req.session.amountToPay } }
+      );
+
+      await cart.deleteMany({ username: req.session.name });
+
+    }
+    let datee=req.session.order_Date
+      const date = new Date(datee);
+
+    res.render("userOrderPlaced", {
+      id : req.session.order_ID,
+      date,
+      userin,
+      wishCount :req.session.wishCount,
+      cartCount : req.session.cartCount,
+      price : req.session.amountToPay,
+      qunatity :req.session.qunatityy,
+     
+    });
+  } catch (error) {
+    console.log("Error when orderPlaced in orderController: ", error);
+  }
+};
+
+// const discard_Online_Payment = async (req, res) => {
+//   try {
+//     console.log("Discard Razorpay failed transaction");
+//     console.log(req.body);
+//     console.log(req.session.user_Applied_Coupon);
+//   } catch (error) {
+//     console.log(
+//       "error happened between discard_Online_Payment in orderController.",
+//       error
+//     );
+//   }
+// };
 
 const orderData = async (req, res) => {
   try {
@@ -606,5 +794,8 @@ module.exports = {
   returnPro,
   returnreason,
   showDetailOrderHistory,
-  salesReport
+  salesReport,
+  razorpayPaymentFailed,
+  reRazorpay,
+  orderPlaced,
 };

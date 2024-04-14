@@ -64,6 +64,10 @@ router.post('/displayaddress', userCheck.isUser, orderController.displayaddress)
 router.post('/toPayment', userCheck.isUser, orderController.toPayment)
 router.get('/toPayment', userCheck.isUser, orderController.toPayment)
 router.get('/paymentSuccess', userCheck.isUser, orderController.codPayment)
+router.get("/razorpay-PaymentFailed", userCheck.isUser,  orderController.razorpayPaymentFailed);
+router.post("/reRazorpay", userCheck.isUser, orderController.reRazorpay);
+router.get("/orderPlaced", userCheck.isUser, orderController.orderPlaced);
+
 
 router.get('/orderhistory', userCheck.isUser, orderController.orderData)
 router.get('/historyOrder', userCheck.isUser, orderController.orderHistory)

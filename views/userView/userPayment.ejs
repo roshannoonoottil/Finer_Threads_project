@@ -506,6 +506,7 @@ function removeCoupon() {
                         var razorpayObject = new Razorpay(options);
                         razorpayObject.on('payment.failed', function (response) {
                             alert("Payment Failed");
+                            window.open(`/razorpay-PaymentFailed`,"_self")
                         });
                         razorpayObject.open();
                     }
