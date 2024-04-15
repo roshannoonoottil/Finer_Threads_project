@@ -146,12 +146,12 @@ const addToCart = async (req, res) => {
     if (cartData) {
       let updatedValue = cartData.quentity;
       updatedValue++;
-      if ((updatedValue <= 5) & (updatedValue >= 1)) {
-        await cartDetails.updateOne(
-          { product: req.params.id },
-          { quentity: updatedValue }
-        );
-      }
+      // if ((updatedValue <= 5) & (updatedValue >= 1)) {
+      //   await cartDetails.updateOne(
+      //     { product: req.params.id },
+      //     { quentity: updatedValue }
+      //   );
+      // }
     } else {
       const categoryData = new cartDetails({
         username: req.session.name,
@@ -188,6 +188,8 @@ const deleteCart = async (req, res) => {
 const changeQuantity = async (req, res) => {
   try {
     const userin = req.session.name;
+
+    console.log("-----------------------------------------------", req.body);
     console.log(req.body, "enterd to changeQuantity");
     const data = Object.values(req.body);
     console.log(data[0], "data zero");
@@ -195,63 +197,87 @@ const changeQuantity = async (req, res) => {
       $and: [{ username: userin }, { product: `${data[0]}` }],
     });
 
-    // const catDataCount = await cartDetails.find({ username: req.session.userName }).countDocuments()
-
-    console.log("before type of");
-    console.log(dataCart1.quentity);
-    let q = dataCart1.quentity;
-    console.log(q + Number(data[1]), "quantity check 10");
-    let val = q + Number(data[1]);
-    if ((val <= 5) & (val >= 1)) {
-      await cartDetails.updateOne(
-        { $and: [{ username: userin }, { product: `${data[0]}` }] },
-        { $inc: { quentity: req.body.count } }
-      );
-      console.log("after cartupater");
-
-      console.log("changeQuantity in cart controller in");
-    }
-    const totalValue = await cartDetails.aggregate([
-      {
-        $match: { username: req.session.name },
-      },
-      {
-        $group: {
-          _id: "$product",
-          totalPrice: { $sum: "$offerPrice" },
-          totalQuantity: { $sum: "$quentity" },
-        },
-      },
-      {
-        $project: {
-          _id: 1,
-          amount: {
-            $multiply: ["$totalPrice", "$totalQuantity"],
-          },
-        },
-      },
-      {
-        $group: {
-          _id: "",
-          sum: {
-            $sum: "$amount",
-          },
-        },
-      },
-    ]);
-    const dataCart = await cartDetails.find({
+    let dataCart = await cartDetails.find({
       $and: [{ username: userin }, { product: `${data[0]}` }],
     });
 
     console.log(dataCart);
     let quantity = dataCart[0].quentity;
-    console.log(quantity, "quantiity kiittyu");
-    let totalPrice = Number(quantity) * Number(data[2]);
-    console.log(totalPrice);
-    console.log(quantity, "quantity after updation");
-    console.log(typeof quantity, "quantity after updation");
-    let totalAmount = totalValue[0].sum;
-    res.json({ response: true, totalPrice, quantity, totalAmount });
+
+    if (req.body.count == "1") {
+      quantity++;
+    } else {
+      quantity--;
+    }
+
+    // const catDataCount = await cartDetails.find({ username: req.session.userName }).countDocuments()
+
+    const product = await productDetails.find({ name: dataCart1.product });
+    console.log(product[0].stock, "product stocks", quantity);
+    if (product[0].stock >= quantity) {
+      console.log("before type of");
+      console.log(dataCart1.quentity);
+      let q = dataCart1.quentity;
+      console.log(q + Number(data[1]), "quantity check 10");
+      let val = q + Number(data[1]);
+      if ((val <= 5) & (val >= 1)) {
+        await cartDetails.updateOne(
+          { $and: [{ username: userin }, { product: `${data[0]}` }] },
+          { $inc: { quentity: req.body.count } }
+        );
+        console.log("after cartupater");
+
+        console.log("changeQuantity in cart controller in");
+      }
+      const totalValue = await cartDetails.aggregate([
+        {
+          $match: { username: req.session.name },
+        },
+        {
+          $group: {
+            _id: "$product",
+            totalPrice: { $sum: "$offerPrice" },
+            totalQuantity: { $sum: "$quentity" },
+          },
+        },
+        {
+          $project: {
+            _id: 1,
+            amount: {
+              $multiply: ["$totalPrice", "$totalQuantity"],
+            },
+          },
+        },
+        {
+          $group: {
+            _id: "",
+            sum: {
+              $sum: "$amount",
+            },
+          },
+        },
+      ]);
+
+      dataCart = await cartDetails.find({
+        $and: [{ username: userin }, { product: `${data[0]}` }],
+      });
+
+      console.log(dataCart);
+      quantity = dataCart[0].quentity;
+      console.log(quantity, "quantiity kiittyu");
+      let totalPrice = Number(quantity) * Number(data[2]);
+      console.log(totalPrice);
+      console.log(quantity, "quantity after updation");
+      console.log(typeof quantity, "quantity after updation");
+      let totalAmount = totalValue[0].sum;
+
+      res.json({ response: true, totalPrice, quantity, totalAmount });
+
+      console.log("stock availbe");
+    } else {
+      res.json({ response: false });
+      console.log("out stock availbe");
+    }
   } catch (e) {
     console.log(
       "error in the changeQuantity in cartController in user side: " + e

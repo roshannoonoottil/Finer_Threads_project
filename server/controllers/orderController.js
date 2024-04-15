@@ -290,6 +290,8 @@ const codPayment = async (req, res) => {
         amount: walletData.wallet - req.session.walletAmount,
       };
 
+      
+
       let updateWallet = await walletModel.updateOne(
         { userId: userData._id },
         {
@@ -299,6 +301,20 @@ const codPayment = async (req, res) => {
         }
       );
     }
+
+    //--------------------------------------------------------------------
+
+    for (let i = 0; i < cartCount; i++) {
+      console.log(cartData);
+      const updatedProduct = await productDetails.findOneAndUpdate(
+          { name: cartData[i].product },
+          { $inc: { stock: -cartData[i].quentity } },
+          { new: true } // To return the updated document
+      );
+      console.log('Updated product:', updatedProduct);
+  }
+
+    //--------------------------------------------------------------------
 
     await cart.deleteMany({ username: userin });
 
@@ -483,6 +499,17 @@ const orderPlaced = async (req, res) => {
         { orderId: req.session.orderid_in_repay },
         { $set: { status: "placed", amountPaid: req.session.amountToPay } }
       );
+
+
+      for (let i = 0; i < cartCount; i++) {
+        console.log(cartData);
+        const updatedProduct = await productDetails.findOneAndUpdate(
+            { name: cartData[i].product },
+            { $inc: { stock: -cartData[i].quentity } },
+            { new: true } // To return the updated document
+        );
+        console.log('Updated product:', updatedProduct);
+    }
 
       await cart.deleteMany({ username: req.session.name });
     }
@@ -833,7 +860,7 @@ const invoice = async (req, res) => {
       orderId: req.query.orderId,
       product: req.query.product,
     });
-    const originalDate = new Date(orders[0].orderId);
+    const originalDate = new Date(orders[0].orderDate);
     const formattedDate = originalDate.toLocaleDateString("en-US"); // Adjust the locale as needed
 
     console.log(formattedDate);
@@ -879,8 +906,15 @@ const invoice = async (req, res) => {
                   </div>
                   
                   <div class="pl-4 pb-20">
-                      <p class="text-gray-500">Bill To:</p>
+                      <p class="text-gray-500">Billing Address:</p>
                       <h3 class="font-bold">${orders[0].username}</h3>
+                      <h5 class="font-bold">${orders[0].address.houseName}, ${
+      orders[0].address.city
+    }</h5>
+                      <h5 class="font-bold">${orders[0].address.state}, ${
+      orders[0].address.pincode
+    }</h5>
+                      <h5 class="font-bold">${orders[0].address.country}</h5>
                   </div>
                   
               </div>
@@ -898,16 +932,10 @@ const invoice = async (req, res) => {
                       <div class="flex flex-col items-end">
                           <p class="text-gray-500 py-1">Date:</p>
                           <p class="text-gray-500 py-1">Payment Method:</p>
-                          <p class="font-bold text-xl py-1 pb-2 ">TOTAL:</p>
                       </div>
                       <div class="flex flex-col items-end w-[12rem] text-right">
                           <p class="py-1">${formattedDate}</p>
                           <p class="py-1 pl-10">${orders[0].paymentMentod}</p>
-                          <div class="pb-2 py-1">
-                              <p class="font-bold text-xl">₹${
-                                orders[0].amountPaid
-                              }</p>
-                          </div>
                       </div>
                   </div>
               </div>
@@ -932,7 +960,7 @@ const invoice = async (req, res) => {
           
           <!--Total Amount-->
           <div class=" pt-20 pr-10 text-right">
-              <p class="text-gray-400">Total: <span class="pl-24 text-black">₹${
+              <p class="text-gray-400">Total: <span class="pl-24 text-black font-bold text-xl">₹${
                 orders[0].amountPaid
               }</span></p>
           </div>

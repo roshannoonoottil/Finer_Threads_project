@@ -268,7 +268,8 @@ const returnDetails = async (req, res) => {
     console.log(req.query);
     await orderData.updateOne(
       { orderId: req.query.id, product: req.query.product },
-      { returnStatus: 1 }
+      { returnStatus: 1,status:"Product Returned" },
+      
     );
 
     const user = await orderData.findOne({
@@ -320,11 +321,13 @@ const returnDetails = async (req, res) => {
     const userWallet1 = await wallet.findOne({ userId: userData._id });
     console.log(userWallet1,"////////////////////////////");
 
-    // await userModel.updateOne(
-    //   { username: user.username },
-    //   { $inc: { wallet: amount } },
-    //   { upsert: true }
-    // );
+      const updatedProduct = await productDetails.findOneAndUpdate(
+          { name: req.query.product },
+          { $inc: { stock: +user.quentity } },
+          { new: true } // To return the updated document
+      );
+      console.log('Updated product:', updatedProduct);
+
 
     res.redirect(
       `/admin/orderDetails?orderId=${req.query.id}&product=${req.query.product}`

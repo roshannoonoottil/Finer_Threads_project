@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="zxx">
   <head>
@@ -53,8 +52,8 @@
           <div class="logo">
             <a href="/"><img src="/img/logo.png" alt="" /></a>
           </div>
-           <div class="header-right">
-               <!-- <img src="img/icons/search.png" alt="" class="search-trigger">
+          <div class="header-right">
+            <!-- <img src="img/icons/search.png" alt="" class="search-trigger">
                     <img src="img/icons/man.png" alt=""> -->
             <a href="/logout" class="logoutbtn">Logout</a>
           </div>
@@ -84,73 +83,86 @@
 
     <!-- Header End -->
 
-
-
- <!-- Cart Page Section Begin -->
- <div class="cart-page">
-  <form action="/checkout" method="post">
-    <div class="container">
-        <div class="cart-table">
+    <!-- Cart Page Section Begin -->
+    <div class="cart-page">
+      <form action="/checkout" method="post">
+        <div class="container">
+          <div class="cart-table">
             <table>
-                <thead>
-                    <tr>
-                        <th class="product-h">Product</th>
-                        <th>Price</th>
-                        <th class="quan">Quantity</th>
-                        <th>Total</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <% for(let i of catData) {%>
-                <tbody>
-                    <tr>
-                        <td class="product-col">
-                            <img src="<%=i.image %>" alt="">
-                            <div class="p-title">
-                                <h5><%=i.product %></h5>
-                            </div>
-                        </td>
-                        <% if (i.rate == i.offerPrice ) { %>
-                          <td class="price-col"> ₹ <%=i.rate%></td>
-                        
-                        <% } else { %>
-                          <td class="price-col"><del>₹ <%=i.rate %></del><br>  ₹ <%=i.offerPrice%></td>
-                         <%} %>
-                        <td class="quantity-col">
-                          <div
-                          class="input-group quantity mx-auto"
-                          style="width: 100px"
+              <thead>
+                <tr>
+                  <th class="product-h">Product</th>
+                  <th>Price</th>
+                  <th class="quan">Quantity</th>
+                  <th>Total</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <% for(let i of catData) {%>
+              <tbody>
+                <tr>
+                  <td class="product-col">
+                    <img src="<%=i.image %>" alt="" />
+                    <div class="p-title">
+                      <h5><%=i.product %></h5>
+                    </div>
+                  </td>
+                  <% if (i.rate == i.offerPrice ) { %>
+                  <td class="price-col">₹ <%=i.rate%></td>
+
+                  <% } else { %>
+                  <td class="price-col">
+                    <del>₹ <%=i.rate %></del><br />
+                    ₹ <%=i.offerPrice%>
+                  </td>
+                  <%} %>
+                  <td class="quantity-col">
+                    <div
+                      class="input-group quantity mx-auto"
+                      style="width: 100px"
+                    >
+                      <div class="input-group-btn">
+                        <button
+                          class="btn btn-touchspin js-touchspin bootstrap-touchspin-down"
+                          type="button"
+                          onclick="quantityChange('<%= i.product %>', -1, '<%= i.offerPrice %>')"
                         >
-                          <div class="input-group-btn">
-                            <button
-                            class="btn btn-touchspin js-touchspin bootstrap-touchspin-down"
-                            type="button"
-                            onclick="quantityChange('<%= i.product %>', -1, '<%= i.offerPrice %>')">
-                            -
+                          -
                         </button>
-                          </div>
-                          <p class="input-group form-control"
-                             id="<%=i.product %>"><%=i.quentity %>
-                          </p>
-                          <div class="input-group-btn">
-                            <button
-                            class="btn btn-touchspin js-touchspin bootstrap-touchspin-up"
-                            type="button"
-                            onclick="quantityChange('<%= i.product %>', 1, '<%= i.offerPrice %>')">
-                            +
+                      </div>
+                      <p class="input-group form-control" id="<%=i.product %>">
+                        <%=i.quentity %>
+                      </p>
+                      <div class="input-group-btn">
+                        <button
+                          class="btn btn-touchspin js-touchspin bootstrap-touchspin-up"
+                          type="button"
+                          onclick="quantityChange('<%= i.product %>', 1, '<%= i.offerPrice %>')"
+                        >
+                          +
                         </button>
-                          </div>
-                        </div>
-                        </td>
-                        <td class="total">
-                        <span>₹ </span><span id="<%=i.product %>+hai"> <%= i.offerPrice * i.quentity %></span></td>
-                        <td class="product-close"><a href="/deleteItemCart/<%=i.product %>" class="btn btn-danger">x</a></td>
-                    </tr>
-                </tbody>
-                <% } %>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="total">
+                    <span>₹ </span
+                    ><span id="<%=i.product %>+hai">
+                      <%= i.offerPrice * i.quentity %></span
+                    >
+                  </td>
+                  <td class="product-close">
+                    <a
+                      href="/deleteItemCart/<%=i.product %>"
+                      class="btn btn-danger"
+                      >x</a
+                    >
+                  </td>
+                </tr>
+              </tbody>
+              <% } %>
             </table>
-        </div>
-        <!-- <div class="cart-btn">
+          </div>
+          <!-- <div class="cart-btn">
             <div class="row">
                 <div class="col-lg-5">
                     <div class="coupon-input">
@@ -163,205 +175,221 @@
                 </div>
             </div>
         </div> -->
-    </div>
-    <div class="shopping-method">
-        <div class="container">
+        </div>
+        <div class="shopping-method">
+          <div class="container">
             <div class="row">
-                <div class="col-lg-12">
-                    <div class="total-info">
-                        <div class="total-table">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Total</th>
-                                        <th>Subtotal</th>
-                                        <th>Shipping</th>
-                                        <th class="total-cart">Total Cart</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td class="total"></td>
-                                        <td class="sub-total"><span>₹ </span><span id="totalAmount"> <%=totalPrice%></span></td>
-                                        <td class="shipping">₹ 0</td>
-                                        <td class="total-cart-p"><span>₹ </span><span id="totalAmounts"> <%=totalPrice%></span></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-12 text-right">
-                                <!-- <a href="#" class="primary-btn chechout-btn">Proceed to checkout</a> -->
-                                <button class="btn btn-secondary">Proceed to checkout</button>
-                            </div>
-                            <!-- <div>
+              <div class="col-lg-12">
+                <div class="total-info">
+                  <div class="total-table">
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>Total</th>
+                          <th>Subtotal</th>
+                          <th>Shipping</th>
+                          <th class="total-cart">Total Cart</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td class="total"></td>
+                          <td class="sub-total">
+                            <span>₹ </span
+                            ><span id="totalAmount"> <%=totalPrice%></span>
+                          </td>
+                          <td class="shipping">₹ 0</td>
+                          <td class="total-cart-p">
+                            <span>₹ </span
+                            ><span id="totalAmounts"> <%=totalPrice%></span>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="row">
+                    <div class="col-lg-12 text-right">
+                      <!-- <a href="#" class="primary-btn chechout-btn">Proceed to checkout</a> -->
+                      <button class="btn btn-secondary">
+                        Proceed to checkout
+                      </button>
+                    </div>
+                    <!-- <div>
                               <p style="color: red;">Maximum 5 products per person </p>
                             </div> -->
-                        </div>
-                    </div>
+                  </div>
                 </div>
+              </div>
             </div>
+          </div>
         </div>
+      </form>
     </div>
-  </form>
-</div>
-<!-- Cart Page Section End -->
-
-
-
-
-
+    <!-- Cart Page Section End -->
 
     <!-- Footer Section Begin -->
     <footer class="footer-section spad">
+      <div class="container">
+        <div class="footer-widget">
+          <div class="row">
+            <div class="col-lg-3 col-sm-6">
+              <div class="single-footer-widget">
+                <h4>About us</h4>
+                <ul>
+                  <li>About Us</li>
+                  <li>Community</li>
+                  <li>Jobs</li>
+                  <li>Shipping</li>
+                  <li>Contact Us</li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-lg-3 col-sm-6">
+              <div class="single-footer-widget">
+                <h4>Customer Care</h4>
+                <ul>
+                  <li>Search</li>
+                  <li>Privacy Policy</li>
+                  <li>2019 Lookbook</li>
+                  <li>Shipping & Delivery</li>
+                  <li>Gallery</li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-lg-3 col-sm-6">
+              <div class="single-footer-widget">
+                <h4>Our Services</h4>
+                <ul>
+                  <li>Free Shipping</li>
+                  <li>Free Returnes</li>
+                  <li>Our Franchising</li>
+                  <li>Terms and conditions</li>
+                  <li>Privacy Policy</li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-lg-3 col-sm-6">
+              <div class="single-footer-widget">
+                <h4>Information</h4>
+                <ul>
+                  <li>Payment methods</li>
+                  <li>Times and shipping costs</li>
+                  <li>Product Returns</li>
+                  <li>Shipping methods</li>
+                  <li>Conformity of the products</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="social-links-warp">
         <div class="container">
-          <div class="footer-widget">
-            <div class="row">
-              <div class="col-lg-3 col-sm-6">
-                <div class="single-footer-widget">
-                  <h4>About us</h4>
-                  <ul>
-                    <li>About Us</li>
-                    <li>Community</li>
-                    <li>Jobs</li>
-                    <li>Shipping</li>
-                    <li>Contact Us</li>
-                  </ul>
-                </div>
-              </div>
-              <div class="col-lg-3 col-sm-6">
-                <div class="single-footer-widget">
-                  <h4>Customer Care</h4>
-                  <ul>
-                    <li>Search</li>
-                    <li>Privacy Policy</li>
-                    <li>2019 Lookbook</li>
-                    <li>Shipping & Delivery</li>
-                    <li>Gallery</li>
-                  </ul>
-                </div>
-              </div>
-              <div class="col-lg-3 col-sm-6">
-                <div class="single-footer-widget">
-                  <h4>Our Services</h4>
-                  <ul>
-                    <li>Free Shipping</li>
-                    <li>Free Returnes</li>
-                    <li>Our Franchising</li>
-                    <li>Terms and conditions</li>
-                    <li>Privacy Policy</li>
-                  </ul>
-                </div>
-              </div>
-              <div class="col-lg-3 col-sm-6">
-                <div class="single-footer-widget">
-                  <h4>Information</h4>
-                  <ul>
-                    <li>Payment methods</li>
-                    <li>Times and shipping costs</li>
-                    <li>Product Returns</li>
-                    <li>Shipping methods</li>
-                    <li>Conformity of the products</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
+          <div class="social-links">
+            <a href="" class="instagram"
+              ><i class="fa fa-instagram"></i><span>instagram</span></a
+            >
+            <a href="" class="pinterest"
+              ><i class="fa fa-pinterest"></i><span>pinterest</span></a
+            >
+            <a href="" class="facebook"
+              ><i class="fa fa-facebook"></i><span>facebook</span></a
+            >
+            <a href="" class="twitter"
+              ><i class="fa fa-twitter"></i><span>twitter</span></a
+            >
+            <a href="" class="youtube"
+              ><i class="fa fa-youtube"></i><span>youtube</span></a
+            >
+            <a href="" class="tumblr"
+              ><i class="fa fa-tumblr-square"></i><span>tumblr</span></a
+            >
           </div>
         </div>
-        <div class="social-links-warp">
-          <div class="container">
-            <div class="social-links">
-              <a href="" class="instagram"
-                ><i class="fa fa-instagram"></i><span>instagram</span></a
-              >
-              <a href="" class="pinterest"
-                ><i class="fa fa-pinterest"></i><span>pinterest</span></a
-              >
-              <a href="" class="facebook"
-                ><i class="fa fa-facebook"></i><span>facebook</span></a
-              >
-              <a href="" class="twitter"
-                ><i class="fa fa-twitter"></i><span>twitter</span></a
-              >
-              <a href="" class="youtube"
-                ><i class="fa fa-youtube"></i><span>youtube</span></a
-              >
-              <a href="" class="tumblr"
-                ><i class="fa fa-tumblr-square"></i><span>tumblr</span></a
-              >
-            </div>
-          </div>
-  
-          <div class="container text-center pt-5">
-            <p>
-              Copyright &copy;
-              <script>
-                document.write(new Date().getFullYear());
-              </script>
-              Finer Therads
-            </p>
-          </div>
-        </div>
-      </footer>
-      <!-- Footer Section End -->
 
-      <!-- count change -->
+        <div class="container text-center pt-5">
+          <p>
+            Copyright &copy;
+            <script>
+              document.write(new Date().getFullYear());
+            </script>
+            Finer Therads
+          </p>
+        </div>
+      </div>
+    </footer>
+    <!-- Footer Section End -->
+
+    <!-- count change -->
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script>
-        function quantityChange(pro, count, price) {
-            ///let quantity = document.getElementById('countUpdate').value;
-            //console.log(quantity);
-            //count = parseInt(count);
+      function quantityChange(pro, count, price) {
+        ///let quantity = document.getElementById('countUpdate').value;
+        //console.log(quantity);
+        //count = parseInt(count);
 
-            console.log('enter');
-            console.log(count);
+        console.log("enter");
+        console.log(count);
 
-            $.ajax({
-                url: '/change-quentity',
-                data: {
-                    name: pro,
-                    count: count,
-                    price: price
-                },
-                method: 'post',
-                dataType: 'json',
-                success: (response) => {
+        $.ajax({
+          url: "/change-quentity",
+          data: {
+            name: pro,
+            count: count,
+            price: price,
+          },
+          method: "post",
+          dataType: "json",
+          success: (response) => {
+            console.log(response.response);
+            //Update the content of an element with the ID 'quantity'
+            if (response.response) {
+              console.log(response, "response got");
+              console.log(response.quantity, "value kitti");
 
-                    //Update the content of an element with the ID 'quantity'
-                    if (response) {
-                        console.log(response, 'response got')
-                        console.log(response.quantity, 'value kitti')
-
-                        //console.log(price)
-                        console.log('success response came');
-                        document.getElementById(`${pro}`).innerHTML = response.quantity;
-                        document.getElementById(`${pro}+hai`).innerHTML = response.totalPrice;
-                        document.getElementById('totalAmount').innerHTML = response.totalAmount
-                        document.getElementById('totalAmounts').innerHTML = response.totalAmount
-                        //if (response.quantity == 10 || response.quantity == 1) {
-                        //    location.reload()
-                        //}
-
-                    } else {
-                        console.log('error in ajax for updating the quantity of the product')
-                    }
-                }
-            });
-        }
+              //console.log(price)
+              console.log("success response came");
+              document.getElementById(`${pro}`).innerHTML = response.quantity;
+              document.getElementById(`${pro}+hai`).innerHTML =
+                response.totalPrice;
+              document.getElementById("totalAmount").innerHTML =
+                response.totalAmount;
+              document.getElementById("totalAmounts").innerHTML =
+                response.totalAmount;
+              //if (response.quantity == 10 || response.quantity == 1) {
+              //    location.reload()
+              //}
+            } else {
+              // function alert() {
+                Swal.fire({
+                  icon: "error",
+                  title: "Out of Stock...!!!!",
+                  // text: "Out of Stock...!!!!",
+                  // footer: '<a href="#">Why do I have this issue?</a>',
+                });
+              // }
+              console.log("out of stock!!!!");
+              // window.alert("Out Of Stock");
+              console.log(
+                "error in ajax for updating the quantity of the product"
+              );
+            }
+          },
+        });
+      }
     </script>
 
-
-  
-      <!-- Js Plugins -->
-      <script src="/js/jquery-3.3.1.min.js"></script>
-      <script src="/js/bootstrap.min.js"></script>
-      <script src="/js/jquery.magnific-popup.min.js"></script>
-      <script src="/js/jquery.slicknav.js"></script>
-      <script src="/js/owl.carousel.min.js"></script>
-      <script src="/js/jquery.nice-select.min.js"></script>
-      <script src="/js/mixitup.min.js"></script>
-      <script src="/js/main.js"></script>
-    </body>
-  </html>
-  
+    <!-- Js Plugins -->
+    <script src="/js/jquery-3.3.1.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/jquery.magnific-popup.min.js"></script>
+    <script src="/js/jquery.slicknav.js"></script>
+    <script src="/js/owl.carousel.min.js"></script>
+    <script src="/js/jquery.nice-select.min.js"></script>
+    <script src="/js/mixitup.min.js"></script>
+    <script src="/js/main.js"></script>
+  </body>
+</html>
