@@ -329,27 +329,6 @@ const codPayment = async (req, res) => {
       qunatity,
     });
 
-    //===========================================================================
-    //   const user = await userDetails.find({ username: req.session.name });
-    //   console.log(user[0].wallet,"wallet check");
-    //   if(){
-
-    //     let amount = user[0].wallet - price ;
-    //   await userDetails.updateOne(
-    //     { username: req.session.name },
-    //     { $set: { wallet: amount } },
-    //     { upsert: true }
-    //   );
-
-    // }else{
-
-    //   await userDetails.updateOne(
-    //     { username: req.session.name },
-    //     { $set: { wallet: 0 } },
-    //     { upsert: true }
-    //   );
-
-    // }
   } catch (e) {
     console.log(
       "error in the codPayment of orderController in user side : " + e
@@ -607,7 +586,7 @@ const orderHistory = async (req, res) => {
 const cancelPro = async (req, res) => {
   try {
     // await order.updateOne({ orderId: req.params.id }, { adminCancel: 1, status: 'CANCELED' })
-    await order.updateOne(
+   await order.updateOne(
       {
         $and: [{ orderId: req.query.orderId }, { product: req.query.product }],
       },
@@ -615,6 +594,20 @@ const cancelPro = async (req, res) => {
         $set: { status: "CANCELED", adminCancel: 1 },
       }
     );
+
+    const orderData =  await order.findOne({
+      $and:[{ orderId: req.query.orderId }, { product: req.query.product }]
+    })
+
+    console.log(orderData.quentity, " stock Data");
+
+    const updatedProduct = await productDetails.findOneAndUpdate(
+      { name: req.query.product },
+      { $inc: { stock: +orderData.quentity } },
+      { new: true } // To return the updated document
+  );
+  console.log('Updated product:', updatedProduct);
+
     res.redirect(
       `/historyOrder?orderId=${req.query.orderId}&product=${req.query.product}`
     );
