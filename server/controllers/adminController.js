@@ -166,7 +166,7 @@ const oders = async (req, res) => {
     if (req.query.page) {
       page = req.query.page;
     }
-    const limit = 3;
+    const limit = 5;
     let dataOrder = await orderData
       .find({})
       .sort({ _id: -1 })
