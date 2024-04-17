@@ -170,11 +170,17 @@
                                     <!-- Payment buttons -->
                                     <p id="cartotal" hidden><%= userin %></p>
                                     <div class="mt-3">
-                                        <a href="/paymentSuccess" class="btn btn-primary">COD Payment</a>
+                    
+                                        <button onclick="window.location.href='/paymentSuccess'" <% if (totalPrice > 5000) { %>disabled<% } %> class="btn btn-primary">COD Payment</button>
+
+                                        
                                         <button class="btn btn-primary" id="razaropay" onclick="">Online Payment</button>
                                     </div>
 
-
+                                  <% if(totalPrice > 5000){%>
+                                    <br>
+                                    <p style="color: rgb(215, 136, 136);">COD for amounts exceeding 5000 is not available.</p>
+                                <%}%>
                                 </div>
                             </div>
                         </div>

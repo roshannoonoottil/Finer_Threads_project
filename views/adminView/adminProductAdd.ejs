@@ -19,6 +19,16 @@
     height: 100%;
     object-fit: cover;
   }
+  .remove-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: rgba(34, 148, 53, 0.8);
+    border: none;
+    border-radius: 50%;
+    padding: 5px;
+    cursor: pointer;
+  }
 </style>
 <section class="content-main">
     <div class="content-header">
@@ -82,7 +92,7 @@
 <p id="img-error"></p>
 <div class="form-group" style="padding-top: 3%;">
   <label for="productImage" style="color:rgb(0, 0, 0); font-size: medium;">Product Image:</label><br>
-  <input type="file" class="form-control-file" id="productImage" onclick="imgup()" accept="image/*" name="images"  multiple accept="image/*" required>
+  <input type="file" class="form-control-file form-control" id="productImage" onclick="imgup()" accept="image/*" name="images"  multiple accept="image/*" required>
 </div>
 <br>
 <span id="submit-error"></span>
@@ -121,9 +131,11 @@ document.getElementById('productImage').addEventListener('change', function(even
   var files = event.target.files;
   var imagePreview = document.getElementById('image-preview');
   imagePreview.innerHTML = ''; // Clear previous previews
+  var selectedFiles = []; // Track selected files
   
   for (var i = 0; i < files.length; i++) {
     var file = files[i];
+    selectedFiles.push(file); // Add file to selectedFiles array
     
     var reader = new FileReader();
     
@@ -135,6 +147,23 @@ document.getElementById('productImage').addEventListener('change', function(even
         img.src = e.target.result;
         previewContainer.appendChild(img);
         
+        var removeBtn = document.createElement('button');
+        removeBtn.textContent = 'X';
+        removeBtn.className = 'remove-btn btn btn-danger';
+        removeBtn.addEventListener('click', function() {
+          // Remove the preview container when the remove button is clicked
+          previewContainer.remove();
+          
+          // Filter out the removed file from selectedFiles
+          selectedFiles = selectedFiles.filter(function(f) {
+            return f !== file;
+          });
+          
+          // Replace the input element with a clone excluding the removed file
+          replaceInput(selectedFiles);
+        });
+        previewContainer.appendChild(removeBtn);
+        
         imagePreview.appendChild(previewContainer);
       };
     })(file);
@@ -142,6 +171,28 @@ document.getElementById('productImage').addEventListener('change', function(even
     reader.readAsDataURL(file);
   }
 });
+
+function replaceInput(files) {
+  var newInput = document.createElement('input');
+  newInput.type = 'file';
+  newInput.id = 'productImage';
+  newInput.className = 'form-control';
+  newInput.accept = 'image/*';
+  newInput.multiple = true;
+  newInput.addEventListener('change', function(event) {
+    // Trigger the change event to update the preview with new files
+    event.target.dispatchEvent(new Event('change'));
+  });
+
+  // Create a new FileList object
+  var fileList = new DataTransfer();
+  for (var i = 0; i < files.length; i++) {
+    fileList.items.add(files[i]);
+  }
+  newInput.files = fileList.files;
+
+  document.getElementById('productImage').parentNode.replaceChild(newInput, document.getElementById('productImage'));
+}
 </script>
 <script>
  var nameError = document.getElementById('name-error');
