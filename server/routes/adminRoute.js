@@ -32,7 +32,8 @@ router.get("/product", adminCheck.isAdmin, productController.adminProduct); // s
 router.post("/proSearch", adminCheck.isAdmin, productController.searchProduct)
 router.post("/product", adminCheck.isAdmin, multer.array("images", 4), productController.addProduct ); //admin add products
 router.get("/addProduct", adminCheck.isAdmin,  productController.newProductPage );  // go to the add product page
-router.post("/productEdit/:name", adminCheck.isAdmin, productController.editProduct ); // Edit Product Page
+router.get("/productEdit/:id", adminCheck.isAdmin, productController.editProduct ); // Edit Product Page
+router.get("/pImageDelete", adminCheck.isAdmin, productController.pImageDelete)
 router.post("/productUpdate", adminCheck.isAdmin, multer.fields([
     { name: "0Image", maxCount: 1 },
     { name: "1Image", maxCount: 1 },

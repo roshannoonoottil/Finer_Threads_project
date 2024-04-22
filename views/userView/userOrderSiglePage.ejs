@@ -129,7 +129,18 @@
                             <% } else { %>
                                 <ul class="list-group">
                                     <li class="list-group-item" style="color: rgb(214, 190, 146);"><%= data[0].status %></li>
+                                    <% if(data[0].status == "Payment Failed") {%>
+                                        <button
+                                        id="repayment-button"
+                                        onclick="retry_Payment(`<%=id= data[0].product %>-<%=amount=data[0].amountPaid%>`)"
+                                        class="m-2 mb-0 mt-4 btn btn-danger"
+                                      >
+                                        Retry Payment
+                                      </button>
+                                    <% }%>
+                                    <% if(data[0].status == "placed") {%>
                                     <li class="list-group-item"><a href="/cancelProduct?orderId=<%= data[0].orderId %>&product=<%= data[0].product %>" class="btn btn-sm btn-danger">Cancel</a></li>
+                                    <% }%>
                                 </ul>
                             <% } %>
                         </div>
@@ -241,6 +252,71 @@
 <script src="/js/main.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.6/umd/popper.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.min.js"></script>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+
+<script>
+    function retry_Payment(id) {
+      console.log("RAZORPAY PAYMENT INVOKED AGAIN");
+      console.log("Order ID is ", id);
+      $.ajax({
+        url: "/reRazorpay",
+        type: "POST",
+        data: { id: id },
+        success: function (res) {
+          if (res.success) {
+            var options = {
+              key: "" + res.key_id + "",
+              amount: "" + res.amount + "",
+              currency: "INR",
+              name: "getantiques",
+              order_id: "" + res.order_id + "",
+              handler: function (response) {
+                console.log("order id is: ", id);
+                window.open(`/orderPlaced?statuss=success`, "_self");
+              },
+              theme: {
+                color: "#2300a3",
+              },
+            };
+            var razorpayObject = new Razorpay(options);
+            razorpayObject.on("payment.failed", function (response) {
+              alert("TEST");
+              alert("Payment Failed");
+              console.log("Is this hitting?????--------------->failed");
+            });
+            razorpayObject.open();
+          } else {
+            alert(res.msg);
+            console.log("Razorpay Payment is success");
+  
+          }
+        },
+      });
+    }
+  
+    function discard(id) {
+      console.log("Order ID is: ", id);
+      Swal.fire({
+        text: "Cancelled & coupon if used any will be reverted",
+        confirmButtonColor: "#3085d6",
+        confirmButtonText: "Ok",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          fetch(`/discard_Online_Payment`, {
+            method: "post",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              id: id,
+            }),
+          });
+        }
+      });
+    }
+  </script>
+
 
 </body>
 

@@ -55,7 +55,8 @@
                 <td style="text-align: center;"><%=p.stock %></td>
                 <td style="text-align:center;" class="description" title="<%=p.description %>"><%=p.description %></td> 
                 <td style="text-align: center;">
-                  <form action="/admin/productEdit/<%=p.name%>" method="post">
+                  <a class="btn btn-success" href="/admin/productEdit/<%=p._id%>" >Edit</a>
+                  <!-- <form action="/admin/productEdit/<%=p.name%>" method="post">
                     <input type="hidden" value="<%=p.name%>" name="oldName">
                     <input type="hidden" value="<%=p.category %>" name="oldCategory">
                      <input type="hidden" value="<%=p.rate %>" name="oldRate">
@@ -64,7 +65,7 @@
                     <input  style="overflow: hidden;" type="hidden" value="<%=p.description %>" name="oldDesc"> 
                     <button class="btn btn-success" type="submit">Edit</button>
                     
-                  </form>
+                  </form> -->
                 </td>
                 <td style="text-align: center;">
                   <a href="/admin/proHide/<%=p.name %>">

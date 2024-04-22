@@ -115,14 +115,14 @@
                 <br>
                 <p id="name-error"></p>
                 <div class="form-group">
-                <input type="hidden" name="oldProdName" value="<%=oldName %>">
+                <input type="hidden" name="oldProdName" value="<%= productData.name %>">
                   <label for="username" style="font-size:large;">Enter new name</label>
                   <input
                     type="text"
                     class="form-control"
                     id="productName"
                     name="newProdName"
-                    value="<%=oldName %>"
+                    value="<%= productData.name %>"
                     onkeyup="validateName()"
                   />
                  <p><br></p>
@@ -133,9 +133,9 @@
                   <label for="description" style="font-size:large;">Choose new category</label>
                   <select class="form-control" onkeyup="catOffer()" id="productCategory" name="newProdCat" required>
           
-                    <option value="<%=oldCategory%>" selected><%=oldCategory%></option>
+                    <option value="<%= productData.category %>" selected><%= productData.category %></option>
                     <% for(let a of category) { %>
-                        <% if (a.name !== oldCategory) { %>
+                        <% if (a.name !== productData.category) { %>
                             <option value="<%=a.name %>"><%=a.name %></option> 
                         <% } %>
                     <% } %>
@@ -149,14 +149,14 @@
                     class="form-control"
                     id="productPrice"
                     name="newProdRate"
-                    value="<%=oldRate %>"
+                    value="<%= productData.rate %>"
                     min="0"
                     onkeyup="proPrice()"
                   /><br>
                   <div class="form-group">
                     <p id="offer-error"></p>
                     <label for="username" style="font-size:large;">Offer</label>
-                    <input type="number" min="0" onkeyup="proOffer()" placeholder="Product offer" value="<%=oldOffer %>" class="form-control" id="offerValue" max="99" name="offer" >
+                    <input type="number" min="0" onkeyup="proOffer()" placeholder="Product offer" value="<%=productData.offer %>" class="form-control" id="offerValue" max="99" name="offer" >
                   </div>
                   <p id="qty-error"></p>
                   <label for="username" style="font-size:large;">Update Quantity</label>
@@ -165,7 +165,7 @@
                     class="form-control"
                     id="productQuantity"
                     name="newProStock"
-                    value="<%=oldStock %>"
+                    value="<%=productData.stock %>"
                     min="0"
                     onkeyup="proqty()"
                   /><br>
@@ -176,7 +176,7 @@
                     class="form-control"
                     id="productDescription"
                     name="newProdDesc"
-                    value="<%=oldDesc %>"
+                    value="<%=productData.description %>"
                     onkeyup="validateDiscription()"
                   /><br>
                   <% for(let i=0; i<totalImages+1; i++){ %>
@@ -186,6 +186,7 @@
                     <input type="text" value="<%=i %>" name="image <%=i %>" hidden >
                     <% if(i<totalImages) {%>
                     <img src="/<%= allOldData.image[i] %>"  style="height: 100px; width: 130px; padding: 10px;">
+                    <a class="btn btn-sm btn-danger" onclick="window.location.reload()" href="/admin/pImageDelete?id=<%=allOldData.image[i] %>&&pName=<%=productData.name %>">X</a>
                       <% }%>
                     </div>
                     <% if(i <= 4) { %>

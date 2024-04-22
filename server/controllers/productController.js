@@ -138,26 +138,30 @@ const newProductPage = async (req, res) => {
 const editProduct = async (req, res) => {
   try {
     const category = await categoryModel.find({}).sort({ name: 1 });
-    const oldName = req.body.oldName;
-    const oldCategory = req.body.oldCategory;
-    const oldRate = req.body.oldRate;
-    const oldStock = req.body.oldStock;
-    const oldDesc = req.body.oldDesc;
-    const oldOffer = req.body.oldOffer;
+    const productData = await productModel.findOne({_id:req.params.id});
+    console.log(productData);
+    // const oldName = req.body.oldName;
+    // const oldCategory = req.body.oldCategory;
+    // const oldRate = req.body.oldRate;
+    // const oldStock = req.body.oldStock;
+    // const oldDesc = req.body.oldDesc;
+    // const oldOffer = req.body.oldOffer;
 
-    const allOldData = await productModel.findOne({ name: oldName });
+    const allOldData = await productModel.findOne({ name: productData.name });
+    console.log(allOldData, "---------------old data------------");
     totalImages = allOldData.image.length;
     console.log(req.body);
     console.log("ADMIN: PRODUCT EDIT");
     res.render("adminProductEdit", {
       username: req.session.username,
-      oldName,
-      oldCategory,
-      oldRate,
-      oldStock,
-      oldDesc,
+      productData,
+      // oldName,
+      // oldCategory,
+      // oldRate,
+      // oldStock,
+      // oldDesc,
       category,
-      oldOffer,
+      // oldOffer,
       allOldData,
       totalImages,
     });
@@ -243,6 +247,21 @@ const updateProduct = async (req, res) => {
     // return res.redirect("/admin/error?message=error-while-updating-category");
   }
 };
+const pImageDelete =  async (req, res)=> {
+  try {
+    console.log(req.query.id, " image id");
+    console.log(req.query.pName, "porduct Name");
+     await productModel.updateOne({name : req.query.pName},
+    {$pull:{ image : req.query.id}});
+
+    const data = await productModel.findOne({name : req.query.pName});
+
+    
+      res.redirect(`/admin/productEdit/${data._id}`)
+
+
+  } catch (e) {}
+}
 
 const proBlock = async (req, res) => {
   try {
@@ -424,6 +443,7 @@ module.exports = {
   addProduct,
   newProductPage,
   editProduct,
+  pImageDelete,
   updateProduct,
   proBlock,
   couponCheck,
