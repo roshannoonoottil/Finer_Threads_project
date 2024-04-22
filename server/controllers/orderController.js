@@ -241,6 +241,7 @@ const codPayment = async (req, res) => {
         adminCancel: 0,
         img: cartData[i].image,
         product: cartData[i].product,
+        category : cartData[i].category,
         quentity: cartData[i].quentity,
         price: cartData[i].quentity * cartData[i].rate,
         offerPrice: cartData[i].quentity * cartData[i].offerPrice,
@@ -382,16 +383,17 @@ const razorpayPaymentFailed = async (req, res) => {
         username: req.session.name,
         orderDate: date,
         orderId: id,
-        status: "Failed",
+        status: "Payment Failed",
         userCacel: 0,
         adminCancel: 0,
         img: cartData[i].image,
         product: cartData[i].product,
+        category : cartData[i].category,
         quentity: cartData[i].quentity,
         price: cartData[i].quentity * cartData[i].rate,
         offerPrice: cartData[i].quentity * cartData[i].offerPrice,
         paymentMentod: "Online",
-        amountPaid: 0,
+        amountPaid: amount,
         address: {
           houseName: req.session.address.housename,
           city: req.session.address.city,
@@ -696,6 +698,16 @@ const salesReport = async (req, res) => {
       },
     ]);
 
+    const count = await order.countDocuments({
+      orderDate: {
+        $gte: new Date(startDate),
+        $lte: new Date(endDate),
+      },
+      status: { $ne: "CANCELED" }
+    });
+    
+    
+
     const Product = await order.aggregate([
       {
         $match: {
@@ -816,6 +828,7 @@ const salesReport = async (req, res) => {
                   </tbody>
               </table>
           </center>
+          <h3>Total Orders: ${ count }</h3>
           <h3>Total Amount: ${
             totalDiscount.length > 0 ? totalDiscount[0].price : 0
           }</h3>
@@ -889,7 +902,7 @@ const invoice = async (req, res) => {
           <div class="flex items-start justify-center">
               <div class="flex-1">
                   <div class="w-60 pb-6">
-                      <img class="w-40" src="https://scontent.fblr8-1.fna.fbcdn.net/v/t39.30808-6/436305798_2735457306606689_214745045166516241_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=5f2048&_nc_ohc=KjsBMjNrUwoAb77bCEc&_nc_ht=scontent.fblr8-1.fna&oh=00_AfCqjx8Y85Z4Y0kpq4nIxnWegR5p83qEw6RdG3S8VwgvLA&oe=6621332B" alt="Logo">
+                      <img class="w-40" src="https://scontent.fblr11-1.fna.fbcdn.net/v/t39.30808-6/436305798_2735457306606689_214745045166516241_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=5f2048&_nc_ohc=8PTsXzniUwMAb5Eq8sV&_nc_ht=scontent.fblr11-1.fna&oh=00_AfA9U_UpSFEqVUTfgSkwVLY9nfIqz6vNlxTuXJ62Nbf79w&oe=66283B2B" alt="Logo">
                   </div>
                   
                   <div class="w-60 pl-4 pb-6">

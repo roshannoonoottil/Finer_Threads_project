@@ -73,12 +73,55 @@ const toDashboard = async (req, res) => {
         },
       },
     ]);
+console.log("-------------------------------------------------------");
+
+    const mostSellingProduct = await orderData.aggregate([
+      { $match: { status: { $ne: "CANCELED" } } }
+      ,
+      {
+        $group: {
+          _id: "$product",
+          totalOrders: { $sum: 1 }
+        }
+      }
+      ,
+      {
+        $sort: { totalOrders: -1 }
+      },
+      {
+        $limit: 5
+      }
+    ])
+    
+
+    const mostSellingCategory = await orderData.aggregate([
+      { $match: { status: { $ne: "CANCELED" } } }
+      ,
+      {
+        $group: {
+          _id: "$category",
+          totalOrders: { $sum: 1 }
+        }
+      }
+      ,
+      {
+        $sort: { totalOrders: -1 }
+      },
+      {
+        $limit: 2
+      }
+    ])
+    
+    console.log("Most selling product:", mostSellingProduct);
+    
     let codPay = await orderData.find({}).count();
     const online = await orderData.find({ paymentMentod: "Online" }).count();
     console.log(online);
     codPay = codPay - online;
     console.log(codPay);
     const orderCount = orders.length;
+
+    let total =Math.floor(totalSales[0].totalAmount)
 
     res.render("dashboard", {
       userCount,
@@ -92,6 +135,9 @@ const toDashboard = async (req, res) => {
       online,
       username: req.session.username,
       totalSales,
+      mostSellingProduct,
+      mostSellingCategory,
+      total
     });
   } catch (e) {
     console.log("error in the dashbord of admin controller :" + e);
@@ -542,6 +588,7 @@ const chartDataYear = async (req, res) => {
 };
 
 const reportPage = async (req, res) => {
+  const ordersCount = await orderData.find({ status: { $ne: "CANCELED" } }).count();
   const totalSales = await orderData.aggregate([
     { $match: { status: { $ne: "CANCELED" } } },
     {
@@ -578,6 +625,7 @@ const reportPage = async (req, res) => {
     username: req.session.username,
     totalSales,
     Product,
+    ordersCount
   });
 };
 

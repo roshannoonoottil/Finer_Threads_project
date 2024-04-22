@@ -49,6 +49,10 @@ const orderSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  category: {
+    type: String,
+    required: true,
+  },
   quentity: {
     type: Number,
     required: true,

@@ -16,7 +16,7 @@
                                     <span class="icon icon-sm rounded-circle bg-primary-light"><i class="text-primary material-icons md-monetization_on"></i></span>
                                     <div class="text">
                                         <h6 class="mb-1 card-title">Revenue</h6>
-                                        <span>₹ <%=totalSales[0].totalAmount%></span>
+                                        <span>₹ <%=total%></span>
                                     </div>
                                 </article>
                             </div>
@@ -136,7 +136,49 @@
                             </div>
                           </div>
                         </div>
+                        <br>
+                        <hr>
+                      <div>
+                        <div class="row">
+                          <div class="col-md-6">
+                              <h3 class="bg-warning-light" colspan="2">Best Selling Products</h3>
+                              <table class="table">
+                                  <thead>
+                                      <tr>
+                                          <th class="bg-warning-light">Product Name</th>
+                                          <th class="bg-warning-light">Total Orders</th>
+                                      </tr>
+                                  </thead>
+                                  <tbody>
+                                      <% mostSellingProduct.forEach(product => { %>
+                                          <tr>
+                                              <td><h4><%= product._id %></h4></td>
+                                              <td class="text-success"><%= product.totalOrders %></td>
+                                          </tr>
+                                      <% }); %>
+                                  </tbody>
+                              </table>
+                          </div>
+                          <div class="col-md-6">
+                              <h3 class="bg-warning-light">Best Selling Category</h3>
+                              <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th class="bg-warning-light">Category Name</th>
+                                        <th class="bg-warning-light">Total Orders</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% mostSellingCategory.forEach(product => { %>
+                                        <tr>
+                                            <td><h4><%= product._id %></h4></td>
+                                            <td class="text-success"><%= product.totalOrders %></td>
+                                        </tr>
+                                    <% }); %>
+                                </tbody>
+                          </div>
                       </div>
+                      
                     </section>
                     
 

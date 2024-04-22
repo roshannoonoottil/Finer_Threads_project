@@ -25,6 +25,10 @@ const cartSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  category: {
+    type: String,
+    required: true,
+  },
   quentity: {
     type: Number,
     required: 1,
