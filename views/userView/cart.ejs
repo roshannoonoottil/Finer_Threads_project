@@ -82,7 +82,29 @@
     </header>
 
     <!-- Header End -->
+    <% if (catData.length==0){ %>
+      <div class="col-lg-8 table-responsive mb-5 text-center"  style="display: flex; justify-content: center; align-items: center; height: 40vh;">
+        <div>
+            <h5>Hi <span><%=userin %>, </span> Your cart is empty.</h5>
+            <div class="container-fluid">
+              <br>
+                <div class="text-center m-lg-2">
+                    <button
+                        style="margin-right: 0%"
+                        type="button"
+                        class="btn btn-outline-primary"
+                        onclick="location.href='/home'"
+                    >
+                        Continue Shopping
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <%}else{%>
 
+     
     <!-- Cart Page Section Begin -->
     <div class="cart-page">
       <form action="/checkout" method="post">
@@ -225,6 +247,7 @@
         </div>
       </form>
     </div>
+    <%} %>
     <!-- Cart Page Section End -->
 
     <!-- Footer Section Begin -->
