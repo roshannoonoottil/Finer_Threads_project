@@ -189,8 +189,8 @@
                     <a class="btn btn-sm btn-danger" onclick="window.location.reload()" href="/admin/pImageDelete?id=<%=allOldData.image[i] %>&&pName=<%=productData.name %>">X</a>
                       <% }%>
                     </div>
-                    <% if(i <= 4) { %>
-                    <div><input name="<%=i%>Image" type="file" class="form-control" id="fileInput" onclick="imgup()"  accept="image/*" class='form' >
+                    <% if(i >= totalImages) { %>
+                    <div><input name="<%=i%>Image" type="file" class="form-control" id="fileInput" onclick="imgup()" <% if (i>= 5) { %>hidden<% } %>  accept="image/*" class='form' >
                     </div>
                     <% } %>
                   </div>
