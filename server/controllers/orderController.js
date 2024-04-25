@@ -467,6 +467,10 @@ const orderPlaced = async (req, res) => {
   try {
     const userin = req.session.name;
     console.log("ORderplaced page");
+    const cartData = await cart.find({ username: userin });
+    const cartCount = await cart
+      .find({ username: req.session.name })
+      .countDocuments();
 
     if (req.query.statuss) {
       console.log("Status passed as query:", req.query.statuss);
@@ -481,9 +485,9 @@ const orderPlaced = async (req, res) => {
         { $set: { status: "placed", amountPaid: req.session.amountToPay } }
       );
 
-
+        console.log(cartCount, " Cart Count before");
       for (let i = 0; i < cartCount; i++) {
-        console.log(cartData);
+        console.log(cartData, "haiiii cart data ===========");
         const updatedProduct = await productDetails.findOneAndUpdate(
             { name: cartData[i].product },
             { $inc: { stock: -cartData[i].quentity } },
@@ -492,8 +496,9 @@ const orderPlaced = async (req, res) => {
         console.log('Updated product:', updatedProduct);
     }
 
-      await cart.deleteMany({ username: req.session.name });
+      
     }
+    await cart.deleteMany({ username: userin });
     let datee = req.session.order_Date;
     const date = new Date(datee);
 

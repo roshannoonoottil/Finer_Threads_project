@@ -79,6 +79,14 @@ const authOTP = async (req, res) => {
         isAdmin: 0,
       });
       await registeredUser.save();
+
+      const wallet = new  walletModel({
+        userId: registeredUser._id,
+        wallet:0,
+        walletTransactions:[]
+      })
+      await wallet.save();
+
       res.redirect("/login");
     } else {
       res.render("otp", { message: "Invalid OTP entered" });
@@ -541,6 +549,7 @@ const wallet = async (req, res) => {
 
     const userName = req.session.name;
     const userData = await userModel.findOne({ username: userName });
+    const wallet =  await walletModel.findOne({ userId: userData._id})
     const walletData = await walletModel.aggregate([
       {
         $match: {
@@ -570,12 +579,15 @@ const wallet = async (req, res) => {
     console.log("length is :", length);
     console.log("------------------------------->>>>");
     const totalPages = Math.ceil(length / limit);
+    // console.log("TYPEOF ...............................",typeof(walletData[0].wallet));
+    // console.log(walletData[0].wallet, " wallectttttttttttt" );
     res.render("wallet", {
       user: userName,
       userData,
       walletData,
       totalPages,
       currentPage: page,
+      wallet
     });
   } catch (error) {
     console.log("Error while displaying wallet ", error);
