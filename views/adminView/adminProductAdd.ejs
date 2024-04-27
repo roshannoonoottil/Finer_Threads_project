@@ -248,11 +248,11 @@
     {
 
         var proqty = document.getElementById('productQuantity').value;
-        if(proqty==0)
-        {
-          qtyError.innerHTML='<p class="help-block text-danger"> Quantity can not be empty </p>';
-          return false;
-        }
+        // if(proqty==0)
+        // {
+        //   qtyError.innerHTML='<p class="help-block text-danger"> Quantity can not be empty </p>';
+        //   return false;
+        // }
        if(proqty<0){
         qtyError.innerHTML='<p class="help-block text-danger"> Invalid input! Please enter a positive number.</p>' ;
         return false;
