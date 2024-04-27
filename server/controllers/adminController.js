@@ -18,6 +18,7 @@ const adiminLogin = (req, res) => {
     }
   } catch (error) {
     console.log("Admin login page error: " + error);
+    res.redirect("/error")
   }
 };
 
@@ -40,6 +41,7 @@ const adminDashboard = async (req, res) => {
     }
   } catch (error) {
     console.log("Admin Dashboard error: " + error);
+    res.redirect("/error")
   }
 };
 
@@ -141,6 +143,7 @@ console.log("-------------------------------------------------------");
     });
   } catch (e) {
     console.log("error in the dashbord of admin controller :" + e);
+    res.redirect("/error")
   }
 };
 
@@ -151,6 +154,7 @@ const adminLogout = (req, res) => {
     res.redirect("/admin");
   } catch (error) {
     console.log("Error in Logging out" + error);
+    res.redirect("/error")
   }
 };
 
@@ -165,6 +169,7 @@ const adminShowUsers = async (req, res) => {
     console.log("Admin View User");
   } catch (error) {
     console.log("Error while Admin showing user data: " + error);
+    res.redirect("/error")
   }
 };
 
@@ -185,6 +190,7 @@ const block = async (req, res) => {
     res.redirect("/admin/user");
   } catch (e) {
     console.log("catch of block in admin : " + e);
+    res.redirect("/error")
   }
 };
 
@@ -203,6 +209,7 @@ const searchUser = async (req, res) => {
     });
   } catch (e) {
     console.log("catch of searchUser in admin : " + e);
+    res.redirect("/error")
   }
 };
 
@@ -231,6 +238,7 @@ const oders = async (req, res) => {
     console.log(
       "error in the orders in the adminController in the admin side : " + e
     );
+    res.redirect("/error")
   }
 };
 
@@ -251,6 +259,7 @@ const updateOrderStatus = async (req, res) => {
     console.log(
       "error in the updateOrderStatus in orderController in admin side: " + e
     );
+    res.redirect("/error")
   }
 };
 
@@ -270,6 +279,7 @@ const searchOrder = async (req, res) => {
     console.log(
       "error in the searchOrder in orderController in admin side : " + e
     );
+    res.redirect("/error")
   }
 };
 
@@ -290,6 +300,7 @@ const details = async (req, res) => {
     res.render("admin_order_details", { data, username: req.session.username });
   } catch (e) {
     console.log("error in the details in orderController in adminSide : " + e);
+    res.redirect("/error")
   }
 };
 
@@ -306,6 +317,7 @@ const deleteOrder = async (req, res) => {
     console.log(
       "error in the deleteOrder in orderController in admin controller : " + e
     );
+    res.redirect("/error")
   }
 };
 
@@ -383,6 +395,7 @@ const returnDetails = async (req, res) => {
       "error in the returnDetails in the ordetrController in the admin side : " +
         e
     );
+    res.redirect("/error")
   }
 };
 
@@ -400,6 +413,7 @@ const returnFail = async (req, res) => {
     console.log(
       "error in the returnFail of orderController in admin side : " + e
     );
+    res.redirect("/error")
   }
 };
 
@@ -415,6 +429,7 @@ const coupon = async (req, res) => {
     });
   } catch (e) {
     console.log("error in the coupon controller in admin side :" + e);
+    res.redirect("/error")
   }
 };
 
@@ -445,6 +460,7 @@ const addCoupon = async (req, res) => {
     console.log(
       "error in the addCoupon in couponController in admin side: " + e
     );
+    res.redirect("/error")
   }
 };
 
@@ -456,6 +472,7 @@ const removeCoupon = async (req, res) => {
     console.log(
       "error in the removeCoupon in couponController in admin side:" + e
     );
+    res.redirect("/error")
   }
 };
 
@@ -493,6 +510,7 @@ const editCoupon = async (req, res) => {
     console.log(
       "error in the editCoupon in couponController in admin side : " + e
     );
+    res.redirect("/error")
   }
 };
 
@@ -526,6 +544,7 @@ const chartData = async (req, res) => {
     res.json(Aggregation);
   } catch (error) {
     console.error(error);
+    res.redirect("/error")
   }
 };
 
@@ -555,7 +574,9 @@ const chartDataMonth = async (req, res) => {
       },
     ]);
     res.json(Aggregation);
-  } catch (error) {}
+  } catch (error) {
+    res.redirect("/error")
+  }
 };
 
 const chartDataYear = async (req, res) => {
@@ -584,6 +605,7 @@ const chartDataYear = async (req, res) => {
     res.json(Aggregation);
   } catch (error) {
     console.error(error);
+    res.redirect("/error")
   }
 };
 

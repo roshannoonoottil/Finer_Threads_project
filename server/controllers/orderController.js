@@ -82,7 +82,7 @@ const proceedtoCheckOut = async (req, res) => {
     console.log(
       "error in the proceedtoCheckOut in orderController in user sdie : " + e
     );
-    // res.redirect("/error")
+    res.redirect("/error")
   }
 };
 
@@ -99,7 +99,7 @@ const displayaddress = async (req, res) => {
       "error in the displayaddress function in the orderController in user side: " +
         e
     );
-    // res.redirect("/error")
+    res.redirect("/error")
   }
 };
 
@@ -184,7 +184,7 @@ const toPayment = async (req, res) => {
     });
   } catch (e) {
     console.log("error in the toPayment orderController in user side :" + e);
-    // res.redirect("/error")
+    res.redirect("/error")
   }
 };
 
@@ -334,7 +334,7 @@ const codPayment = async (req, res) => {
     console.log(
       "error in the codPayment of orderController in user side : " + e
     );
-    // res.redirect("/error")
+    res.redirect("/error")
   }
 };
 
@@ -417,6 +417,7 @@ const razorpayPaymentFailed = async (req, res) => {
       "error in the razorpayPaymentFailed of orderController in user side : " +
         e
     );
+    res.redirect("/error")
   }
 };
 
@@ -460,6 +461,7 @@ const reRazorpay = async (req, res) => {
     });
   } catch (error) {
     console.log("error happened between reRazorpay in orderController.", error);
+    res.redirect("/error")
   }
 };
 
@@ -513,6 +515,7 @@ const orderPlaced = async (req, res) => {
     });
   } catch (error) {
     console.log("Error when orderPlaced in orderController: ", error);
+    res.redirect("/error")
   }
 };
 
@@ -622,6 +625,7 @@ const cancelPro = async (req, res) => {
     console.log(
       "error in the cancelPro in orderController in user side : " + e
     );
+    res.redirect("/error")
   }
 };
 
@@ -858,7 +862,7 @@ const salesReport = async (req, res) => {
     res.status(200).end(pdfBuffer);
   } catch (err) {
     console.log(err);
-    // res.redirect('/admin/errorPage')
+    res.redirect("/error")
   }
 };
 

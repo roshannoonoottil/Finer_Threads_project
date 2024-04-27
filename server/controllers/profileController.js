@@ -31,7 +31,7 @@ const changePass = async (req, res) => {
     console.log(
       "error in the userChangePass in userController in user side : " + e
     );
-    // res.redirect("/error")
+    res.redirect("/error")
   }
 };
 
@@ -56,7 +56,7 @@ const change = async (req, res) => {
     }
   } catch (e) {
     console.log("error in the change in userController in user side : " + e);
-    // res.redirect("/error")
+    res.redirect("/error")
   }
 };
 
@@ -106,7 +106,7 @@ const addAddress = async (req, res) => {
     console.log(
       "error in the addAddress in userProfileController in user side : " + e
     );
-    // res.redirect("/error")
+    res.redirect("/error")
   }
 };
 
@@ -126,7 +126,7 @@ const newAddressEdit = async (req, res) => {
     console.log(
       "error in the profile in userProfileController in the user side : " + e
     );
-    // res.redirect("/error")
+    res.redirect("/error")
   }
 };
 
@@ -156,7 +156,7 @@ const newEditAddress = async (req, res) => {
     console.log(
       "error in the newAddress in userProfileController in user side:" + e
     );
-    // res.redirect("/error")
+    res.redirect("/error")
   }
 };
 
@@ -169,7 +169,7 @@ const removeAddress = async (req, res) => {
     console.log(
       "error in the removeAddress in userProfileController in user side : " + e
     );
-    // res.redirect("/error")
+    res.redirect("/error")
   }
 };
 
@@ -195,7 +195,7 @@ const updateProfile = async (req, res) => {
     console.log(
       "error in the updateAddress in userprofilecontoller in user side : " + e
     );
-    // res.redirect("/error")
+    res.redirect("/error")
   }
 };
 
@@ -223,7 +223,7 @@ const updateProfileData = async (req, res) => {
       "error in the updateProfileData in userProfileController in user side : " +
         e
     );
-    // res.redirect("/error")
+    res.redirect("/error")
   }
 };
 

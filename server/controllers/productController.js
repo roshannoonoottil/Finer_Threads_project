@@ -32,6 +32,7 @@ const adminProduct = async (req, res) => {
     console.log(product.name, +"product console");
   } catch (err) {
     res.send("Error Occurred");
+    res.redirect("/error")
   }
 };
 
@@ -53,6 +54,7 @@ const searchProduct = async(req,res)=>{
     });
   } catch (e) {
     console.log("catch of searchUser in admin : " + e);
+    res.redirect("/error")
   }
 
 }
@@ -121,6 +123,7 @@ const addProduct = async (req, res) => {
     return res.redirect(`/admin/product`);
   } catch (err) {
     console.log("error while adding product to the DB: " + err);
+    res.redirect("/error")
   }
 };
 
@@ -132,6 +135,7 @@ const newProductPage = async (req, res) => {
     console.log("ADMIN WILL ADD PRODUCT");
   } catch (err) {
     console.log("Error while redirecting the page to add product: " + err);
+    res.redirect("/error")
   }
 };
 
@@ -244,7 +248,7 @@ const updateProduct = async (req, res) => {
     return res.redirect("/admin/product");
   } catch (err) {
     console.log(err.message);
-    // return res.redirect("/admin/error?message=error-while-updating-category");
+    res.redirect("/error")
   }
 };
 const pImageDelete =  async (req, res)=> {
@@ -260,7 +264,9 @@ const pImageDelete =  async (req, res)=> {
       res.redirect(`/admin/productEdit/${data._id}`)
 
 
-  } catch (e) {}
+  } catch (e) {
+    res.redirect("/error")
+  }
 }
 
 const proBlock = async (req, res) => {
@@ -274,6 +280,7 @@ const proBlock = async (req, res) => {
     res.redirect(`/admin/product`);
   } catch (e) {
     console.log("catch of block in admin : " + e);
+    res.redirect("/error")
   }
 };
 
@@ -328,7 +335,7 @@ const couponCheck = async (req, res) => {
       "error in the couponCheck in userside in couponController.js:",
       e
     );
-    // res.redirect("/error")
+    res.redirect("/error")
   }
 };
 
@@ -398,7 +405,7 @@ const createOrder = async (req, res) => {
     });
   } catch (error) {
     console.log(error.message);
-    // res.redirect("/error")
+    res.redirect("/error")
   }
 };
 
@@ -422,6 +429,7 @@ const applyWallet = async (req, res) => {
     console.log(
       "error in the applyWallet in the couponController in user side : " + e
     );
+    res.redirect("/error")
   }
 };
 
@@ -435,6 +443,7 @@ const removeWallet = (req, res) => {
     res.json({ success: true, amount, wallet });
   } catch (e) {
     console.log("error in the removeWallet in couponControler in userside");
+    res.redirect("/error")
   }
 };
 
