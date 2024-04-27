@@ -19,6 +19,7 @@ const showCategory = async (req, res) => {
     });
   } catch (e) {
     console.log("error in the showCategory in admin side : " + e);
+    res.redirect("/error")
   }
 };
 
@@ -57,6 +58,7 @@ const addCategory = async (req, res) => {
     }
   } catch (e) {
     console.log("Error in the edit_catergory in admin side: " + e);
+    res.redirect("/error")
   }
 };
 
@@ -80,6 +82,7 @@ const list = async (req, res) => {
     res.redirect(`/admin/category`);
   } catch (e) {
     console.log("catch of list in admin : " + e);
+    res.redirect("/error")
   }
 };
 
@@ -131,7 +134,7 @@ const categoryEdit = async (req, res) => {
     }
   } catch (e) {
     console.log("Error in the edit_category of adminController:", e);
-    // res.redirect('/admin/errorPage');
+    res.redirect("/error")
   }
 };
 

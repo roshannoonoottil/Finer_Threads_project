@@ -13,6 +13,7 @@ router.post("/signup", userController.verifyOTPS);
 router.post("/verifyOTP", userController.authOTP);
 router.post("/home", userController.validateUser);
 router.get("/regResOTP/:id", userController.regResendOTP);
+router.get("/error" , userController.error)
 
 
 router.get("/home", userCheck.isUser, userController.redirectUser);

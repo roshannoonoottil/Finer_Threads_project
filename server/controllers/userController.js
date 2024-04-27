@@ -34,8 +34,13 @@ const login = (req, res) => {
     }
   } catch {
     console.log("Error while rendering user registration page: " + error);
+    res.redirect("/error")
   }
 };
+
+const error =(req,res) =>{
+  res.render('errorPage')
+}
 
 const signup = (req, res) => {
   try {
@@ -62,6 +67,7 @@ const verifyOTPS = (req, res) => {
     console.log("User OTP Page");
   } catch (err) {
     console.log("error in veriy otp" + err);
+    res.redirect("/error")
   }
 };
 
@@ -94,6 +100,7 @@ const authOTP = async (req, res) => {
     console.log("otp check");
   } catch (err) {
     console.log("Error while authenticating OTP: " + err);
+    res.redirect("/error")
   }
 };
 
@@ -129,6 +136,7 @@ const validateUser = async (req, res) => {
     }
   } catch (err) {
     console.log("Error in validating user :" + err);
+    res.redirect("/error")
   }
 };
 
@@ -141,6 +149,7 @@ const redirectUser = async (req, res) => {
     res.render("home", { category, product, userName });
   } catch (error) {
     console.log("Error while redirection");
+    res.redirect("/error")
   }
 };
 
@@ -152,6 +161,7 @@ const logout = (req, res) => {
     console.log("User loged  out");
   } catch (error) {
     console.log("Error during user signout ", +error);
+    res.redirect("/error")
   }
 };
 
@@ -186,11 +196,13 @@ const productView = async (req, res) => {
     });
   } catch (error) {
     console.log("Error while displaying product page " + error);
+    res.redirect("/error")
   }
 };
 
 const homePageCategory = async (req, res) => {
   console.log("category clicked");
+  let searchValue
   const params = req.params.name;
   console.log(params);
   const product = await productModel.find({ category: params });
@@ -220,6 +232,7 @@ const userproductView = async (req, res) => {
     });
   } catch (error) {
     console.log("Error while displaying product page " + error);
+    res.redirect("/error")
   }
 };
 
@@ -229,6 +242,7 @@ const forgotPassword = (req, res) => {
     console.log("USER IN FORGOT PASSWORD - EMAIL PAGE");
   } catch (error) {
     console.log("Error while redirecting to forgot password page :" + error);
+    res.redirect("/error")
   }
 };
 
@@ -254,6 +268,7 @@ const authEmail = async (req, res) => {
     console.log(
       "Error while authenticating email for password reset :" + error
     );
+    res.redirect("/error")
   }
 };
 
@@ -274,6 +289,7 @@ const fpGetOTP = (req, res) => {
     newOTP = otpData;
   } catch (error) {
     console.log("Error in getting OTP for password reset :" + error);
+    res.redirect("/error")
   }
 };
 
@@ -292,6 +308,7 @@ const fpAuthOTP = (req, res) => {
     }
   } catch (error) {
     console.log("Error in authenticating OTP for password change: " + error);
+    res.redirect("/error")
   }
 };
 
@@ -300,6 +317,7 @@ const toChangePassword = (req, res) => {
     res.render("changePassword");
   } catch (error) {
     console.log("Error while redirected to change password :" + error);
+    res.redirect("/error")
   }
 };
 
@@ -315,6 +333,7 @@ const updatePassword = async (req, res) => {
     res.redirect("/login");
   } catch (error) {
     console.log("Error while updating password :" + error);
+    res.redirect("/error")
   }
 };
 
@@ -335,6 +354,7 @@ const resendOTP = (req, res) => {
     console.log("USER RESEND OTP PAGE");
   } catch (error) {
     console.log("Error while resending OTP :" + error);
+    res.redirect("/error")
   }
 };
 
@@ -345,6 +365,7 @@ const otp = (req, res) => {
     console.log(
       "Error while displaying OTP page when wrong OTP entered by user :" + error
     );
+    res.redirect("/error")
   }
 };
 
@@ -365,6 +386,7 @@ const regResendOTP = (req, res) => {
     console.log("USER RESEND OTP PAGE");
   } catch (error) {
     console.log("Error while resending OTP :" + error);
+    res.redirect("/error")
   }
 };
 
@@ -387,6 +409,7 @@ const search = async (req, res) => {
     });
   } catch (error) {
     console.log("Error while searching a product by guest: " + error);
+    res.redirect("/error")
   }
 };
 
@@ -441,7 +464,7 @@ const userAccount = async (req, res) => {
     console.log(
       "error in the userAccount of userController in user side : " + e
     );
-    // res.redirect("/error")
+    res.redirect("/error")
   }
 };
 
@@ -469,7 +492,7 @@ const newAddress = async (req, res) => {
     console.log(
       "error in the newAddress in userController in the user side:" + e
     );
-    // res.redirect("/error")
+    res.redirect("/error")
   }
 };
 
@@ -534,6 +557,7 @@ const categoryProductSort = async (req, res) => {
     }
   } catch (error) {
     console.log("Error happened while accessing categoryProductSort: " + error);
+    res.redirect("/error")
   }
 };
 
@@ -591,6 +615,7 @@ const wallet = async (req, res) => {
     });
   } catch (error) {
     console.log("Error while displaying wallet ", error);
+    res.redirect("/error")
   }
 };
 
@@ -598,6 +623,7 @@ const wallet = async (req, res) => {
 module.exports = {
   index,
   login,
+  error,
   signup,
   verifyOTPS,
   authOTP,
