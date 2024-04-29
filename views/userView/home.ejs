@@ -74,9 +74,9 @@
                                 <li><a href="check-out.html">Check out</a></li>
                             </ul> -->
               </li>
-              <li><a href="./product-page.html">About</a></li>
-              <li><a href="./check-out.html">Blog</a></li>
-              <li><a href="./contact.html">Contact</a></li>
+              <!-- <li><a href="/">About</a></li>
+              <li><a href="/">Blog</a></li>
+              <li><a href="/">Contact</a></li> -->
             </ul>
           </nav>
         </div>
@@ -248,7 +248,7 @@
             </figure>
             <div class="product-text">
               <h6><%=p.name %></h6>
-              <% if (p.offer) { %>
+              <% if (p.discountAmount != p.rate) { %>
                 <span class="price"><del>₹ <%= p.rate %></del>
                   <h5>₹ <%= p.discountAmount %></h5></span>
                 <% } else { %>

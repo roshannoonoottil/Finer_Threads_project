@@ -32,7 +32,7 @@
                             <p>Pin Code: <%= data.address.pincode %></p>
                             <p>Payment Type : <%= data.paymentMentod %></p>
     
-                            <% if (data.status === 'CANCELED' || data.status === "Failed" ) { %>
+                            <% if (data.status === 'CANCELED' || data.status === "Payment Failed" ) { %>
                                 <p style="color: red;">Status : <%= data.status %></p>
                             <% } else if (data.status === 'Delivered Successfully') { %>
                                 <% if (data.returnStatus) { %>

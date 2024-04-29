@@ -88,9 +88,9 @@ const authOTP = async (req, res) => {
 
       const wallet = new  walletModel({
         userId: registeredUser._id,
-        wallet:0,
-        walletTransactions:[]
-      })
+        wallet: 0,
+        walletTransactions :[]
+      });
       await wallet.save();
 
       res.redirect("/login");
@@ -572,8 +572,12 @@ const wallet = async (req, res) => {
     const limit = 5;
 
     const userName = req.session.name;
+    console.log(userName,  "is logged in!");
     const userData = await userModel.findOne({ username: userName });
+    console.log(userData, " user data");
+    console.log(userData._id, " user id");
     const wallet =  await walletModel.findOne({ userId: userData._id})
+    console.log(wallet, " wallet");
     const walletData = await walletModel.aggregate([
       {
         $match: {

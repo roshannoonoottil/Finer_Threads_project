@@ -37,7 +37,7 @@
                             <th>Quentity</th>
                             <th>Total Price</th>
                             <th>Payment</th>
-                            <th>Delivery Status</th>
+                            <th>Order Status</th>
                             <th>Update</th>
                             <th>Details</th>
                         </tr>
@@ -74,9 +74,9 @@
                                                     <option value="Out for delivery" style="color: green;">Out for delivery</option>
                                                     <option value="Delivered Successfully" style="color: green;">Delivered Successfully</option>
                                                 </select>
-                                            <% } else if (order.status === 'Failed') { %>
+                                            <% } else if (order.status === 'Payment Failed') { %>
                                                 <select class="form-select" aria-label="Default select example" style="color: green;" name="status">
-                                                    <option value="Failed" style="color: green;">Failed</option>
+                                                    <option value="Failed" style="color: green;">Payment Failed</option>
                                                 </select>
                                             <% } else { %>
                                                 <% if (order.returnStatus) { %>

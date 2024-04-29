@@ -88,7 +88,7 @@ const proceedtoCheckOut = async (req, res) => {
 
 const displayaddress = async (req, res) => {
   try {
-    console.log(req.body);
+    console.log(req.body, "display address");
     const id = req.body.addressId;
     console.log(id);
     const data = await userPro.findOne({ _id: id });
@@ -107,14 +107,31 @@ const toPayment = async (req, res) => {
   try {
     req.session.address = req.body;
     const address = req.body;
-    console.log(req.body + "req.session.address");``
-    console.log(req.body.newAddress);
     const userin = req.session.name;
     const cartCount = await cart
       .find({ username: req.session.name })
       .countDocuments();
     const wishCount = await wish.find({ username: userin }).countDocuments();
     // console.log(req.body)
+
+    if (req.body.newaddress) {
+      const newAddress = new userPro({
+        username: req.session.name,
+        fullname: req.session.address.firstname,
+        phone: req.session.address.phone,
+        address: {
+          houseName: req.session.address.housename,
+          city: req.session.address.city,
+          state: req.session.address.state,
+          pincode: req.session.address.pincode,
+          country: req.session.address.country,
+        },
+        primary: 0,
+      });
+
+      await newAddress.save();
+    }
+
 
     //---------------------------------------------------------------
     const catData = await cart.find({ username: req.session.name });
