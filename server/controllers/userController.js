@@ -492,8 +492,8 @@ const categoryProductSort = async (req, res) => {
     const userName = req.session.name;
     const number = req.params.number;
     if (number == 1) {
-      let totalPages;
-      let currentPage;
+      var totalPages;
+      var currentPage;
       const product = await productModel.find({}).sort({ name: 1 });
       console.log("DATA IF 1 is pressed:" + product);
       const value = "A - Z";

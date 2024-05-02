@@ -123,7 +123,6 @@ router.get(
 
 router.get(
   "/Ucategory/sort/:number",
-  userCheck.isUser,
   userController.categoryProductSort
 );
 
