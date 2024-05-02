@@ -101,7 +101,7 @@
 
                       <form action="/signup" method="post">
                         <h2 class="fw-bold mb-2 ">Sign Up</h2>
-                        <p class="text-white-50 mb-5">Please enter your deails and Register!</p>
+                        <p class="text-white-50 mb-5">Please enter your details and Register!</p>
 
                         <div class="form-outline form-white mb-4">
                             <input type="text" placeholder="Username" id="typeUsername" name="username" class="form-control form-control-lg" onkeyup="validateName()" />
@@ -242,6 +242,7 @@
     <script>
         setTimeout(()=>{
           let a=document.getElementById("alreadyUser");
+          a.style.display='none';
         },2000)
         </script>
         <script>

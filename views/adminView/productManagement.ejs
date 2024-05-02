@@ -1,62 +1,164 @@
 <%- include ('adminHeader') %>
 
 <section class="content-main">
-    <div class="content-header">
+  <div class="content-header">
+    <div>
+      <h2 class="content-title card-title">Products</h2>
+    </div>
+    <div>
       <div>
-        <h2 class="content-title card-title">Products</h2>
-      </div>
-      <div>
-        <div>  
-            <a href="/admin/addProduct" class="btn btn-primary btn-sm rounded">Add Product</a>
-          </div> 
+        <a href="/admin/addProduct" class="btn btn-primary btn-sm rounded"
+          >Add Product</a
+        >
       </div>
     </div>
-    <header class="card card-body mb-4">
-      <div class="row gx-3">
-        <form class="d-flex" role="search" action="/admin/proSearch" method="post" >
-            <div class="col-lg-4 col-md-6 me-auto">
-              <input type="search" placeholder="Search..." class="form-control" name="psearch" value="<%= productSearch %>"/>
-            </div>
-            </form>
-      </div>
-    </header>
-    <!-- card-header end// -->
-    <div class="card">
+  </div>
+  <header class="card card-body mb-4">
+    <div class="row gx-3">
+      <form
+        class="d-flex"
+        role="search"
+        action="/admin/proSearch"
+        method="post"
+      >
+        <div class="col-lg-4 col-md-6 me-auto">
+          <input
+            type="search"
+            placeholder="Search..."
+            class="form-control"
+            name="psearch"
+            value="<%= productSearch %>"
+          />
+        </div>
+      </form>
+    </div>
+  </header>
+  <!-- card-header end// -->
+  <div class="card">
     <div class="card-body">
       <div class="row">
-        
         <div class="container mt-6">
           <div class="row">
-          <div class="col-md-12 table-responsive"> 
-            <table class="table table-striped" width="50%>">
-              <tr>
-                <th style="color:rgb(0, 0, 0);font-size:small; text-align: center; ">Product Image</th>
-                <th style="color:rgb(0, 0, 0);font-size:small; text-align: center; ">Name</th>
-                <th style="color:rgb(0, 0, 0);font-size:small; text-align: center; ">Category</th>
-                <th style="color:rgb(0, 0, 0);font-size:small; text-align: center; ">Rate</th>
-                <th style="color:rgb(0, 0, 0);font-size:small; text-align: center; ">Offer Price</th>
-                <th style="color:rgb(0, 0, 0);font-size:small; text-align: center; ">Stock</th>
-                <th style="color:rgb(0, 0, 0);font-size:small; text-align: center; width: 250px;">Description</th>
-               <th style="color:rgb(0, 0, 0);font-size:small; text-align: center; ">Edit</th>
-                <th style="color:rgb(0, 0, 0);font-size:small; text-align: center; ">Hide</th>
-              </tr>
-               <% for(let p of product) { %>
-              <tr>
-                <td style="text-align: center;"><img src="<%= p.image[0] %>" style="padding:15%;" height="100px" width="100px" >  </td>
-                <td style="text-align: center;"><%=p.name %></td>
-                <td style="text-align: center;"><%=p.category %> </td>
-                <td style="text-align: center;">₹ <%=p.rate %></td> 
-                <% if (p.discountAmount != p.rate) { %>
-                  <td style="text-align: center;">₹ <%= p.discountAmount %></td>
-              <% } else { %>
-                  <td style="text-align: center;">No Offer!</td>
-              <% } %>
-              
-                <td style="text-align: center;"><%=p.stock %></td>
-                <td style="text-align:center;" class="description" title="<%=p.description %>"><%=p.description %></td> 
-                <td style="text-align: center;">
-                  <a class="btn btn-success" href="/admin/productEdit/<%=p._id%>" >Edit</a>
-                  <!-- <form action="/admin/productEdit/<%=p.name%>" method="post">
+            <div class="col-md-12 table-responsive">
+              <table class="table table-striped" width="50%>">
+                <tr>
+                  <th
+                    style="
+                      color: rgb(0, 0, 0);
+                      font-size: small;
+                      text-align: center;
+                    "
+                  >
+                    Product Image
+                  </th>
+                  <th
+                    style="
+                      color: rgb(0, 0, 0);
+                      font-size: small;
+                      text-align: center;
+                    "
+                  >
+                    Name
+                  </th>
+                  <th
+                    style="
+                      color: rgb(0, 0, 0);
+                      font-size: small;
+                      text-align: center;
+                    "
+                  >
+                    Category
+                  </th>
+                  <th
+                    style="
+                      color: rgb(0, 0, 0);
+                      font-size: small;
+                      text-align: center;
+                    "
+                  >
+                    Rate
+                  </th>
+                  <th
+                    style="
+                      color: rgb(0, 0, 0);
+                      font-size: small;
+                      text-align: center;
+                    "
+                  >
+                    Offer Price
+                  </th>
+                  <th
+                    style="
+                      color: rgb(0, 0, 0);
+                      font-size: small;
+                      text-align: center;
+                    "
+                  >
+                    Stock
+                  </th>
+                  <th
+                    style="
+                      color: rgb(0, 0, 0);
+                      font-size: small;
+                      text-align: center;
+                      width: 250px;
+                    "
+                  >
+                    Description
+                  </th>
+                  <th
+                    style="
+                      color: rgb(0, 0, 0);
+                      font-size: small;
+                      text-align: center;
+                    "
+                  >
+                    Edit
+                  </th>
+                  <th
+                    style="
+                      color: rgb(0, 0, 0);
+                      font-size: small;
+                      text-align: center;
+                    "
+                  >
+                    Hide
+                  </th>
+                </tr>
+                <% for(let p of product) { %>
+                <tr>
+                  <td style="text-align: center">
+                    <img
+                      src="<%= p.image[0] %>"
+                      style="padding: 15%"
+                      height="100px"
+                      width="100px"
+                    />
+                  </td>
+                  <td style="text-align: center"><%=p.name %></td>
+                  <td style="text-align: center"><%=p.category %></td>
+                  <td style="text-align: center">₹ <%=p.rate %></td>
+                  <% if (p.discountAmount != p.rate) { %>
+                  <td style="text-align: center">₹ <%= p.discountAmount %></td>
+                  <% } else { %>
+                  <td style="text-align: center">No Offer!</td>
+                  <% } %>
+
+                  <td style="text-align: center"><%=p.stock %></td>
+                  <td
+                    style="text-align: center"
+                    class="description"
+                    title="<%=p.description %>"
+                  >
+                    <%=p.description %>
+                  </td>
+                  <td style="text-align: center">
+                    <a
+                      class="btn btn-success"
+                      href="/admin/productEdit/<%=p._id%>"
+                      >Edit</a
+                    >
+                    <!-- <form action="/admin/productEdit/<%=p.name%>" method="post">
                     <input type="hidden" value="<%=p.name%>" name="oldName">
                     <input type="hidden" value="<%=p.category %>" name="oldCategory">
                      <input type="hidden" value="<%=p.rate %>" name="oldRate">
@@ -66,20 +168,19 @@
                     <button class="btn btn-success" type="submit">Edit</button>
                     
                   </form> -->
-                </td>
-                <td style="text-align: center;">
-                  <a href="/admin/proHide/<%=p.name %>">
-                    <% if (p.hide){ %>
-                    <button class="btn btn-success">UnBlock</button>
-                    <% }else{ %>
-                    <button class="btn btn-danger">Block</button>
-                    <% } %>
-                  </a>
-                </td>
-              </tr>
-              <% } %>
-              
-            </table>
+                  </td>
+                  <td style="text-align: center">
+                    <a href="/admin/proHide/<%=p.name %>">
+                      <% if (p.hide){ %>
+                      <button class="btn btn-success">UnBlock</button>
+                      <% }else{ %>
+                      <button class="btn btn-danger">Block</button>
+                      <% } %>
+                    </a>
+                  </td>
+                </tr>
+                <% } %>
+              </table>
             </div>
           </div>
         </div>
@@ -87,20 +188,17 @@
     </div>
   </div>
 
-
   <div class="pagination-area mt-15 mb-50">
     <nav aria-label="Page navigation example">
       <ul class="pagination justify-content-center">
         <% for(let page = 1; page <= totalPages; page++){ %>
-          <li class="page-item <%= currentPage === page ? 'active' : '' %>">
-            <a class="page-link btn-primary" href="?page=<%=page%>"><%=page%></a>
-          </li>
+        <li class="page-item <%= currentPage === page ? 'active' : '' %>">
+          <a class="page-link btn-primary" href="?page=<%=page%>"><%=page%></a>
+        </li>
         <% } %>
       </ul>
     </nav>
   </div>
-   
-  </section>
-
+</section>
 
 <%- include ('adminFooter') %>

@@ -8,7 +8,7 @@ const multer = require("multer");
 const walletModel = require("../models/walletModel");
 require("dotenv").config();
 
-let productSearch
+let productSearch;
 const adminProduct = async (req, res) => {
   try {
     let page = 1;
@@ -21,7 +21,7 @@ const adminProduct = async (req, res) => {
       .sort({ _id: -1 })
       .limit(limit * 1)
       .skip((page - 1) * limit); //cant use const here as it will render error when a product is searched//
-      const count = await productModel.find({}).countDocuments(); // counts the total products //
+    const count = await productModel.find({}).countDocuments(); // counts the total products //
     res.render("productManagement", {
       username: req.session.username,
       product,
@@ -32,34 +32,31 @@ const adminProduct = async (req, res) => {
     console.log(product.name, +"product console");
   } catch (err) {
     res.send("Error Occurred");
-    res.redirect("/error")
+    res.redirect("/error");
   }
 };
 
-const searchProduct = async(req,res)=>{
+const searchProduct = async (req, res) => {
   try {
-    let totalPages
-  productSearch = req.body.psearch;
-  const regex = new RegExp(`${productSearch}`, "i");
-  console.log(regex);
-  const product = await productModel.find({
-    $and: [{ name: { $regex: regex } }],
+    let totalPages;
+    productSearch = req.body.psearch;
+    const regex = new RegExp(`${productSearch}`, "i");
+    console.log(regex);
+    const product = await productModel.find({
+      $and: [{ name: { $regex: regex } }],
     });
 
     res.render("productManagement", {
       username: req.session.username,
       product,
       productSearch,
-      totalPages
+      totalPages,
     });
   } catch (e) {
     console.log("catch of searchUser in admin : " + e);
-    res.redirect("/error")
+    res.redirect("/error");
   }
-
-}
-
-
+};
 
 const addProduct = async (req, res) => {
   try {
@@ -74,8 +71,8 @@ const addProduct = async (req, res) => {
         .replace("/admin", "../");
     }
     const { prodName, category, prodDesc, prodRate, quantity } = req.body;
-    const product = await productModel.find({name: prodName});
-   
+    const product = await productModel.find({ name: prodName });
+
     let data = req.body;
     console.log(data.offer, "  data............");
     let amount = 0;
@@ -102,28 +99,27 @@ const addProduct = async (req, res) => {
         }
       }
     }
-    if(!product.name)
-    {
-    console.log(amount," offer amound");
-    const newProd = new productModel({
-      name: prodName,
-      category: category,
-      description: prodDesc,
-      rate: prodRate,
-      stock: quantity,
-      list: 0,
-      hide: 0,
-      image: imagePath,
-      offer: data.offer,
-      discountAmount: amount,
-    });
+    if (!product.name) {
+      console.log(amount, " offer amound");
+      const newProd = new productModel({
+        name: prodName,
+        category: category,
+        description: prodDesc,
+        rate: prodRate,
+        stock: quantity,
+        list: 0,
+        hide: 0,
+        image: imagePath,
+        offer: data.offer,
+        discountAmount: amount,
+      });
 
-    await newProd.save();
-  }
+      await newProd.save();
+    }
     return res.redirect(`/admin/product`);
   } catch (err) {
     console.log("error while adding product to the DB: " + err);
-    res.redirect("/error")
+    res.redirect("/error");
   }
 };
 
@@ -135,14 +131,14 @@ const newProductPage = async (req, res) => {
     console.log("ADMIN WILL ADD PRODUCT");
   } catch (err) {
     console.log("Error while redirecting the page to add product: " + err);
-    res.redirect("/error")
+    res.redirect("/error");
   }
 };
 
 const editProduct = async (req, res) => {
   try {
     const category = await categoryModel.find({}).sort({ name: 1 });
-    const productData = await productModel.findOne({_id:req.params.id});
+    const productData = await productModel.findOne({ _id: req.params.id });
     console.log(productData);
     // const oldName = req.body.oldName;
     // const oldCategory = req.body.oldCategory;
@@ -248,26 +244,25 @@ const updateProduct = async (req, res) => {
     return res.redirect("/admin/product");
   } catch (err) {
     console.log(err.message);
-    res.redirect("/error")
+    res.redirect("/error");
   }
 };
-const pImageDelete =  async (req, res)=> {
+const pImageDelete = async (req, res) => {
   try {
     console.log(req.query.id, " image id");
     console.log(req.query.pName, "porduct Name");
-     await productModel.updateOne({name : req.query.pName},
-    {$pull:{ image : req.query.id}});
+    await productModel.updateOne(
+      { name: req.query.pName },
+      { $pull: { image: req.query.id } }
+    );
 
-    const data = await productModel.findOne({name : req.query.pName});
+    const data = await productModel.findOne({ name: req.query.pName });
 
-    
-      res.redirect(`/admin/productEdit/${data._id}`)
-
-
+    res.redirect(`/admin/productEdit/${data._id}`);
   } catch (e) {
-    res.redirect("/error")
+    res.redirect("/error");
   }
-}
+};
 
 const proBlock = async (req, res) => {
   try {
@@ -280,7 +275,7 @@ const proBlock = async (req, res) => {
     res.redirect(`/admin/product`);
   } catch (e) {
     console.log("catch of block in admin : " + e);
-    res.redirect("/error")
+    res.redirect("/error");
   }
 };
 
@@ -335,7 +330,7 @@ const couponCheck = async (req, res) => {
       "error in the couponCheck in userside in couponController.js:",
       e
     );
-    res.redirect("/error")
+    res.redirect("/error");
   }
 };
 
@@ -405,7 +400,7 @@ const createOrder = async (req, res) => {
     });
   } catch (error) {
     console.log(error.message);
-    res.redirect("/error")
+    res.redirect("/error");
   }
 };
 
@@ -415,8 +410,10 @@ const applyWallet = async (req, res) => {
       req.body,
       "=============================================================="
     );
-    const userDataId = await userDetails.findOne({ username: req.session.name });
-    const userData =await walletModel.findOne({userId:userDataId._id});
+    const userDataId = await userDetails.findOne({
+      username: req.session.name,
+    });
+    const userData = await walletModel.findOne({ userId: userDataId._id });
     console.log(userData.wallet);
     let amount = Math.max(1, req.session.amountToPay - userData.wallet);
     let wallet = Math.max(0, userData.wallet - req.session.amountToPay);
@@ -429,10 +426,9 @@ const applyWallet = async (req, res) => {
     console.log(
       "error in the applyWallet in the couponController in user side : " + e
     );
-    res.redirect("/error")
+    res.redirect("/error");
   }
 };
-
 
 const removeWallet = (req, res) => {
   try {
@@ -443,7 +439,7 @@ const removeWallet = (req, res) => {
     res.json({ success: true, amount, wallet });
   } catch (e) {
     console.log("error in the removeWallet in couponControler in userside");
-    res.redirect("/error")
+    res.redirect("/error");
   }
 };
 
@@ -460,5 +456,5 @@ module.exports = {
   createOrder,
   applyWallet,
   removeWallet,
-  searchProduct
+  searchProduct,
 };
