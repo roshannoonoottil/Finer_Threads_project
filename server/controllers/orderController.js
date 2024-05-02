@@ -107,8 +107,6 @@ const toPayment = async (req, res) => {
   try {
     req.session.address = req.body;
     const address = req.body;
-    console.log(req.body + "req.session.address");
-    console.log(req.body.newaddress, " new address");
     const userin = req.session.name;
     const cartCount = await cart
       .find({ username: req.session.name })
