@@ -82,7 +82,7 @@ const proceedtoCheckOut = async (req, res) => {
     console.log(
       "error in the proceedtoCheckOut in orderController in user sdie : " + e
     );
-    res.redirect("/error")
+    res.redirect("/error");
   }
 };
 
@@ -99,7 +99,7 @@ const displayaddress = async (req, res) => {
       "error in the displayaddress function in the orderController in user side: " +
         e
     );
-    res.redirect("/error")
+    res.redirect("/error");
   }
 };
 
@@ -133,7 +133,6 @@ const toPayment = async (req, res) => {
 
       await newAddress.save();
     }
-
 
     //---------------------------------------------------------------
     const catData = await cart.find({ username: req.session.name });
@@ -203,7 +202,7 @@ const toPayment = async (req, res) => {
     });
   } catch (e) {
     console.log("error in the toPayment orderController in user side :" + e);
-    res.redirect("/error")
+    res.redirect("/error");
   }
 };
 
@@ -260,7 +259,7 @@ const codPayment = async (req, res) => {
         adminCancel: 0,
         img: cartData[i].image,
         product: cartData[i].product,
-        category : cartData[i].category,
+        category: cartData[i].category,
         quentity: cartData[i].quentity,
         price: cartData[i].quentity * cartData[i].rate,
         offerPrice: cartData[i].quentity * cartData[i].offerPrice,
@@ -310,8 +309,6 @@ const codPayment = async (req, res) => {
         amount: walletData.wallet - req.session.walletAmount,
       };
 
-      
-
       let updateWallet = await walletModel.updateOne(
         { userId: userData._id },
         {
@@ -327,12 +324,12 @@ const codPayment = async (req, res) => {
     for (let i = 0; i < cartCount; i++) {
       console.log(cartData);
       const updatedProduct = await productDetails.findOneAndUpdate(
-          { name: cartData[i].product },
-          { $inc: { stock: -cartData[i].quentity } },
-          { new: true } // To return the updated document
+        { name: cartData[i].product },
+        { $inc: { stock: -cartData[i].quentity } },
+        { new: true } // To return the updated document
       );
-      console.log('Updated product:', updatedProduct);
-  }
+      console.log("Updated product:", updatedProduct);
+    }
 
     //--------------------------------------------------------------------
 
@@ -348,12 +345,11 @@ const codPayment = async (req, res) => {
       price,
       qunatity,
     });
-
   } catch (e) {
     console.log(
       "error in the codPayment of orderController in user side : " + e
     );
-    res.redirect("/error")
+    res.redirect("/error");
   }
 };
 
@@ -407,7 +403,7 @@ const razorpayPaymentFailed = async (req, res) => {
         adminCancel: 0,
         img: cartData[i].image,
         product: cartData[i].product,
-        category : cartData[i].category,
+        category: cartData[i].category,
         quentity: cartData[i].quentity,
         price: cartData[i].quentity * cartData[i].rate,
         offerPrice: cartData[i].quentity * cartData[i].offerPrice,
@@ -436,7 +432,7 @@ const razorpayPaymentFailed = async (req, res) => {
       "error in the razorpayPaymentFailed of orderController in user side : " +
         e
     );
-    res.redirect("/error")
+    res.redirect("/error");
   }
 };
 
@@ -480,7 +476,7 @@ const reRazorpay = async (req, res) => {
     });
   } catch (error) {
     console.log("error happened between reRazorpay in orderController.", error);
-    res.redirect("/error")
+    res.redirect("/error");
   }
 };
 
@@ -506,18 +502,16 @@ const orderPlaced = async (req, res) => {
         { $set: { status: "placed", amountPaid: req.session.amountToPay } }
       );
 
-        console.log(cartCount, " Cart Count before");
+      console.log(cartCount, " Cart Count before");
       for (let i = 0; i < cartCount; i++) {
         console.log(cartData, "haiiii cart data ===========");
         const updatedProduct = await productDetails.findOneAndUpdate(
-            { name: cartData[i].product },
-            { $inc: { stock: -cartData[i].quentity } },
-            { new: true } // To return the updated document
+          { name: cartData[i].product },
+          { $inc: { stock: -cartData[i].quentity } },
+          { new: true } // To return the updated document
         );
-        console.log('Updated product:', updatedProduct);
-    }
-
-      
+        console.log("Updated product:", updatedProduct);
+      }
     }
     await cart.deleteMany({ username: userin });
     let datee = req.session.order_Date;
@@ -534,7 +528,7 @@ const orderPlaced = async (req, res) => {
     });
   } catch (error) {
     console.log("Error when orderPlaced in orderController: ", error);
-    res.redirect("/error")
+    res.redirect("/error");
   }
 };
 
@@ -615,7 +609,7 @@ const orderHistory = async (req, res) => {
 const cancelPro = async (req, res) => {
   try {
     // await order.updateOne({ orderId: req.params.id }, { adminCancel: 1, status: 'CANCELED' })
-   await order.updateOne(
+    await order.updateOne(
       {
         $and: [{ orderId: req.query.orderId }, { product: req.query.product }],
       },
@@ -624,9 +618,9 @@ const cancelPro = async (req, res) => {
       }
     );
 
-    const orderData =  await order.findOne({
-      $and:[{ orderId: req.query.orderId }, { product: req.query.product }]
-    })
+    const orderData = await order.findOne({
+      $and: [{ orderId: req.query.orderId }, { product: req.query.product }],
+    });
 
     console.log(orderData.quentity, " stock Data");
 
@@ -634,8 +628,8 @@ const cancelPro = async (req, res) => {
       { name: req.query.product },
       { $inc: { stock: +orderData.quentity } },
       { new: true } // To return the updated document
-  );
-  console.log('Updated product:', updatedProduct);
+    );
+    console.log("Updated product:", updatedProduct);
 
     res.redirect(
       `/historyOrder?orderId=${req.query.orderId}&product=${req.query.product}`
@@ -644,7 +638,7 @@ const cancelPro = async (req, res) => {
     console.log(
       "error in the cancelPro in orderController in user side : " + e
     );
-    res.redirect("/error")
+    res.redirect("/error");
   }
 };
 
@@ -731,10 +725,8 @@ const salesReport = async (req, res) => {
         $gte: new Date(startDate),
         $lte: new Date(endDate),
       },
-      status: { $ne: "CANCELED" }
+      status: { $ne: "CANCELED" },
     });
-    
-    
 
     const Product = await order.aggregate([
       {
@@ -856,7 +848,7 @@ const salesReport = async (req, res) => {
                   </tbody>
               </table>
           </center>
-          <h3>Total Orders: ${ count }</h3>
+          <h3>Total Orders: ${count}</h3>
           <h3>Total Amount: ${
             totalDiscount.length > 0 ? totalDiscount[0].price : 0
           }</h3>
@@ -881,7 +873,7 @@ const salesReport = async (req, res) => {
     res.status(200).end(pdfBuffer);
   } catch (err) {
     console.log(err);
-    res.redirect("/error")
+    res.redirect("/error");
   }
 };
 

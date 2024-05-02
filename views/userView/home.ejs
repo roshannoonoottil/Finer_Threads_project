@@ -54,16 +54,22 @@
           </div>
           <div class="header-right">
             <!-- <img src="img/icons/search.png" alt="" class="search-trigger">-->
-            <a href="/useraccount/<%= userName %> "><img src="img/icons/man.png" class="p-2" alt=""></a>
-              <a href="/cart"><img src="img/icons/cart.png" class="p-2" alt=""></a>
-              <a href="/wishlist"><img src="img/icons/heart.png" class="p-2" alt=""></a>
-              <a href="/logout" class="logoutbtn p-2">Logout</a>
+            <a href="/useraccount/<%= userName %> "
+              ><img src="img/icons/man.png" class="p-2" alt=""
+            /></a>
+            <a href="/cart"
+              ><img src="img/icons/cart.png" class="p-2" alt=""
+            /></a>
+            <a href="/wishlist"
+              ><img src="img/icons/heart.png" class="p-2" alt=""
+            /></a>
+            <a href="/logout" class="logoutbtn p-2">Logout</a>
           </div>
           <!-- <div class="user-access">
                      <a href="/signup">Register</a> 
                     <a href="/login" class="in">Logout</a>
                 </div> -->
-          <nav class="main-menu mobile-menu"> 
+          <nav class="main-menu mobile-menu">
             <ul>
               <li><a class="active" href="/">Home</a></li>
               <li>
@@ -208,17 +214,17 @@
     </section>
     <!-- Features Section End -->
 
-   <!-- Latest Product Begin -->
-   <section class="latest-products spad">
-    <div class="container">
-      <div class="product-filter">
-        <div class="row">
-          <div class="col-lg-12 text-center">
-            <div class="section-title">
-              <h2>Latest Products</h2>
-              <hr />
-              <ul class="product-controls">
-                <!-- <% for(let i of category) {%>
+    <!-- Latest Product Begin -->
+    <section class="latest-products spad">
+      <div class="container">
+        <div class="product-filter">
+          <div class="row">
+            <div class="col-lg-12 text-center">
+              <div class="section-title">
+                <h2>Latest Products</h2>
+                <hr />
+                <ul class="product-controls">
+                  <!-- <% for(let i of category) {%>
                 <li>
                   <a
                     href="/home/<%=i.name %>"
@@ -227,41 +233,43 @@
                   >
                 </li>
                 <% } %> -->
-              </ul>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="row" id="product-list">
-        <% for(let p of product){%>
-        <div class="col-lg-4 col-sm-6 mix all accesories bags">
-          <div class="single-product-item">
-            <figure>
-              <a href="/userproduct/<%=p.id %>"
-                ><img
-                  src="<%=p.image[0] %>"
-                  alt=""
-                  width="240px"
-                  height="360px"
-              /></a>
-              <!-- <div class="p-status popular">popular</div> -->
-            </figure>
-            <div class="product-text">
-              <h6><%=p.name %></h6>
-              <% if (p.discountAmount != p.rate) { %>
-                <span class="price"><del>₹ <%= p.rate %></del>
-                  <h5>₹ <%= p.discountAmount %></h5></span>
+        <div class="row" id="product-list">
+          <% for(let p of product){%>
+          <div class="col-lg-4 col-sm-6 mix all accesories bags">
+            <div class="single-product-item">
+              <figure>
+                <a href="/userproduct/<%=p.id %>"
+                  ><img
+                    src="<%=p.image[0] %>"
+                    alt=""
+                    width="240px"
+                    height="360px"
+                /></a>
+                <!-- <div class="p-status popular">popular</div> -->
+              </figure>
+              <div class="product-text">
+                <h6><%=p.name %></h6>
+                <% if (p.discountAmount != p.rate) { %>
+                <span class="price"
+                  ><del>₹ <%= p.rate %></del>
+                  <h5>₹ <%= p.discountAmount %></h5></span
+                >
                 <% } else { %>
-                  <span class="price">₹ <%= p.rate %></span>
-                  <% } %>
+                <span class="price">₹ <%= p.rate %></span>
+                <% } %>
+              </div>
             </div>
           </div>
+          <% } %>
         </div>
-        <% } %>
       </div>
-    </div>
-  </section>
-  <!-- Latest Product End -->
+    </section>
+    <!-- Latest Product End -->
 
     <!-- Lookbok Section Begin -->
     <section class="lookbok-section">

@@ -34,13 +34,13 @@ const login = (req, res) => {
     }
   } catch {
     console.log("Error while rendering user registration page: " + error);
-    res.redirect("/error")
+    res.redirect("/error");
   }
 };
 
-const error =(req,res) =>{
-  res.render('errorPage')
-}
+const error = (req, res) => {
+  res.render("errorPage");
+};
 
 const signup = (req, res) => {
   try {
@@ -53,21 +53,27 @@ const signup = (req, res) => {
 };
 
 let OTP;
-const verifyOTPS = (req, res) => {
+const verifyOTPS = async (req, res) => {
   try {
     console.log(req.body);
     req.session.userDetails = req.body;
-    const email = req.body.email;
-    console.log("sending otp");
-    const otpData = otpSend.sendmail(email);
-    console.log(otpData);
-    OTP = otpData;
-    console.log("OTP received is: " + otpData);
-    res.render("otp", { OTP, email });
-    console.log("User OTP Page");
+    let checkName = req.body.username;
+    const checkUser = await userModel.findOne({ username: checkName });
+    if (checkUser) {
+      res.redirect("/signup?error=User already exist");
+    } else {
+      const email = req.body.email;
+      console.log("sending otp");
+      const otpData = otpSend.sendmail(email);
+      console.log(otpData);
+      OTP = otpData;
+      console.log("OTP received is: " + otpData);
+      res.render("otp", { OTP, email });
+      console.log("User OTP Page");
+    }
   } catch (err) {
     console.log("error in veriy otp" + err);
-    res.redirect("/error")
+    res.redirect("/error");
   }
 };
 
@@ -86,21 +92,21 @@ const authOTP = async (req, res) => {
       });
       await registeredUser.save();
 
-      const wallet = new  walletModel({
+      const wallet = new walletModel({
         userId: registeredUser._id,
         wallet: 0,
-        walletTransactions :[]
+        walletTransactions: [],
       });
       await wallet.save();
 
       res.redirect("/login");
     } else {
-      res.render("otp", { message: "Invalid OTP entered" });
+      res.render("otp", { message: "Invalid OTP entered" }, email);
     }
     console.log("otp check");
   } catch (err) {
     console.log("Error while authenticating OTP: " + err);
-    res.redirect("/error")
+    res.redirect("/error");
   }
 };
 
@@ -136,7 +142,7 @@ const validateUser = async (req, res) => {
     }
   } catch (err) {
     console.log("Error in validating user :" + err);
-    res.redirect("/error")
+    res.redirect("/error");
   }
 };
 
@@ -149,7 +155,7 @@ const redirectUser = async (req, res) => {
     res.render("home", { category, product, userName });
   } catch (error) {
     console.log("Error while redirection");
-    res.redirect("/error")
+    res.redirect("/error");
   }
 };
 
@@ -161,7 +167,7 @@ const logout = (req, res) => {
     console.log("User loged  out");
   } catch (error) {
     console.log("Error during user signout ", +error);
-    res.redirect("/error")
+    res.redirect("/error");
   }
 };
 
@@ -196,13 +202,13 @@ const productView = async (req, res) => {
     });
   } catch (error) {
     console.log("Error while displaying product page " + error);
-    res.redirect("/error")
+    res.redirect("/error");
   }
 };
 
 const homePageCategory = async (req, res) => {
   console.log("category clicked");
-  let searchValue
+  let searchValue;
   const params = req.params.name;
   console.log(params);
   const product = await productModel.find({ category: params });
@@ -232,7 +238,7 @@ const userproductView = async (req, res) => {
     });
   } catch (error) {
     console.log("Error while displaying product page " + error);
-    res.redirect("/error")
+    res.redirect("/error");
   }
 };
 
@@ -242,7 +248,7 @@ const forgotPassword = (req, res) => {
     console.log("USER IN FORGOT PASSWORD - EMAIL PAGE");
   } catch (error) {
     console.log("Error while redirecting to forgot password page :" + error);
-    res.redirect("/error")
+    res.redirect("/error");
   }
 };
 
@@ -268,7 +274,7 @@ const authEmail = async (req, res) => {
     console.log(
       "Error while authenticating email for password reset :" + error
     );
-    res.redirect("/error")
+    res.redirect("/error");
   }
 };
 
@@ -289,7 +295,7 @@ const fpGetOTP = (req, res) => {
     newOTP = otpData;
   } catch (error) {
     console.log("Error in getting OTP for password reset :" + error);
-    res.redirect("/error")
+    res.redirect("/error");
   }
 };
 
@@ -308,7 +314,7 @@ const fpAuthOTP = (req, res) => {
     }
   } catch (error) {
     console.log("Error in authenticating OTP for password change: " + error);
-    res.redirect("/error")
+    res.redirect("/error");
   }
 };
 
@@ -317,7 +323,7 @@ const toChangePassword = (req, res) => {
     res.render("changePassword");
   } catch (error) {
     console.log("Error while redirected to change password :" + error);
-    res.redirect("/error")
+    res.redirect("/error");
   }
 };
 
@@ -333,7 +339,7 @@ const updatePassword = async (req, res) => {
     res.redirect("/login");
   } catch (error) {
     console.log("Error while updating password :" + error);
-    res.redirect("/error")
+    res.redirect("/error");
   }
 };
 
@@ -354,7 +360,7 @@ const resendOTP = (req, res) => {
     console.log("USER RESEND OTP PAGE");
   } catch (error) {
     console.log("Error while resending OTP :" + error);
-    res.redirect("/error")
+    res.redirect("/error");
   }
 };
 
@@ -365,7 +371,7 @@ const otp = (req, res) => {
     console.log(
       "Error while displaying OTP page when wrong OTP entered by user :" + error
     );
-    res.redirect("/error")
+    res.redirect("/error");
   }
 };
 
@@ -386,7 +392,7 @@ const regResendOTP = (req, res) => {
     console.log("USER RESEND OTP PAGE");
   } catch (error) {
     console.log("Error while resending OTP :" + error);
-    res.redirect("/error")
+    res.redirect("/error");
   }
 };
 
@@ -409,25 +415,11 @@ const search = async (req, res) => {
     });
   } catch (error) {
     console.log("Error while searching a product by guest: " + error);
-    res.redirect("/error")
+    res.redirect("/error");
   }
 };
 
 const shop = async (req, res) => {
-  // let page = 1;
-  // if (req.query.page) {
-  //   page = req.query.page;
-  // }
-  // const limit = 6;
-  // let product = await productModel
-  //   .find({})
-  //   .sort({ _id: 1 })
-  //   .limit(limit * 1)
-  //   .skip((page - 1) * limit); //cant use const here as it will render error when a product is searched//
-
-  // const count = await productModel.find({}).countDocuments(); // counts the total products //
-  // console.log("PRODUCT COUNT IS :" + count);
-
   console.log("Shop clicked");
   searchValue = req.body.searchValue;
   const product = await productModel.find({});
@@ -436,8 +428,6 @@ const shop = async (req, res) => {
     category,
     product,
     searchValue,
-    // totalPages: Math.ceil(count / limit),
-    // currentPage: page,
   });
 };
 
@@ -464,7 +454,7 @@ const userAccount = async (req, res) => {
     console.log(
       "error in the userAccount of userController in user side : " + e
     );
-    res.redirect("/error")
+    res.redirect("/error");
   }
 };
 
@@ -492,21 +482,15 @@ const newAddress = async (req, res) => {
     console.log(
       "error in the newAddress in userController in the user side:" + e
     );
-    res.redirect("/error")
+    res.redirect("/error");
   }
 };
 
 const categoryProductSort = async (req, res) => {
   try {
-    // const cartProducts = await cartModel.find({ user: req.session.userID });
-    // const cartCount = cartProducts[0].item.length;
-
     const category = await categoryModel.find({ list: 1 });
     const userName = req.session.name;
-    // const searchValue = "";
-    // const searchData = "";
     const number = req.params.number;
-    //console.log(number);
     if (number == 1) {
       let totalPages;
       let currentPage;
@@ -557,10 +541,9 @@ const categoryProductSort = async (req, res) => {
     }
   } catch (error) {
     console.log("Error happened while accessing categoryProductSort: " + error);
-    res.redirect("/error")
+    res.redirect("/error");
   }
 };
-
 
 const wallet = async (req, res) => {
   try {
@@ -572,11 +555,11 @@ const wallet = async (req, res) => {
     const limit = 5;
 
     const userName = req.session.name;
-    console.log(userName,  "is logged in!");
+    console.log(userName, "is logged in!");
     const userData = await userModel.findOne({ username: userName });
     console.log(userData, " user data");
     console.log(userData._id, " user id");
-    const wallet =  await walletModel.findOne({ userId: userData._id})
+    const wallet = await walletModel.findOne({ userId: userData._id });
     console.log(wallet, " wallet");
     const walletData = await walletModel.aggregate([
       {
@@ -607,22 +590,19 @@ const wallet = async (req, res) => {
     console.log("length is :", length);
     console.log("------------------------------->>>>");
     const totalPages = Math.ceil(length / limit);
-    // console.log("TYPEOF ...............................",typeof(walletData[0].wallet));
-    // console.log(walletData[0].wallet, " wallectttttttttttt" );
     res.render("wallet", {
       user: userName,
       userData,
       walletData,
       totalPages,
       currentPage: page,
-      wallet
+      wallet,
     });
   } catch (error) {
     console.log("Error while displaying wallet ", error);
-    res.redirect("/error")
+    res.redirect("/error");
   }
 };
-
 
 module.exports = {
   index,
@@ -652,5 +632,5 @@ module.exports = {
   userAccount,
   newAddress,
   categoryProductSort,
-  wallet
+  wallet,
 };

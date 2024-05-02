@@ -37,7 +37,7 @@ const viewWish = async (req, res) => {
     });
   } catch (e) {
     console.log("error in the viewCart in cartController user side : " + e);
-    res.redirect("/error")
+    res.redirect("/error");
   }
 };
 
@@ -72,7 +72,7 @@ const addtoWishList = async (req, res) => {
     res.redirect("/wishlist");
   } catch (e) {
     console.log("error in the addtoCart in cartController user side : " + e);
-    res.redirect("/error")
+    res.redirect("/error");
   }
 };
 
@@ -88,7 +88,7 @@ const removeWishlist = async (req, res) => {
     console.log(
       "error in the removeWishlist in cartController in user side : " + e
     );
-    res.redirect("/error")
+    res.redirect("/error");
   }
 };
 
@@ -137,7 +137,7 @@ const viewcart = async (req, res) => {
     res.render("cart", { catData, userin, catDataCount, totalPrice, cat });
   } catch (e) {
     console.log("error in the viewCart in cartController user side : " + e);
-    res.redirect("/error")
+    res.redirect("/error");
   }
 };
 
@@ -162,7 +162,7 @@ const addToCart = async (req, res) => {
         product: cartPro.name,
         image: cartPro.image[0],
         rate: cartPro.rate,
-        category : cartPro.category ,
+        category: cartPro.category,
         quentity: 1,
         offerPrice: cartPro.discountAmount,
         offer: cartPro.offer,
@@ -173,7 +173,7 @@ const addToCart = async (req, res) => {
     res.redirect("/cart");
   } catch (e) {
     console.log("error in the addtoCart in cartController user side : " + e);
-    res.redirect("/error")
+    res.redirect("/error");
   }
 };
 
@@ -186,7 +186,7 @@ const deleteCart = async (req, res) => {
     console.log(
       "error in the deleteCart in cartController in user side : " + e
     );
-    res.redirect("/error")
+    res.redirect("/error");
   }
 };
 
@@ -287,7 +287,7 @@ const changeQuantity = async (req, res) => {
     console.log(
       "error in the changeQuantity in cartController in user side: " + e
     );
-    res.redirect("/error")
+    res.redirect("/error");
   }
 };
 

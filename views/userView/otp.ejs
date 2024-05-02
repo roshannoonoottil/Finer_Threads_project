@@ -94,7 +94,7 @@
                         name="otp"
                         placeholder="Enter the OTP"
                         required
-                        maxlength="6"
+                        oninput="this.value = this.value.slice(0, 6);"
                         onkeyup="validateOTP()"
                     />
                     <br>        
@@ -284,7 +284,8 @@
     
         function resendOTP() {
             // Simulate OTP resend logic
-            // Replace this with your actual OTP resend logic   
+            // Replace this with your actual OTP resend logic 
+            
             
             window.location.href="/regResOTP/<%=email %>"
     

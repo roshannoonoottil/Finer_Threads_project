@@ -1,121 +1,177 @@
 <%- include ('adminHeader') %>
 
-
 <section class="content-main">
-    <div class="page-content">
-        <!-- Page Header-->
-        <div class="page-header no-margin-bottom">
-            <div class="container-fluid">
-                <h2 class="h5 no-margin-bottom">Orders</h2>
-            </div>
-        </div>
-        <!-- Breadcrumb-->
-        <!-- <div class="container-fluid">
+  <div class="page-content">
+    <!-- Page Header-->
+    <div class="page-header no-margin-bottom">
+      <div class="container-fluid">
+        <h2 class="h5 no-margin-bottom">Orders</h2>
+      </div>
+    </div>
+    <!-- Breadcrumb-->
+    <!-- <div class="container-fluid">
             <ul class="breadcrumb">
                 <li class="breadcrumb-item"><a href="index.html">User Details</a></li>
                 <li class="breadcrumb-item active">Basic forms </li>
             </ul>
         </div> -->
-    
-        <div class="container-fluid m-2 pd-2">
-            <div class="container-fluid">
-                <form class="d-flex" role="search" method="post">
-                    <input class="form-control " type="search" placeholder="Search" aria-label="Search" name="search" value="">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
-                </form>
-            </div>
-        </div>
-    
-        <div class="container mt-5 p-5">
-            <div class="row">
-                <table class="table table-striped table-hover">
-                    <thead>
-                        <tr>
-                            <th>Username</th>
-                            <th>Date</th>
-                            <th>Product</th>
-                            <th>Quentity</th>
-                            <th>Total Price</th>
-                            <th>Payment</th>
-                            <th>Order Status</th>
-                            <th>Update</th>
-                            <th>Details</th>
-                        </tr>
-                    </thead>
-                    <% dataOrder.forEach(order => { %>
-                        <tbody>
-                            <form action="/admin/updatestatus?orderId=<%= order.orderId %>&product=<%= order.product %>" method="post">
-                                <tr>
-                                    <td><%= order.username %></td>
-                                    <td><%= order.orderDate.toLocaleDateString() %></td>
-                                    <td><%= order.product %></td>
-                                    <td><%= order.quentity %></td>
-                                    <td><%= order.price %></td>
-                                    <td><%= order.paymentMentod %></td>
-                                    <td>
-                                        <% if (order.status === 'CANCELED') { %>
-                                            <button class="btn btn-danger" disabled>canceled</button>
-                                        <% } else { %>
-                                            <% if (order.status === 'placed') { %>
-                                                <select class="form-select" aria-label="Default select example" style="color: green;" name="status">
-                                                    <option style="color: green;"> <%= order.status %></option>
-                                                    <option value="Shipped" style="color: green;">Shipped</option>
-                                                    <option value="Out for delivery" style="color: green;">Out for delivery</option>
-                                                    <option value="Delivered Successfully" style="color: green;">Delivered Successfully</option>
-                                                </select>
-                                            <% } else if (order.status === 'Shipped') { %>
-                                                <select class="form-select" aria-label="Default select example" style="color: green;" name="status">
-                                                    <option value="Shipped" style="color: green;">Shipped</option>
-                                                    <option value="Out for delivery" style="color: green;">Out for delivery</option>
-                                                    <option value="Delivered Successfully" style="color: green;">Delivered Successfully</option>
-                                                </select>
-                                            <% } else if (order.status === 'Out for delivery') { %>
-                                                <select class="form-select" aria-label="Default select example" style="color: green;" name="status">
-                                                    <option value="Out for delivery" style="color: green;">Out for delivery</option>
-                                                    <option value="Delivered Successfully" style="color: green;">Delivered Successfully</option>
-                                                </select>
-                                            <% } else if (order.status === 'Payment Failed') { %>
-                                                <select class="form-select" aria-label="Default select example" style="color: green;" name="status">
-                                                    <option value="Failed" style="color: green;">Payment Failed</option>
-                                                </select>
-                                            <% } else { %>
-                                                <% if (order.returnStatus) { %>
-                                                    <p style="color: red;">Product Returned</p>
-                                                <% } else { %>
-                                                    <select class="form-select" aria-label="Default select example" style="color: green;" name="status">
-                                                        <option value="Delivered Successfully" style="color: green;">Delivered Successfully</option>
-                                                    </select>
-                                                <% } %>
-                                            <% } %>
-                                        <% } %>
-                                    </td>
-                                    <td><button class="btn btn-primary" type="submit">Update</button></td>
-                                    <td><button class="btn btn-sm btn-success"><a style="color: white;" href="/admin/orderDetails?orderId=<%= order.orderId %>&product=<%= order.product %>">Details</a></button></td>
-                                </tr>
-                            </form>
-                        </tbody>
-                    <% }); %>
-                </table>
-            </div>
-        </div>
-    
-      
+
+    <div class="container-fluid m-2 pd-2">
+      <div class="container-fluid">
+        <form class="d-flex" role="search" method="post">
+          <input
+            class="form-control"
+            type="search"
+            placeholder="Search"
+            aria-label="Search"
+            name="search"
+            value=""
+          />
+          <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+      </div>
     </div>
 
-    <div class="pagination-area mt-15 mb-50">
-        <nav aria-label="Page navigation example">
-          <ul class="pagination justify-content-center">
-            <% for(let page = 1; page <= totalPages; page++){ %>
-              <li class="page-item <%= currentPage === page ? 'active' : '' %>">
-                <a class="page-link btn-primary" href="?page=<%=page%>"><%=page%></a>
-              </li>
-            <% } %>
-          </ul>
-        </nav>
+    <div class="container mt-5 p-5">
+      <div class="row">
+        <table class="table table-striped table-hover">
+          <thead>
+            <tr>
+              <th>Username</th>
+              <th>Date</th>
+              <th>Product</th>
+              <th>Quentity</th>
+              <th>Total Price</th>
+              <th>Payment</th>
+              <th>Order Status</th>
+              <th>Update</th>
+              <th>Details</th>
+            </tr>
+          </thead>
+          <% dataOrder.forEach(order => { %>
+          <tbody>
+            <form
+              action="/admin/updatestatus?orderId=<%= order.orderId %>&product=<%= order.product %>"
+              method="post"
+            >
+              <tr>
+                <td><%= order.username %></td>
+                <td><%= order.orderDate.toLocaleDateString() %></td>
+                <td><%= order.product %></td>
+                <td><%= order.quentity %></td>
+                <td><%= order.price %></td>
+                <td><%= order.paymentMentod %></td>
+                <td>
+                  <% if (order.status === 'CANCELED') { %>
+                  <button class="btn btn-danger" disabled>canceled</button>
+                  <% } else { %> <% if (order.status === 'placed') { %>
+                  <select
+                    class="form-select"
+                    aria-label="Default select example"
+                    style="color: green"
+                    name="status"
+                  >
+                    <option style="color: green"><%= order.status %></option>
+                    <option value="Shipped" style="color: green">
+                      Shipped
+                    </option>
+                    <option value="Out for delivery" style="color: green">
+                      Out for delivery
+                    </option>
+                    <option value="Delivered Successfully" style="color: green">
+                      Delivered Successfully
+                    </option>
+                  </select>
+                  <% } else if (order.status === 'Shipped') { %>
+                  <select
+                    class="form-select"
+                    aria-label="Default select example"
+                    style="color: green"
+                    name="status"
+                  >
+                    <option value="Shipped" style="color: green">
+                      Shipped
+                    </option>
+                    <option value="Out for delivery" style="color: green">
+                      Out for delivery
+                    </option>
+                    <option value="Delivered Successfully" style="color: green">
+                      Delivered Successfully
+                    </option>
+                  </select>
+                  <% } else if (order.status === 'Out for delivery') { %>
+                  <select
+                    class="form-select"
+                    aria-label="Default select example"
+                    style="color: green"
+                    name="status"
+                  >
+                    <option value="Out for delivery" style="color: green">
+                      Out for delivery
+                    </option>
+                    <option value="Delivered Successfully" style="color: green">
+                      Delivered Successfully
+                    </option>
+                  </select>
+                  <% } else if (order.status === 'Payment Failed') { %>
+                  <select
+                    class="form-select"
+                    aria-label="Default select example"
+                    style="color: green"
+                    name="status"
+                  >
+                    <option value="Failed" style="color: green">
+                      Payment Failed
+                    </option>
+                  </select>
+                  <% } else { %> <% if (order.returnStatus) { %>
+                  <p style="color: red">Product Returned</p>
+                  <% } else { %>
+                  <select
+                    class="form-select"
+                    aria-label="Default select example"
+                    style="color: green"
+                    name="status"
+                  >
+                    <option value="Delivered Successfully" style="color: green">
+                      Delivered Successfully
+                    </option>
+                  </select>
+                  <% } %> <% } %> <% } %>
+                </td>
+                <td>
+                  <button class="btn btn-primary" type="submit">Update</button>
+                </td>
+                <td>
+                  <button class="btn btn-sm btn-success">
+                    <a
+                      style="color: white"
+                      href="/admin/orderDetails?orderId=<%= order.orderId %>&product=<%= order.product %>"
+                      >Details</a
+                    >
+                  </button>
+                </td>
+              </tr>
+            </form>
+          </tbody>
+          <% }); %>
+        </table>
       </div>
-    
-     
-</section> <!-- content-main end// -->
+    </div>
+  </div>
 
+  <div class="pagination-area mt-15 mb-50">
+    <nav aria-label="Page navigation example">
+      <ul class="pagination justify-content-center">
+        <% for(let page = 1; page <= totalPages; page++){ %>
+        <li class="page-item <%= currentPage === page ? 'active' : '' %>">
+          <a class="page-link btn-primary" href="?page=<%=page%>"><%=page%></a>
+        </li>
+        <% } %>
+      </ul>
+    </nav>
+  </div>
+</section>
+<!-- content-main end// -->
 
 <%- include ('adminFooter') %>
