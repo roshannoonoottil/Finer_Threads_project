@@ -9,6 +9,7 @@ const orderid = require("otp-generator");
 const puppeteer = require("puppeteer");
 const Razorpay = require("razorpay");
 const walletModel = require("../models/walletModel");
+const ExcelJS = require("exceljs");
 require("dotenv").config();
 
 const razorpayInstance = new Razorpay({
@@ -676,9 +677,11 @@ const returnreason = async (req, res) => {
   }
 };
 
+
 const salesReport = async (req, res) => {
   try {
-    const { startDate, endDate } = req.body;
+    const { startDate, endDate, format } = req.body;
+    console.log(format, "======");
 
     // Aggregate to get total sales amount
     const totalSales = await order.aggregate([
@@ -712,7 +715,7 @@ const salesReport = async (req, res) => {
       {
         $group: {
           _id: null,
-          totalDiscount: { $sum: "$offerPrice" }, // Assuming discount field name is discount
+          totalDiscount: { $sum: "$offerPrice" }, // Assuming discount field name is offerPrice
           price: { $sum: "$price" },
         },
       },
@@ -851,29 +854,90 @@ const salesReport = async (req, res) => {
             totalDiscount.length > 0 ? totalDiscount[0].price : 0
           }</h3>
           <h3>Total Discount Amount: ${
-            totalDiscount[0].price - totalDiscount[0].totalDiscount
+            totalDiscount.length > 0 ? totalDiscount[0].price - totalDiscount[0].totalDiscount : 0
           }</h3>
       </body>
       </html>
-  `;
+    `;
 
-    const browser = await puppeteer.launch();
-    const page = await browser.newPage();
-    await page.setContent(htmlContent);
+    if (format === "pdf") {
+      // Generate PDF
+      const browser = await puppeteer.launch();
+      const page = await browser.newPage();
+      await page.setContent(htmlContent);
+      const pdfBuffer = await page.pdf();
+      await browser.close();
 
-    const pdfBuffer = await page.pdf();
+      // Set headers for PDF
+      res.setHeader("Content-Length", pdfBuffer.length);
+      res.setHeader("Content-Type", "application/pdf");
+      res.setHeader("Content-Disposition", "attachment; filename=sales.pdf");
+      res.status(200).end(pdfBuffer);
+    } else if (format === "excel") {
+      // Create a new Excel workbook
+      const workbook = new ExcelJS.Workbook();
+      const worksheet = workbook.addWorksheet("Sales Report");
 
-    await browser.close();
+      // Add headers for total sales
+const salesHeaderRow = worksheet.addRow(["Product Name", "Product Price", "Product Offer Price", "Total Orders"]);
+salesHeaderRow.eachCell({ includeEmpty: true }, (cell) => {
+    cell.fill = {
+        type: 'pattern',
+        pattern: 'solid',
+        fgColor: { argb: 'FFFF00' } // Yellow fill color
+    };
+});
 
-    res.setHeader("Content-Length", pdfBuffer.length);
-    res.setHeader("Content-Type", "application/pdf");
-    res.setHeader("Content-Disposition", "attachment; filename=sales.pdf");
-    res.status(200).end(pdfBuffer);
+// Add data for total sales
+Product.forEach((item) => {
+    worksheet.addRow([item._id, item.price, item.Offerprice, item.totalOrders]);
+});
+
+// Add empty row
+worksheet.addRow();
+
+// Add headers for order status
+const statusHeaderRow = worksheet.addRow(["Status", "Total Count"]);
+statusHeaderRow.eachCell({ includeEmpty: true }, (cell) => {
+    cell.fill = {
+        type: 'pattern',
+        pattern: 'solid',
+        fgColor: { argb: 'FFA07A' } // Light salmon fill color
+    };
+});
+
+// Add data for order status
+status.forEach((item) => {
+    worksheet.addRow([item._id, item.count]);
+});
+
+// Add empty row
+worksheet.addRow();
+
+// Add total orders, total amount, and total discount amount
+worksheet.addRow(["Total Orders:", count]);
+worksheet.addRow(["Total Amount:", totalDiscount.length > 0 ? totalDiscount[0].price : 0]);
+worksheet.addRow(["Total Discount Amount:", totalDiscount.length > 0 ? totalDiscount[0].price - totalDiscount[0].totalDiscount : 0]);
+
+
+      // Set the content type and headers for the response for Excel
+      res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+      res.setHeader("Content-Disposition", "attachment; filename=sales.xlsx");
+
+      // Write the Excel workbook to the response
+      const excelBuffer = await workbook.xlsx.writeBuffer();
+      res.status(200).end(excelBuffer);
+    } else {
+      res.status(400).send("Invalid report format selected.");
+    }
   } catch (err) {
     console.log(err);
     res.redirect("/error");
   }
 };
+
+module.exports = salesReport;
+
 
 const invoice = async (req, res) => {
   try {
