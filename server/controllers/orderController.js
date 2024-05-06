@@ -496,7 +496,7 @@ const orderPlaced = async (req, res) => {
       );
       req.session.initial_status = "placed";
 
-      await order.updateOne(
+      await order.updateMany(
         { orderId: req.session.orderid_in_repay },
         { $set: { status: "placed", amountPaid: req.session.amountToPay } }
       );
