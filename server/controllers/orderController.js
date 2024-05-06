@@ -862,7 +862,9 @@ const salesReport = async (req, res) => {
 
     if (format === "pdf") {
       // Generate PDF
-      const browser = await puppeteer.launch();
+      const browser = await puppeteer.launch({
+        executablePath: '/usr/bin/chromium-browser'
+      })
       const page = await browser.newPage();
       await page.setContent(htmlContent);
       const pdfBuffer = await page.pdf();
@@ -1092,8 +1094,8 @@ const invoice = async (req, res) => {
     }
 
     const browser = await puppeteer.launch({
-      // executablePath: '/usr/bin/chromium-browser'
-    });
+      executablePath: '/usr/bin/chromium-browser'
+    })
     const page = await browser.newPage();
     await page.setContent(htmlContent);
 
