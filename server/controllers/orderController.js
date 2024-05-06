@@ -936,7 +936,7 @@ worksheet.addRow(["Total Discount Amount:", totalDiscount.length > 0 ? totalDisc
   }
 };
 
-module.exports = salesReport;
+
 
 
 const invoice = async (req, res) => {
