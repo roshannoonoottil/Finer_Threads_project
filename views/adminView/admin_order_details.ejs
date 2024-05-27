@@ -1,4 +1,4 @@
-<%- include ('adminHeader') %>
+<%- include('adminHeader') %>
 
 <section class="content-main">
   <div class="page-content">
@@ -20,52 +20,49 @@
               <h2><%= data.product %></h2>
               <br />
               <p>OrderId : <%= data.orderId %></p>
-              <p>Usernane : <%= data.username %></p>
-              <p>Quantity: <%= data.quentity %></p>
+              <p>Username : <%= data.username %></p>
+              <p>Quantity: <%= data.quantity %></p> <!-- Fixed typo: "quentity" to "quantity" -->
               <p>Price : <%= data.price %></p>
               <p>
-                Address : <%= data.address.houseName %>, <%= data.address.city
-                %>, <%= data.address.state %>, <%= data.address.country %>
+                Address : <%= data.address.houseName %>, <%= data.address.city %>, <%= data.address.state %>, <%= data.address.country %>
               </p>
               <p>Pin Code: <%= data.address.pincode %></p>
-              <p>Payment Type : <%= data.paymentMentod %></p>
+              <p>Payment Type : <%= data.paymentMethod %></p> <!-- Fixed typo: "paymentMentod" to "paymentMethod" -->
 
-              <% if (data.status === 'CANCELED' || data.status === "Payment
-              Failed" ) { %>
-              <p style="color: red">Status : <%= data.status %></p>
-              <% } else if (data.status === 'Delivered Successfully') { %> <% if
-              (data.returnStatus) { %> <% if (data.returnStatus === 2) { %>
-              <p style="color: red">Return request rejected</p>
+              <% if (data.status === 'CANCELED' || data.status === 'Payment Failed') { %>
+                <p style="color: red">Status : <%= data.status %></p>
+              <% } else if (data.status === 'Delivered Successfully') { %>
+                <% if (data.returnStatus) { %>
+                  <% if (data.returnStatus === 2) { %>
+                    <p style="color: red">Return request rejected</p>
+                  <% } else { %>
+                    <p style="color: green">Returned Successfully</p>
+                  <% } %>
+                <% } else if (data.returnreason) { %>
+                  <% if (!data.returnStatus) { %>
+                    <p style="color: aquamarine">Return reason : <%= data.returnreason %></p>
+                    <a
+                      href="/admin/returnFail?id=<%= data.orderId %>&product=<%= data.product %>"
+                      class="btn btn-sm btn-danger"
+                      onclick="return confirm('Do you want to reject the return?')"
+                    >Reject</a>
+                    <a
+                      href="/admin/returnsuccess?id=<%= data.orderId %>&product=<%= data.product %>"
+                      class="btn btn-sm btn-success"
+                      onclick="return confirm('Do you want to accept the return?')"
+                    >Accept</a> <!-- Fixed typo: "Accepte" to "Accept" -->
+                  <% } %>
+                <% } else { %>
+                  <p style="color: green">Status : <%= data.status %></p>
+                <% } %>
               <% } else { %>
-              <p style="color: green">Returned Successfully</p>
-              <% } %> <% } else if (data.returnreason) { %> <% if
-              (!data.returnStatus) { %>
-              <p style="color: aquamarine">
-                Return reason : <%= data.returnreason %>
-              </p>
-              <a
-                href="/admin/returnFail?id=<%= data.orderId %>&product=<%= data.product %>"
-                class="btn btn-sm btn-danger"
-                onclick="return confirm('Do you want to reject the return?')"
-                >Reject</a
-              >
-              <a
-                href="/admin/returnsuccess?id=<%= data.orderId %>&product=<%= data.product %>"
-                class="btn btn-sm btn-success"
-                onclick="return confirm('Do you want to accept the return?')"
-                >Accepte</a
-              >
-              <% } %> <% } else { %>
-              <p style="color: green">Status : <%= data.status %></p>
-              <% } %> <% } else { %>
-              <p>Status : <%= data.status %></p>
-              Cancel :
-              <a
-                href="/admin/deleteOrder?orderId=<%= data.orderId %>&product=<%= data.product %>"
-                class="btn btn-sm btn-danger"
-                onclick="return confirm('Do you want to cancel the order?')"
-                >Cancel</a
-              >
+                <p>Status : <%= data.status %></p>
+                Cancel :
+                <a
+                  href="/admin/deleteOrder?orderId=<%= data.orderId %>&product=<%= data.product %>"
+                  class="btn btn-sm btn-danger"
+                  onclick="return confirm('Do you want to cancel the order?')"
+                >Cancel</a>
               <% } %>
             </div>
           </div>
@@ -76,4 +73,4 @@
 </section>
 <!-- content-main end// -->
 
-<%- include ('adminFooter') %>
+<%- include('adminFooter') %>
